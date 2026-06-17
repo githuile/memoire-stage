@@ -1,0 +1,15 @@
+Suricata :
+
+  Afin de mieux surpervisre la sécurité du réseaud e Mesulog, il a été choisit d'installer Suricata en mode IDS (détection d'intrusion, mais aucune action prise par suricata).
+  La distribution linux utilisée en production à mesulog est Rocky Linux 10, une distribution RHEL (Red Hat)
+
+Choix techniques : 
+
+  L'installation de suricata sur Rocky Linux se fait avec le dépôt COPR du projet OISF (développeurs et mainteneurs de Suricata).
+  Cependant ce dépôt qui installe via un fichier rpm n'arrive pas à résoudre ses dépendance sur Rocky 10. Nous avons donc choisit d'installer suricata via l'image docker fournie par Jason Ish, membre deu projet OISF.
+  Ce choix technique nous permet aussi d'installer Evebox dans un second conteneur docker. Evebox est l'outil de gestion d'alerte et d'évenement pour Suricata développé et maintenu lui aussi par le projet OISF.
+  Ces 2 conteneurs sont réunis dans un même fichier docker compose pour une meilleure maintenabilité.
+  Pour éviter de risquer ralentir le traffic, nous avons mis en place un port mirroring à partir d'un swirch juste en aval du pare-feu Sophos, le suricata reçoit donc une copie exacte de tout le traffic qui passe de WAN à LAN et de LAN à WAN.
+  
+    
+Configuration :
