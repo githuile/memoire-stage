@@ -1,0 +1,78 @@
+<!-- Local rules -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015, Wazuh Inc. -->
+
+<!-- Example -->
+<group name="local,syslog,sshd,">
+
+  <!--
+  Dec 10 01:02:02 host sshd[1234]: Failed none for root from 1.1.1.1 port 1066 ssh2
+  -->
+  <rule id="100001" level="5">
+    <if_sid>5716</if_sid>
+    <srcip>1.1.1.1</srcip>
+    <description>sshd: authentication failed from IP 1.1.1.1.</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+
+</group>
+
+
+<group name="veeam,critical,correlation">
+
+  <rule id="100900" level="15" frequency="2" timeframe="120">
+    <decoded_as>Veeam MP</decoded_as>
+    <match>deleted</match>
+    <time>16:00-23:59</time>
+    <description> Multiple Veeam deletions within 2 minutes</description>
+  </rule>
+
+</group>
+
+<group name="wifi, ubiquiti, dhcp,">
+  <!-- Known device DHCPACK: level 3 (low) -->
+  <rule id="120050" level="3">
+    <decoded_as>ubiquiti-dhcp-ack</decoded_as>
+    <list field="srcmac" lookup="match_key">etc/lists/known-devices</list>
+    <description>Known device connected: $(hostname) (MAC: $(srcmac), IP: $(srcip))</description>
+  </rule>
+
+  <!-- Unknown device DHCPACK: level 12 (high) -->
+  <rule id="120051" level="12">
+    <decoded_as>ubiquiti-dhcp-ack</decoded_as>
+    <list field="srcmac" lookup="not_match_key">etc/lists/known-devices</list>
+    <description>ALERT! Unknown device connected: $(hostname) (MAC: $(srcmac), IP: $(srcip))</description>
+  </rule>
+</group>
+
+<group name="dhcp">
+  <rule id="120052" level="3">
+    <if_sid>6305</if_sid>
+    <list field="mac" lookup="match_key">etc/lists/known-devices</list>
+    <description>DHCP lease renewed for $(mac) = $(srcip)</description>
+  </rule>
+  <rule id="120053" level="12">
+    <if_sid>6305</if_sid>
+    <list field="mac" lookup="not_match_key">etc/lists/known-devices</list>
+    <description>ALERT! Unknown device connected: for $(mac) = $(srcip)</description>
+  </rule>
+
+</group>
+
+<group name="suricata,">
+  <rule id="118713" level="3">
+    <if_sid>87924</if_sid>
+    <field name="docker.Actor.Attributes.signal">^12$</field>
+    <description>Suricata Reloaded - Suricata container received SIGUSR2 signal</description>
+    <group>docker,</group>
+  </rule>
+
+  <rule id="118714" level="12" frequency="10" timeframe="300">
+    <if_matched_sid>86601</if_matched_sid>
+    <same_field>alert.signature_id</same_field>
+    <description>Suricata Alert - REPUTATION 10 connections or more from/to unsafe ip</description>
+    <options>no_full_log</options>
+    <group>ip_reputation</group>
+  </rule>
+</group>

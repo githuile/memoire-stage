@@ -459,36 +459,29 @@ elles s’inscrivent. Cette première partie introduit le contexte institutionne
 \node[boxdark, right=1.8cm of president] (admin) {Emilie Evrard\\Responsable administrative};
 
 % --- Ligne 2 : Chefs de projet ---
-\node[boxmed, below left=1.6cm and 2.8cm of president] (lamy) {Damien Lamy\\Chef de projet};
-\node[boxmed, below=1.6cm of president] (andrieu) {Adrien Andrieu\\Chef de projet};
+\node[boxmed, below=1.2cm of president] (lamy) {Damien Lamy\\Chef de projet};
+\node[boxmed, right=1.8cm of lamy] (andrieu) {Adrien Andrieu\\Chef de projet};
 
 % --- Ligne 3 : Développeurs ---
-\node[boxlight, below left=1.6cm and 2.4cm of andrieu] (lerch) {Benjamin Lerch\\Développeur ingénieur};
-\node[boxlight, below=1.6cm of andrieu] (asaro) {Anthony Asaro\\Développeur technicien};
-\node[boxlight, below right=1.6cm and 2.4cm of andrieu] (bertin) {Thomas Bertin\\Développeur ingénieur};
+\node[boxlight, below=1.2cm of lamy] (lerch) {Benjamin Lerch\\Développeur ingénieur};
+\node[boxlight, right=1.8cm of lerch] (asaro) {Anthony Asaro\\Développeur technicien};
+\node[boxlight, right=1.8cm of asaro] (bertin) {Thomas Bertin\\Développeur ingénieur};
 
 % --- Ligne 4 : Stagiaires / Alternant ---
-\node[boxlight, below left=1.6cm and 2.4cm of asaro] (sechi) {Kenzo Sechi\\Alternant};
-\node[boxgreen, below=1.6cm of asaro] (kilian) {Verger Kilian\\Stagiaire};
-\node[boxlight, below right=1.6cm and 2.4cm of asaro] (miquel) {Vianney Miquel\\Stagiaire};
+\node[boxlight, below=1.2cm of lerch] (sechi) {Kenzo Sechi\\Alternant};
+\node[boxlight, right=1.8cm of sechi] (kilian) {Verger Kilian\\Stagiaire};
+\node[boxgreen, right=1.8cm of kilian] (miquel) {Vianney Miquel\\Stagiaire};
 
-% --- Connexions ---
-% Président <-> Admin
-\draw[line] (president.east) -- (admin.west);
+% --- Groupes par ligne (rectangle englobant) ---
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(president) (admin), label=above:{Président + Responsable administrative}] (grp1) {};
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lamy) (andrieu), label=above:{Chefs de projet}] (grp2) {};
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lerch) (asaro) (bertin), label=above:{Développeurs}] (grp3) {};
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(sechi) (kilian) (miquel), label=above:{Stagiaires / Alternant}] (grp4) {};
 
-% Président -> chefs de projet
-\draw[line] (president.south) -- ++(0,-0.5) -| (lamy.north);
-\draw[line] (president.south) -- ++(0,-0.5) -- (andrieu.north);
-
-% Andrieu -> développeurs
-\draw[line] (andrieu.south) -- ++(0,-0.5) -| (lerch.north);
-\draw[line] (andrieu.south) -- ++(0,-0.5) -- (asaro.north);
-\draw[line] (andrieu.south) -- ++(0,-0.5) -| (bertin.north);
-
-% Asaro -> niveau 4
-\draw[line] (asaro.south) -- ++(0,-0.5) -| (sechi.north);
-\draw[line] (asaro.south) -- ++(0,-0.5) -- (kilian.north);
-\draw[line] (asaro.south) -- ++(0,-0.5) -| (miquel.north);
+% --- Connexions entre rectangles seulement ---
+\draw[line] (grp1.south) -- ++(0,-0.5) -- (grp2.north);
+\draw[line] (grp2.south) -- ++(0,-0.5) -- (grp3.north);
+\draw[line] (grp3.south) -- ++(0,-0.5) -- (grp4.north);
 
 \end{tikzpicture}
 
@@ -564,41 +557,32 @@ L’entreprise met en œuvre une organisation agile et accorde une attention par
 
 \begin{tikzpicture}[node distance=1.4cm and 1.6cm]
 
-% --- Ligne 1 : Président + Responsable administrative ---
-\node[boxdark] (president) {Luc Desruelle\\Président};
-\node[boxdark, right=1.8cm of president] (admin) {Emilie Evrard\\Responsable administrative};
+\node[boxlight] (asaro) {Anthony Asaro\\Développeur technicien};
+\node[boxlight, left=1.8cm of asaro] (lerch) {Benjamin Lerch\\Développeur ingénieur};
+\node[boxlight, right=1.8cm of asaro] (bertin) {Thomas Bertin\\Développeur ingénieur};
 
-% --- Ligne 2 : Chefs de projet ---
-\node[boxmed, below left=1.6cm and 2.8cm of president] (lamy) {Damien Lamy\\Chef de projet};
-\node[boxmed, below=1.6cm of president] (andrieu) {Adrien Andrieu\\Chef de projet};
+\node[boxlight, below=1.2cm of lerch] (sechi) {Kenzo Sechi\\Alternant};
+\node[boxlight, below=1.2cm of asaro] (kilian) {Verger Kilian\\Stagiaire};
+\node[boxgreen, below=1.2cm of bertin] (miquel) {Vianney Miquel\\Stagiaire};
 
-% --- Ligne 3 : Développeurs ---
-\node[boxlight, below left=1.6cm and 2.4cm of andrieu] (lerch) {Benjamin Lerch\\Développeur ingénieur};
-\node[boxlight, below=1.6cm of andrieu] (asaro) {Anthony Asaro\\Développeur technicien};
-\node[boxlight, below right=1.6cm and 2.4cm of andrieu] (bertin) {Thomas Bertin\\Développeur ingénieur};
+\node[boxmed, above=1.2cm of asaro, xshift=-3cm] (lamy) {Damien Lamy\\Chef de projet};
+\node[boxmed, above=1.2cm of asaro, xshift=3cm] (andrieu) {Adrien Andrieu\\Chef de projet};
 
-% --- Ligne 4 : Stagiaires / Alternant ---
-\node[boxlight, below left=1.6cm and 2.4cm of asaro] (sechi) {Kenzo Sechi\\Alternant};
-\node[boxgreen, below=1.6cm of asaro] (kilian) {Verger Kilian\\Stagiaire};
-\node[boxlight, below right=1.6cm and 2.4cm of asaro] (miquel) {Vianney Miquel\\Stagiaire};
+\node[boxdark, above=3.6cm of asaro] (president) {Luc Desruelle\\Président};
 
-% --- Connexions ---
-% Président <-> Admin
-\draw[line] (president.east) -- (admin.west);
+\node[boxdark, above=5.2cm of andrieu] (admin) {Emilie Evrard\\Responsable administrative};
 
-% Président -> chefs de projet
-\draw[line] (president.south) -- ++(0,-0.5) -| (lamy.north);
-\draw[line] (president.south) -- ++(0,-0.5) -- (andrieu.north);
 
-% Andrieu -> développeurs
-\draw[line] (andrieu.south) -- ++(0,-0.5) -| (lerch.north);
-\draw[line] (andrieu.south) -- ++(0,-0.5) -- (asaro.north);
-\draw[line] (andrieu.south) -- ++(0,-0.5) -| (bertin.north);
+% --- Groupes par ligne (rectangle englobant) ---
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(president), label=north:{Direction}] (grp1) {};
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lamy) (andrieu), label=above:{Chefs de projet}] (grp2) {};
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lerch) (asaro) (bertin), label=above:{Développeurs}] (grp3) {};
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(sechi) (kilian) (miquel), label=above:{Stagiaires / Alternant}] (grp4) {};
 
-% Asaro -> niveau 4
-\draw[line] (asaro.south) -- ++(0,-0.5) -| (sechi.north);
-\draw[line] (asaro.south) -- ++(0,-0.5) -- (kilian.north);
-\draw[line] (asaro.south) -- ++(0,-0.5) -| (miquel.north);
+% --- Connexions entre rectangles seulement ---
+\draw[line] (grp1.south) -- ++(0,-0.6) -- (grp2.north);
+\draw[line] (grp2.south) -- ++(0,-0.6) -- (grp3.north);
+\draw[line] (grp3.south) -- ++(0,-0.6) -- (grp4.north);
 
 \end{tikzpicture}
 \bigskip

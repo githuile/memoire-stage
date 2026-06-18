@@ -1,0 +1,291 @@
+<decoder name="sophos-firewall">
+    <prematch>X10123GJGTRC2B1</prematch>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>bytes_sent=(\.*) </regex>
+    <order>bytes_sent</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>device_name="(\.*)" </regex>
+    <order>device_name</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>timestamp="(\.*)" </regex>
+    <order>timestamp</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>device_model="(\.*)" </regex>
+    <order>device_model</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>device_serial_id="(\.*)" </regex>
+    <order>device_serial_id</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>log_id="(\.*)" </regex>
+    <order>log_id</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>log_type="(\.*)" </regex>
+    <order>log_type</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>log_component="(\.*)" </regex>
+    <order>log_component</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>log_subtype="(\.*)" </regex>
+    <order>log_subtype</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>log_version=(\.*) </regex>
+    <order>log_version</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>severity="(\.*)" </regex>
+    <order>severity</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>duration=(\.*) </regex>
+    <order>duration</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>fw_rule_id="(\.*)" </regex>
+    <order>fw_rule_id</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>fw_rule_name="(\.*)" </regex>
+    <order>fw_rule_name</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>fw_rule_section="(\.*)" </regex>
+    <order>fw_rule_section</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>nat_rule_id="(\.*)" </regex>
+    <order>nat_rule_id</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>nat_rule_name="(\.*)" </regex>
+    <order>nat_rule_name</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>fw_rule_type="(\.*)" </regex>
+    <order>fw_rule_type</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>web_policy_id=(\.*) </regex>
+    <order>web_policy_id</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>app_filter_policy_id=(\.*) </regex>
+    <order>app_filter_policy_id</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>app_name="(\.*)" </regex>
+    <order>app_name</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>app_risk=(\.*) </regex>
+    <order>app_risk</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>ether_type="(\.*)" </regex>
+    <order>ether_type</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>in_interface="(\.*)" </regex>
+    <order>in_interface</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>src_mac="(\.*)" </regex>
+    <order>src_mac</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>dst_mac="(\.*)" </regex>
+    <order>dst_mac</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>src_ip="(\.*)" </regex>
+    <order>src_ip</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>src_country="(\.*)" </regex>
+    <order>src_country</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>dst_ip="(\.*)" </regex>
+    <order>dst_ip</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>dst_country="(\.*)" </regex>
+    <order>dst_country</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>protocol="(\.*)" </regex>
+    <order>protocol</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>src_port=(\.*) </regex>
+    <order>src_port</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>dst_port=(\.*) </regex>
+    <order>dst_port</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>packets_sent=(\.*) </regex>
+    <order>packets_sent</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>packets_received=(\.*) </regex>
+    <order>packets_received</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>bytes_sent=(\.*) </regex>
+    <order>bytes_sent</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>bytes_received=(\.*) </regex>
+    <order>bytes_received</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>src_zone_type="(\.*)" </regex>
+    <order>src_zone_type</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>src_zone="(\.*)" </regex>
+    <order>src_zone</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>dst_zone_type="(\.*)" </regex>
+    <order>dst_zone_type</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>dst_zone="(\.*)" </regex>
+    <order>dst_zone</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>con_event="(\.*)" </regex>
+    <order>con_event</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>app_resolved_by="(\.*)" </regex>
+    <order>app_resolved_by</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>app_is_cloud="(\.*)" </regex>
+    <order>app_is_cloud</order>
+</decoder>
+
+<decoder name="sophos-firewall-qualifier">
+    <parent>sophos-firewall</parent>
+    <regex>qualifier="(\.*)" </regex>
+    <order>qualifier</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>in_display_interface="(\.*)" </regex>
+    <order>in_display_interface</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>out_display_interface="(\.*)" </regex>
+    <order>out_display_interface</order>
+</decoder>
+
+<decoder name="sophos-firewall-child">
+    <parent>sophos-firewall</parent>
+    <regex>log_occurrence="(\.*)"</regex>
+    <order>log_occurrence</order>
+</decoder>

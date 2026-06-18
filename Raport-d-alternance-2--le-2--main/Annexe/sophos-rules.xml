@@ -1,0 +1,124 @@
+<group name="sophos,">
+<!--
+    <rule id="111000" level="0">
+        <decoded_as>sophos-firewall</decoded_as>
+        <description>Sophos XG Firewall event (internal routing)</description>
+        <group>firewall,</group>
+    </rule>
+-->
+    <!-- Catch-all: generates a visible alert for any firewall event -->
+<!--
+ <rule id="111001" level="3">
+        <if_matched_sid>111000</if_matched_sid>
+        <description>Sophos XG Firewall - $(log_type) $(log_subtype): $(src_ip) -> $(dst_ip) ($(bytes_sent) bytes)</description>
+        <group>firewall,</group>
+    </rule>
+-->
+
+<!-- Regles d'exfiltration de données -->
+<!--
+    <rule id="118720" level="9">
+        <decoded_as>sophos-firewall</decoded_as>
+        <field name="bytes_sent">\d\d\d\d\d\d\d\d\d\d+</field>
+        <description>Sophos XGS - Upload 1Go+ en journée($(timestamp)): $(bytes_sent) octets depuis l'adress ip $(src_ip) (mac : $(src_mac), pays : $(src_country)) vers l'adresse ip $(dst_ip) (mac : $(dst_mac), pays : $(dst_country))</description>
+        <group>firewall,data_transfer,</group>
+    </rule>
+
+    <rule id="118721" level="12">
+        <decoded_as>sophos-firewall</decoded_as>
+        <field name="bytes_sent">\d\d\d\d\d\d\d\d\d+</field>
+        <weekday>weekdays</weekday>
+        <time>19:00 - 23:59</time>
+        <description>Sophos XGS - Upload 100Mo+ pendant la nuit($(timestamp)): $(bytes_sent) octets depuis l'adress ip $(src_ip) (mac : $(src_mac), pays : $(src_country)) vers l'adresse ip $(dst_ip) (mac : $(dst_mac), pays : $(dst_country))</description>
+        <group>firewall,data_transfer,night,</group>
+    </rule>
+
+    <rule id="118722" level="12">
+        <decoded_as>sophos-firewall</decoded_as>
+        <field name="bytes_sent">\d\d\d\d\d\d\d\d\d+</field>
+        <weekday>weekdays</weekday>
+        <time>00:00 - 08:00</time>
+        <description>Sophos XGS - Upload 100Mo+ pendant la nuit($(timestamp)): $(bytes_sent) octets depuis l'adress ip $(src_ip) (mac : $(src_mac), pays : $(src_country)) vers l'adresse ip $(dst_ip) (mac : $(dst_mac), pays : $(dst_country))</description>
+        <group>firewall,data_transfer,night,</group>
+    </rule>
+
+    <rule id="118723" level="12">
+        <decoded_as>sophos-firewall</decoded_as>
+        <field name="bytes_sent">\d\d\d\d\d\d\d\d\d+</field>
+        <weekday>weekends</weekday>
+        <description>Sophos XGS - Upload 100Mo+ pendant le weekend($(timestamp)): $(bytes_sent) octets depuis l'adress ip $(src_ip) (mac : $(src_mac), pays : $(src_country)) vers l'adresse ip $(dst_ip) (mac : $(dst_mac), pays : $(dst_country))</description>
+        <group>firewall,data_transfer,</group>
+    </rule>
+-->
+<!-- API Python-->
+    <rule id="118725" level="0">
+        <field name="rule.id">118725</field>
+        <description>$(description)</description>
+        <group>firewall,data_transfer,</group>
+    </rule>
+
+<!-- Autres evenements Sophos -->
+    <rule id="118730" level="12">
+        <decoded_as>sophos-firewall</decoded_as>
+        <field name="severity">Critical</field>
+        <description>Sophos XG - CRITICAL: $(log_component) event</description>
+        <group>firewall,critical,</group>
+    </rule>
+
+    <rule id="118731" level="9">
+        <decoded_as>sophos-firewall</decoded_as>
+        <field name="dst_country">CHN|RUS|PRK|IRN|BLR|NGA|VNM</field>
+        <description>Sophos XG - Connection to potentially high-risk country: $(dst_country)</description>
+        <group>firewall,geographic,</group>
+    </rule>
+
+    <rule id="118732" level="12">
+        <if_matched_sid>118731</if_matched_sid>
+        <field name="dst_country">CHN|RUS|PRK|IRN|BLR|NGA|VNM</field>
+        <field name="bytes_sent">\d\d\d\d\d\d\d+</field>
+        <description>Sophos XG - 1Mo+ sent to potentially high-risk country: $(dst_country)</description>
+        <group>firewall,geographic,</group>
+    </rule>
+
+    <rule id="118733" level="4">
+        <decoded_as>sophos-firewall</decoded_as>
+        <field name="duration">^\d\d\d\d$</field>
+        <description>Sophos XG - Long duration connection: $(duration) seconds from $(src_ip) to $(dst_ip)</description>
+        <group>firewall,long_connection,</group>
+    </rule>
+
+    <rule id="118734" level="12">
+        <if_matched_sid>118733</if_matched_sid>
+        <field name="duration">^\d\d\d\d</field>
+        <field name="dst_country">CHN|RUS|PRK|IRN|BLR|NGA|VNM</field>
+        <description>Sophos XG - Long duration connection to potentially high-risk country: $(duration) seconds from $(src_ip) to $(dst_ip), $(dst_country)</description>
+        <group>firewall,long_connection,</group>
+    </rule>
+
+    <rule id="118735" level="0">
+        <field name="log_subtype">Denied</field>
+        <description>Sophos XG - denied connection from $(src_ip)</description>
+        <group>firewall,denied,</group>
+    </rule>
+
+    <rule id="118736" level="8" frequency="10" timeframe="300">
+        <if_matched_sid>118735</if_matched_sid>
+        <same_source_ip />
+        <description>Sophos XG - Multiple denied connections ($(firedtimes)) from $(src_ip) in 5 minutes</description>
+        <group>firewall,denied,</group>
+    </rule>
+
+    <rule id="118737" level="8">
+        <decoded_as>sophos-firewall</decoded_as>
+        <field name="dst_port">23|135|139|445|1433|3389</field>
+        <description>Sophos XG - High risk protocol connection to $(dst_ip):$(dst_port)</description>
+        <group>firewall,security,</group>
+    </rule>
+
+    <rule id="118738" level="5">
+        <decoded_as>sophos-firewall</decoded_as>
+        <field name="app_risk">(?!1)\d+</field>
+        <description>Sophos XG - High risk application detected: $(app_name) (risk level: $(app_risk))</description>
+        <group>firewall,security,</group>
+    </rule>
+</group>

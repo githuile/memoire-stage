@@ -1,0 +1,53 @@
+<!-- Local Decoders -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015, Wazuh Inc. -->
+
+<!--
+  - Allowed static fields:
+  - location   - where the log came from (only on FTS)
+  - srcuser    - extracts the source username
+  - dstuser    - extracts the destination (target) username
+  - user       - an alias to dstuser (only one of the two can be used)
+  - srcip      - source ip
+  - dstip      - dst ip
+  - srcport    - source port
+  - dstport    - destination port
+  - protocol   - protocol
+  - id         - event id
+  - url        - url of the event
+  - action     - event action (deny, drop, accept, etc)
+  - status     - event status (success, failure, etc)
+  - extra_data - Any extra data
+-->
+
+
+<!-- identify any Ubiquiti CEF log (OLD)
+
+<decoder name="ubiquiti-cef">
+  <program_name>CEF</program_name>
+  <prematch>^CEF:\d+\|Ubiquiti\|</prematch>
+</decoder>
+
+<decoder name="ubiquiti-cef-wifi-connected">
+<parent>ubiquiti-cef</parent>
+<regex type="pcre2">^.*CEF:0\|Ubiquiti\|UniFi Network\|[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)+\|[0-9]+\|WiFi Client Connected\|\d\|UNIFIcategory=Client Devices UNIFIhost=(\S+) UNIFIconnectedToDeviceName=.*? UNIFIconnectedToDeviceIp=(\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\b) UNIFIconnectedToDeviceMac=([A-Fa-f0-9]+(?::[A-Fa-f0-9]+)+) UNIFIconnectedToDeviceModel=.*? UNIFIconnectedToDeviceVersion=.*? UNIFIclientAlias=(.*?) UNIFIclientHostname=.*? UNIFIclientIp=(\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\b) UNIFIclientMac=([A-Fa-f0-9]+(?::[A-Fa-f0-9]+)+) UNIFIwifiChannel=\d+ UNIFIwifiChannelWidth=\d+ UNIFIwifiName=(\S+) UNIFIwifiBand=\S+ UNIFIauthMethod=\S+ UNIFIWiFiRssi=[+-]?(?:\d+)?\.?\d* UNIFInetworkName=.*? UNIFInetworkSubnet=.*? UNIFInetworkVlan=\d+ UNIFIutcTime=([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]+)?[Zz]?)</regex>
+<order>serverName, apIp, apMac, clientAlias, clientIp, clientMac, wifiName, utcTimestamp</order>
+</decoder>
+
+-->
+
+<!-- DHCPACK: device got an IP (connection complete) -->
+<decoder name="ubiquiti-dhcp-ack">
+  <prematch>dnsmasq-dhcp</prematch>
+  <regex>DHCPACK\((\w+)\)\s+(\S+)\s+(\S+)\s+(\S+)</regex>
+  <order>interface, srcip, srcmac, hostname</order>
+</decoder>
+
+
+<!-- DHCP Windows -->
+<decoder name="ms-dhcp-ipv4-fields">
+  <parent>ms-dhcp-ipv4</parent>
+  <regex type="pcre2">^(\d+),[\d/]+,[\d:]+,[^,]+,([\d.]+),([^,]*),([A-F0-9]{12})</regex>
+  <order>id,srcip,hostname,mac</order>
+</decoder>

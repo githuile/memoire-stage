@@ -33,4 +33,29 @@ Ce reload est d'ailleurs détecté par l'agent wazuh présent sur la machine hô
 
 Pour executer ce programme de manière automatique, nous avons créé un service linux "suricata-ip-update.service" qui est lancé tous les jours à minuit par "suricata-ip-update.timer".
 Grâce à l'option "RandomizedDelaySec=1800", ce timer a une fenêtre de 30 min (entre 00:00 et 00:30) pour lancer le service, ce qui permet d'éviter de surcharger la machine si des processus louds sont déjà en train de s'executer (backup automatiques entre autre)
- 
+
+
+
+Wazuh : 
+
+  En parallèle de l'installation de suricata, nous avons mis en place un SIEM (Outil de gestion d'évenement et d'informations de securité). Nous avons opté pour le SIEM Open source Wazuh.
+  Wazuh est installé sur une machine Rocky Linux 10 dans une VM contrairement à suricata qui est une machine physique.
+
+  Quesque wazuh :
+
+    - tu coco
+
+  Configuration des sources :
+    Wazuh reçoit des logs depuis diverses sources comme les agents wazuh ; installés sur chaque machine employé ainsi que sur le serveur Active Directory, le serveur de fichier, le serveur de backups, le serveur des vms et la machine suricata.
+    En plus de ces agnets, certains équipement réseau ne peuvent pas installer un agent wazuh et remontent donc des logs directement par flux tcp.
+    Nous avons sur le port 1514/tcp les logs au format sysylog des agents wazuh, sur le port 5514/tcp les logs du gateway wifi Ubiquiti qui remontent des logs sous le format CEF (common event format) et sur le port 514/tcp les logs en sysylog provenant du pare-feu Sophos XGS107.
+
+  Décoders et règles :
+    Des décodeurs supplémentaires ont été ajoutés, notamment pour les logs au format CEF du gateway Ubuiquiti, ou pour décoder les évenments du pare-feu Sophos.
+
+
+
+Database Access : 
+
+  Au début de mon stage, j'ai travaillé sur une analyse de base de donnée Microsoft Access pour un client de Mesulog. Cette base de donnée, générée automatiquement depuis les rapports de test de banc de test Mesulog présent chez des clients, ce présente au départ comme 1 seule table à 23 colonnes.
+  Il était donc courant d'avoir des enregisrtements partiels, erronés ou avec un mauvais format. L'objectif final était de produire différents graphiques pour analyser l'évolution de la production
