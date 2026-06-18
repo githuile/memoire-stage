@@ -1,0 +1,14 @@
+[Unit]
+Description=Update Suricata IP reputation feeds
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/suricata-ip-update.sh
+StandardOutput=journal
+StandardError=journal
+User=root
+
+[Install]
+WantedBy=multi-user.target

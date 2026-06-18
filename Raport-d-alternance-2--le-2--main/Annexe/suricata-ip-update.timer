@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Suricata feed update daily
+Requires=suricata-ip-update.service
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=1800
+
+[Install]
+WantedBy=timers.target

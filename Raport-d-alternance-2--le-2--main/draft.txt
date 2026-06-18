@@ -1,6 +1,6 @@
 Suricata :
 
-  Afin de mieux surpervisre la sécurité du réseaud e Mesulog, il a été choisit d'installer Suricata en mode IDS (détection d'intrusion, mais aucune action prise par suricata).
+  Afin de mieux surpervisre la sécurité du réseau de Mesulog, il a été choisit d'installer Suricata en mode IDS (détection d'intrusion, mais aucune action prise par suricata).
   La distribution linux utilisée en production à mesulog est Rocky Linux 10, une distribution RHEL (Red Hat)
 
 Choix techniques : 
@@ -13,3 +13,24 @@ Choix techniques :
   
     
 Configuration :
+
+
+suricata.yaml gang
+
+Liaison avec Wazuh : 
+
+Pour eviter de surcharger le SIEM, nous avons créé un deuxième fichier de log sous le format EVE (Extensible Event Format), intitulé eve-wazuh.json, dans lequel seuleeent les alertes Suricata sont loggées, contrairement au fichier de log eve.json pour Evebox où toutes les alertes ainsi que tous les évenement sont loggés.
+Ainsi nous avons un agent wazuh sur la machine hôte Rocky linux de suricata et evebox. Cet agent est configuré pour utiliser le fichier eve-wazuh.json comme source.
+Cet agent wazuh a aussi une deuxième fonction ; en effet il vérifie régulièrement l'état des conteneurs dockers, et remonte des alertes dans wazuh dès qu'un changement d'état ou une commande docker <args> est lancée sur la machine.
+Il suffit par la suite de créer des règles dans Wazuh pour attraper les alerts suricata petrinentes.
+
+En ce qui concerne les règles de Suricata en mode IDS, nous avons premièrement ajouté les règles de l'Open Emerging Threats publiées par Proofpoint. Avec des règles additionnnelles, ajoutées à la suite de l'analyse de l'activité réseau avec Evebox.
+Par exemple, en constatant un traffic significatif de packets mDNS sur le réseau, des règles contre le mDNS poisoning on été ajoutées dans un fichier de règle supplémentaire.
+Afin de se prémunir contre les IPs malicieuses, nous avons ajouté des règles automatiquent suivant une liste d'ip malicuese.
+Pour ce faire, nous avons écrit un programme bash qui récupère des listes d'ip maliceuses depuis de listes de emerging threats, abuse.ch ou encore alien vault (Voir annexe). Nous concatenons ensuite ces liste dans un seul fichier, puis ajountons pour chaque ip 2 règles dans un fichier de règle suricata "ip-reputation!.rules"
+une règle pour les connexions sortante et la deuxième pour les connexions entrantes depuis/vers cette ip. Ensuite le programme execute "docker kill --signal=USR2 suricata" qui envoie un signal non pas d'arrêt mais de reload des règles à chaud sans redémarrer le service.
+Ce reload est d'ailleurs détecté par l'agent wazuh présent sur la machine hôte, qui remonte un évenement de reload dans wazuh.
+
+Pour executer ce programme de manière automatique, nous avons créé un service linux "suricata-ip-update.service" qui est lancé tous les jours à minuit par "suricata-ip-update.timer".
+Grâce à l'option "RandomizedDelaySec=1800", ce timer a une fenêtre de 30 min (entre 00:00 et 00:30) pour lancer le service, ce qui permet d'éviter de surcharger la machine si des processus louds sont déjà en train de s'executer (backup automatiques entre autre)
+ 
