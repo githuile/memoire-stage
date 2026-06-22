@@ -301,7 +301,7 @@ Vianney MIQUEL\\
 
 {\small Jury} \\
 IUT 	: M. FONTENAS \\
-IUT 	: M. \\
+IUT 	: M. DUTOT \\
 Société  : M. DESRUELLE\\
 \end{center}
  
@@ -313,13 +313,14 @@ Société  : M. DESRUELLE\\
 
 
 
-\addtocounter{page}{-1}
+\addtocounter{page}{-6}
+\thispagestyle{empty} 
 \vspace{-1cm}
 
 \begin{document}
 \thispagestyle{empty} 
 \maketitle
-
+\thispagestyle{empty}
 \newpage 
 \thispagestyle{empty} 
 \begin{center}
@@ -371,28 +372,16 @@ Ce stage a été une expérience très positive, où j'ai pu me tester et acqué
 \item[$\bullet$] \textbf{Eric Fontenas} Mon tuteur pédagogique qui a répondu à toutes mes questions.
 \item[] 
 
-\item[$\bullet$] \textbf{ekess} Qui a pris le temps de lire ce rapport afin de m’évaluer
+\item[$\bullet$] \textbf{Pierre-françois Dutot} Qui a pris le temps de lire ce rapport afin de m’évaluer
 \item[] 
 
 \end{itemize}
-
 \vspace{\baselineskip} % Ajoute une ligne vide entre les éléments
-
-Je souhaite que mon travail ait un impact positif sur l'entreprise et sur mes collègues. Ce stage m'a aussi servi de confirmation de mes choix d'orientation, et j'utiliserai les compétences acquises au cours de celui ci dans tout mes futurs emplois.
-
-
-
- \newpage
-
-
-
-
-	
-
+\newpage
 \thispagestyle{empty}
-
 \tableofcontents
 \newpage
+\thispagestyle{empty} 
 \listoffigures
 \newpage
 
@@ -438,36 +427,36 @@ Mesulog fait aussi partie d'un groupe d'entreprise, \textbf{Nerys Group}. Nerys 
 
 \begin{figure}[h]
   \centering
-\begin{tikzpicture}[node distance=1.4cm and 1.6cm]
+  \begin{tikzpicture}[node distance=1.4cm and 1.6cm]
 
-\node[boxlight] (asaro) {Anthony Asaro\\Développeur technicien};
-\node[boxlight, left=1.8cm of asaro] (lerch) {Benjamin Lerch\\Développeur ingénieur};
-\node[boxlight, right=1.8cm of asaro] (bertin) {Thomas Bertin\\Développeur ingénieur};
+  \node[boxlight] (asaro) {Anthony Asaro\\Développeur technicien};
+  \node[boxlight, left=1.8cm of asaro] (lerch) {Benjamin Lerch\\Développeur ingénieur};
+  \node[boxlight, right=1.8cm of asaro] (bertin) {Thomas Bertin\\Développeur ingénieur};
 
-\node[boxlight, below=1.2cm of lerch] (sechi) {Kenzo Sechi\\Alternant};
-\node[boxlight, below=1.2cm of asaro] (kilian) {Verger Kilian\\Stagiaire};
-\node[boxgreen, below=1.2cm of bertin] (miquel) {Vianney Miquel\\Stagiaire};
+  \node[boxlight, below=1.2cm of lerch] (sechi) {Kenzo Sechi\\Alternant};
+  \node[boxlight, below=1.2cm of asaro] (kilian) {Verger Kilian\\Stagiaire};
+  \node[boxgreen, below=1.2cm of bertin] (miquel) {Vianney Miquel\\Stagiaire};
 
-\node[boxmed, above=1.2cm of asaro, xshift=-3cm] (lamy) {Damien Lamy\\Chef de projet};
-\node[boxmed, above=1.2cm of asaro, xshift=3cm] (andrieu) {Adrien Andrieu\\Chef de projet};
+  \node[boxmed, above=1.2cm of asaro, xshift=-3cm] (lamy) {Damien Lamy\\Chef de projet};
+  \node[boxmed, above=1.2cm of asaro, xshift=3cm] (andrieu) {Adrien Andrieu\\Chef de projet};
 
-\node[boxdark, above=3.6cm of asaro] (president) {Luc Desruelle\\Directeur};
+  \node[boxdark, above=3.6cm of asaro] (president) {Luc Desruelle\\Directeur};
 
-\node[boxdark, right=2cm of president] (admin) {Emilie Evrard\\Responsable administrative};
+  \node[boxdark, right=2cm of president] (admin) {Emilie Evrard\\Responsable administrative};
 
-% --- Groupes par ligne (rectangle englobant) ---
-\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(president), label=north:{Direction}] (grp1) {};
-\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lamy) (andrieu), label=above:{Chefs de projet}] (grp2) {};
-\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lerch) (asaro) (bertin), label=above:{Développeurs}] (grp3) {};
-\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(sechi) (kilian) (miquel), label=above:{Stagiaires / Alternant}] (grp4) {};
+  % --- Groupes par ligne (rectangle englobant) ---
+  \node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(president), label=north:{Direction}] (grp1) {};
+  \node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lamy) (andrieu), label=above:{Chefs de projet}] (grp2) {};
+  \node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lerch) (asaro) (bertin), label=above:{Développeurs}] (grp3) {};
+  \node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(sechi) (kilian) (miquel), label=above:{Stagiaires / Alternant}] (grp4) {};
 
-% --- Connexions entre rectangles seulement ---
-\draw[line] (grp1.south) -- ++(0,-0.6) -- (grp2.north);
-\draw[line] (grp2.south) -- ++(0,-0.6) -- (grp3.north);
-\draw[line] (grp3.south) -- ++(0,-0.6) -- (grp4.north);
-\draw[dashed] (admin.west) -- (grp1.east);
+  % --- Connexions entre rectangles seulement ---
+  \draw[line] (grp1.south) -- ++(0,-0.6) -- (grp2.north);
+  \draw[line] (grp2.south) -- ++(0,-0.6) -- (grp3.north);
+  \draw[line] (grp3.south) -- ++(0,-0.6) -- (grp4.north);
+  \draw[dashed] (admin.west) -- (grp1.east);
 
-\end{tikzpicture}
+  \end{tikzpicture}
   \caption{Présentation de la hiérarchie de l'équipe Mesulog}
   \label{fig:hierachie-mesulog}
 \end{figure}
@@ -493,49 +482,56 @@ J'ai aussi pu retravailler l'organisation de l'Active Directory de l'entreprise,
 \\
 Ces missions étant toutes étroitement liées entre elles, excepté l'analyse de données pour un client, elles se sont déroulées en parallèles sur la durée de mon stage.
 par\bigskip
-%\begin{figure}[H]
-%\centering
-%\resizebox{\textwidth}{!}{%
-%  \begin{ganttchart}[
-%      hgrid style/.style={draw=gray!20, line width=0.4pt},
-%      vgrid={*{7s}{draw=none}, dotted},
-%      time slot format=isodate,
-%      time slot unit=day,
-%      canvas/.style={draw=gray!30, line width=0.5pt},
-%      title/.style={draw=none, fill=gray!12},
-%      title label font=\small\bfseries\color{black!70},
-%      title height=1,
-%      bar label font=\small,
-%      bar label node/.append style={align=right, text width=6cm},
-%      bar height=0.55,
-%      bar top shift=0.225,
-%      y unit title=0.7cm,
-%      y unit chart=1.1cm,
-%      x unit=0.15cm
-%    ]{2026-04-13}{2026-07-17}
-%      \gantttitlecalendar{year, month=name, week=1} \\[grid]
-%      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
-%          {Analyse de données client dans Microsoft Access}{2026-04-13}{2026-05-01} \\
-%      \ganttbar[bar/.append style={fill=blue!30, draw=blue!50, rounded corners=2pt}]
-%          {Installation de Suricata et Evebox}{2026-05-01}{2026-05-31} \\
-%      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
-%          {Installation et Configuration de Wazuh}{2026-05-01}{2026-06-30} \\
-%      \ganttbar[bar/.append style={fill=blue!30, draw=blue!50, rounded corners=2pt}]
-%          {Durcissement système (GPO) et refonte de l'organisation Active Directory}{2026-05-30}{2026-07-17} \\
-%      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
-%          {Réalisation d'une campagne de phishing}{2026-06-01}{2026-06-30} \\
-%
-%  \end{ganttchart}
-%}%
-%\caption{Chronologie des missions réalisées pendant mon stage}
-%\label{fig:gantt-missions}
-%\end{figure}
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+  \begin{ganttchart}[
+      hgrid style/.style={draw=gray!20, line width=0.4pt},
+      vgrid={*{6}{draw=none}, dotted},
+      time slot format=isodate,
+      time slot unit=day,
+      canvas/.style={draw=gray!30, line width=0.5pt},
+      title/.style={draw=none, fill=gray!12},
+      title label font=\small\bfseries\color{black!70},
+      title height=1,
+      bar label font=\small,
+      bar label node/.append style={align=right, text width=6cm},
+      bar height=0.55,
+      bar top shift=0.225,
+      y unit title=0.7cm,
+      y unit chart=1.2cm,
+      x unit=0.16cm
+    ]{2026-04-13}{2026-07-17}
+      \gantttitlecalendar{year, month=name} \\
+      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
+          {Analyse de données client dans Microsoft Access}{2026-04-13}{2026-05-03} \\
+      \ganttbar[bar/.append style={fill=blue!30, draw=blue!50, rounded corners=2pt}]
+          {Installation de Suricata et Evebox}{2026-05-04}{2026-06-07} \\
+      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
+          {Installation et Configuration de Wazuh}{2026-05-11}{2026-06-28} \\
+      \ganttbar[bar/.append style={fill=blue!30, draw=blue!50, rounded corners=2pt}]
+          {Durcissement système (GPO) et refonte de l'organisation Active Directory}{2026-05-31}{2026-07-17} \\
+      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
+          {Réalisation d'une campagne de phishing}{2026-06-15}{2026-07-05} \\
+
+  \end{ganttchart}
+}%
+\caption{Chronologie des missions réalisées pendant mon stage}
+\label{fig:gantt-missions}
+\end{figure}
 \section{Réalisation}
 
 \subsection{Base de données Access}
 
   Au début de mon stage, j'ai travaillé sur une analyse de base de donnée Microsoft Access pour un client de Mesulog. Cette base de donnée, générée automatiquement depuis les rapports de test de banc de test Mesulog présent chez des clients, ce présente au départ comme 1 seule table à 23 colonnes.\\
-  \\
+  \par\bigskip
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/access-schema.png}
+    \label{fig:access-sechema}
+    \caption{Schéma de la table initiale}
+  \end{figure}
+  \par\bigskip
   Il était donc courant d'avoir des enregistrements partiels, erronés ou avec un mauvais format. L'objectif final était de produire différents graphiques et tableaux pour analyser l'évolution de la production de modules, appelés "V1" ou "V2".\\
   \\
   Les modules sont testés sur un banc, ils sont soit de type 1 ou 2. Un module passe un ou plusieurs tests ou essais avant d'être validé. Pour qu'un module soit validé il suffit d'un essai passé. Un essai à 4 issues : "Passed" (valide), "Failed" (non-valide), "Terminated" (le test s'est treminé prématurément) et "Error" (le banc de test a fait crasher le test).\\
@@ -543,8 +539,10 @@ par\bigskip
   Nous devons donc produire un tableau récapitulatif général par année et par banc avec entre autre les nombres de modules validés, le nombre d'essais moyen et médian avant pour un moduel avant d'être validé, le temps moyen en heure pour valider un module, le ratio des états des essais.\\
   \\
   Le client a aussi 2 demandes plus particulières : \\
-   - nous devons analyser plus précisément les états des essais les lundi matins car un nombre anormal d'erreurs sur le banc est suspecté.\\
-   - nous devons aussi analyser la distribution des états des essais selon le pas de test. En effet une séquence d'essais complète comporte 39 étapes.\\
+  \begin{enumerate}
+    \item[$\bullet$] Nous devons analyser plus précisément les états des essais les lundi matins car un nombre anormal d'erreurs sur le banc est suspecté.
+    \item[$\bullet$] Nous devons aussi analyser la distribution des états des essais selon le pas de test. En effet une séquence d'essais complète comporte 39 étapes.
+  \end{enumerate}
 \par\bigskip
 
 \subsubsection{Nettoyage des données}
@@ -556,26 +554,27 @@ par\bigskip
     \item[$\bullet$] Le type du module (V1 ou V2), qui est noté UHF100 pour V1, UHF100 V2 ou UHF1002Ghz. Cette valeur est souvent manquante, il faut donc l'inférer.
     \item[$\bullet$] Les essais qui font partis de la chaine production et les essais de R\&D ou de SAV qui ne sont pas signalés de manière consistante. Il faut écarter ces enregistrements de l'analyse.
   \end{enumerate}
-  \par\bigskip
+\par\bigskip
   Pour ce faire nous avons créé une suite de requètes SQL pour automatiquement effecture ce nettoyage. Etant donné que l'objectif final est d'automatiser l'execution de toutes ces requètes dans Microsoft Access avec un scipt VBS (Visual Basic Scripting), la synthaxe SQL utilisée est celle de Microsoft Access, qui nous impose des choix parfois sous-optimaux.\\
   Pour ne pas surcharger ce rapport nous verrons ici seulement un exemple de formattage, le reste est disponible en Annexe \hyperref[fig:setup-access]{ici} :
   \par\bigskip
-  \begin{figure}[h]
+  \begin{figure}[H]
     \lstinputlisting[language=SQL, firstline=122, lastline=141]{Annexe/Setup_query.sql}
     \label{fig:setup-access-08}
     \caption{Requête de normalisation des fins de numéro de série}
   \end{figure}
-  \par\bigskip
+\par\bigskip
 
 Nous pouvons voir ci-dessus un requête destinée à formatter tous les numéros de série sous la forme "*.XXX", "XXX" étant 3 chiffres.\\
 Exemple : "17A240923.2" est transformé en "17A240923.002"\\
+Afin de ne perdre aucune information, le numéro de série normalisé est inséré dans une nouvelle colonne. Il en va de même pour le modèle et pour l'objectif du test (Porduction ou SAV, R\&D).\\
 \\
 Une fois que toutes les données sont complétées et formattées, nous passons à l'exploitation de celles-ci.
 \par\bigskip
 \subsubsection{Extraction des données pertinentes}
 
 L'objectif de cette partie est de remplir un tableau type comme présenté ci-dessous :\\
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/tableau-access.png}
   \label{fig:tableau}
@@ -589,8 +588,8 @@ Nous pouvons aussi voir des lignes mettant en évidence les différences d'essai
 Dans ce jeu de données, nous avons 2 bancs est 2 types de modules. Il était demandé d'analyser l'évolution de la production par banc tous types de modules confondus et par banc seulement pour les modules types V2. Cela nous fait donc 6 tableaux à remplir de données.\\
 Pour extraire ces données, nous partons de la table nettoyée, et nous avons fait une suite de 18 requêtes SQL pour extraire les données ou créer des tables temporaires pour d'autres requêtes. Si dans ces requêtes nous définissons le banc et le type de module en dur, il est prévu d'utiliser un script VBS (Visual Basic Scripting) pour remplacer automatiquement ces variables dans les reqêtes.\\
 Comme précedement, nous ne montrons pas l'intégralité des requêtes dans le corps du rapport, mais elles sont disponibles en \hyperref[fig:extraction-access]{Annexe}.
-\newpage
-\begin{figure}[h]
+\par\bigskip
+\begin{figure}[H]
   \lstinputlisting[language=SQL, firstline=411, lastline=448]{Annexe/BANC_MOD_extraction_query.sql}
   \label{fig:extraction-access-15}
   \caption{Requête d'une table tamporaire pour le calcul du TtFP (Time to First Pass)}
@@ -600,7 +599,7 @@ Cette requête créer une table temporaire qui regroupe l'empreinte temporelle d
 \\
 Maintenant que nous avons extrait toutes les données nécessaires, nous pouvons les mettre en forme, voici donc quelques exemples de graphiques produits (L'ensemble est trouvable en \hyperref[fig:graphiques]{Annexe}):
 \par\bigskip
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/nb_test_mod12_stepcount.png}
   \label{fig:graph-step12-corps}
@@ -610,19 +609,61 @@ Maintenant que nous avons extrait toutes les données nécessaires, nous pouvons
 \newpage
 \subsection{Mise en place de Suricata}
 
-Suricata est un système de détection/prévention d'intrusion. Son fonctionnement est assez simple : il capture chaque paquet qui transite sur le réseau et analyse ses propriétés.Pour engendrer une alerte ou une action, Suricata utilise des règles, qui sont un ensemble de paramètres. Si une trame correspond à tous les critères (elle à la même signature) alors une action est prise pzr suricata.\\ Il peut etre décider de ne rien faire, de génerer une alerte ou de rejetter la trame si Suricata est en mode IPS (Intrusion Prevention System). En mode IDS (Intrusion Detection System) nous lancons simplement des alerts mais sans bloquer le traffic. C'est comme ça que nous l'installerons, afin d'éviter qu'un faut positif coupe une connexion légitime.\\
- Pour installer Suricata, nous avons pris une machine physique.   Pour éviter de risquer ralentir le traffic, nous avons mis en place un port mirroring à partir d'un swirch juste en aval du pare-feu Sophos, le suricata reçoit donc une copie exacte de tout le traffic qui passe de WAN à LAN et de LAN à WAN.\\ La distribution linux utilisée en production à mesulog est Rocky Linux 10, une distribution RHEL (Red Hat).   L'installation de suricata sur Rocky Linux se fait avec le dépôt COPR du projet OISF (développeurs et mainteneurs de Suricata).\\
+Suricata est un système de détection/prévention d'intrusion. Son fonctionnement est assez simple : il capture chaque paquet qui transite sur le réseau et analyse ses propriétés.Pour engendrer une alerte ou une action, Suricata utilise des règles, qui sont un ensemble de paramètres. Si une trame correspond à tous les critères (elle à la même signature) alors une action est prise par suricata.
+\par\bigskip
+\begin{figure}[H]
+    \centering
+    \lstinputlisting[language=bash]{Annexe/suricata-example.rules}
+  \label{fig:example-rule-corps}
+  \caption{Exemple de règle Suricata - ici une règle contre le mDNS poisoning}
+\end{figure}
+\par\bigskip
+Suricata peut donc décider de ne rien faire, de génerer une alerte ou de rejetter la trame en mode IPS (Intrusion Prevention System). En mode IDS (Intrusion Detection System) nous lancons simplement des alerts mais sans bloquer le traffic. C'est comme ça que nous l'installerons, afin d'éviter qu'un faut positif coupe une connexion légitime.\\
+ Pour installer Suricata, nous avons pris une machine physique.   Pour éviter de risquer ralentir le traffic, nous avons mis en place un port mirroring à partir d'un swirch juste en aval du pare-feu Sophos, le suricata reçoit donc une copie exacte de tout le traffic qui passe de WAN à LAN et de LAN à WAN.\\
+ \\
+ La distribution linux utilisée en production à mesulog est Rocky Linux 10, une distribution RHEL (Red Hat).   L'installation de suricata sur Rocky Linux se fait avec le dépôt COPR du projet OISF (développeurs et mainteneurs de Suricata).\\
   Cependant ce dépôt qui installe via un fichier rpm n'arrive pas à résoudre ses dépendance sur Rocky 10. Nous avons donc choisit d'installer suricata via l'image docker fournie par Jason Ish, membre du projet OISF.\\
   Ce choix technique nous permet aussi d'installer Evebox dans un second conteneur docker. Evebox est l'outil de gestion d'alerte et d'évenement pour Suricata développé et maintenu lui aussi par le projet OISF.
   Ces 2 conteneurs sont réunis dans un même fichier docker compose pour une meilleure maintenabilité.
+\par\bigskip
+\begin{figure}[H]
+    \centering
+    \lstinputlisting[basicstyle=\small]{Annexe/compose.yaml}
+  \label{fig:compose-yaml}
+  \caption{fichier Docker Compose}
+\end{figure}
+\par\bigskip
+Premièrement nous pouvons voir que les deux conteneurs sont paraméter pour redémarrer automatiquement dès qu'ils sont éteints, pour limiter le temps hors-service. La variable d'environnement "TZ" permet de s'assurer que l'heure soit bien synchronisée dans les logs.\\
+Quelques points important :\\
+  \begin{enumerate}
+    \item[$\bullet$] Des capabilités ont été ajoutées avec "cap\_add" au conteneur Suricata pour accéder à l'interface réseau de la machine hôte, créer des sockets ou changer la priorité des processus si besoin.
+    \item[$\bullet$] La variable d'environnement "EVEBOX\_RETENTION\_PERIOD" permet de définir un limite de temps au delà de laquelle les logs sont effacés, très important pour ne pas saturer le stockage. Ici la limite est de 7 jours.
+  \end{enumerate}
+  \par\bigskip
 
-\subsubsection{Configuration et liaison avec Wazuh}
+Ci-dessous l'interface web de Evebox, qui permet de suivre pas seulement les alertes mais tous les évenemment Suricata : \\
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/evebox-interface.png}
+  \label{fig:evebox-interface}
+  \caption{Interface web d'Evebox}
+\end{figure}
+\par\bigskip
 
-Pour eviter de surcharger le SIEM, nous avons créé un deuxième fichier de log sous le format EVE (Extensible Event Format), intitulé eve-wazuh.json, dans lequel seuleeent les alertes Suricata sont loggées, contrairement au fichier de log eve.json pour Evebox où toutes les alertes ainsi que tous les évenement sont loggés.\\
+
+\subsubsection{Configuration et integration avec Wazuh}
+
+Pour éviter de surcharger le SIEM, nous avons créé un deuxième fichier de log sous le format EVE (Extensible Event Format), intitulé eve-wazuh.json, dans lequel seulement les alertes Suricata sont loggées, contrairement au fichier de log eve.json pour Evebox où toutes les alertes ainsi que tous les évenement sont loggés.\\
 Ainsi nous avons un agent wazuh sur la machine hôte Rocky linux de suricata et evebox. Cet agent est configuré pour utiliser le fichier eve-wazuh.json comme source.\\
-Cet agent wazuh a aussi une deuxième fonction ; en effet il vérifie régulièrement l'état des conteneurs dockers, et remonte des alertes dans wazuh dès qu'un changement d'état ou une commande docker <args> est lancée sur la machine.\\
+Cet agent wazuh a aussi une deuxième fonction ; en effet il vérifie régulièrement l'état des conteneurs dockers, et remonte des alertes dans wazuh dès qu'un changement d'état ou une commande docker est lancée sur la machine.\\
 Il suffit par la suite de créer des règles dans Wazuh pour attraper les alerts suricata petrinentes.\\
-\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/docker-wazuh.png}
+  \label{fig:docker-wazuh}
+  \caption{Dashboard d'évenements Docker dans Wazuh}
+\end{figure}
+\par\bigskip
 En ce qui concerne les règles de Suricata en mode IDS, nous avons premièrement ajouté les règles de l'Open Emerging Threats publiées par Proofpoint. Avec des règles additionnnelles, ajoutées à la suite de l'analyse de l'activité réseau avec Evebox.\\
 Par exemple, en constatant un traffic significatif de packets mDNS sur le réseau, des règles contre le mDNS poisoning on été ajoutées dans un fichier de règle supplémentaire.\\
 Afin de se prémunir contre les IPs malicieuses, nous avons ajouté des règles automatiquent suivant une liste d'ip malicuese.\\

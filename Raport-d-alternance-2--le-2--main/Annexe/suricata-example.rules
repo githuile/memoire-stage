@@ -1,0 +1,1 @@
+alert udp any any -> any 546 (msg:"Suspicious DHCPv6 Advertise Packet Detected, Possible attack using mitm6"; content:"|02|"; depth:1; offset:0; reference:url,https://blog.exploit.org/caster-neurotransmitter/; sid:1118750; rev:1;)
