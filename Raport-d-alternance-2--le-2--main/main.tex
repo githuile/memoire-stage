@@ -606,25 +606,47 @@ Maintenant que nous avons extrait toutes les données nécessaires, nous pouvons
   \label{fig:graph-step12-corps}
   \caption{Distribution des statuts de fin des essais par étape de l'essai, tous bancs confondus}
 \end{figure}
+\par\bigskip
+\newpage
 \subsection{Mise en place de Suricata}
-\subsubsection{Choix techniques}
-\subsubsection{Détail des tâches}
-\subsubsection{Pistes d'améliorations}
 
-\subsection{Mise en place d'un SIEM - Wazuh}
-\subsubsection{Choix techniques}
-\subsubsection{Détail des tâches}
-\subsubsection{Pistes d'améliorations}
+Suricata est un système de détection/prévention d'intrusion. Son fonctionnement est assez simple : il capture chaque paquet qui transite sur le réseau et analyse ses propriétés.Pour engendrer une alerte ou une action, Suricata utilise des règles, qui sont un ensemble de paramètres. Si une trame correspond à tous les critères (elle à la même signature) alors une action est prise pzr suricata.\\ Il peut etre décider de ne rien faire, de génerer une alerte ou de rejetter la trame si Suricata est en mode IPS (Intrusion Prevention System). En mode IDS (Intrusion Detection System) nous lancons simplement des alerts mais sans bloquer le traffic. C'est comme ça que nous l'installerons, afin d'éviter qu'un faut positif coupe une connexion légitime.\\
+ Pour installer Suricata, nous avons pris une machine physique.   Pour éviter de risquer ralentir le traffic, nous avons mis en place un port mirroring à partir d'un swirch juste en aval du pare-feu Sophos, le suricata reçoit donc une copie exacte de tout le traffic qui passe de WAN à LAN et de LAN à WAN.\\ La distribution linux utilisée en production à mesulog est Rocky Linux 10, une distribution RHEL (Red Hat).   L'installation de suricata sur Rocky Linux se fait avec le dépôt COPR du projet OISF (développeurs et mainteneurs de Suricata).\\
+  Cependant ce dépôt qui installe via un fichier rpm n'arrive pas à résoudre ses dépendance sur Rocky 10. Nous avons donc choisit d'installer suricata via l'image docker fournie par Jason Ish, membre du projet OISF.\\
+  Ce choix technique nous permet aussi d'installer Evebox dans un second conteneur docker. Evebox est l'outil de gestion d'alerte et d'évenement pour Suricata développé et maintenu lui aussi par le projet OISF.
+  Ces 2 conteneurs sont réunis dans un même fichier docker compose pour une meilleure maintenabilité.
 
-\section{Impact environnemental et sociétal}
+\subsubsection{Configuration et liaison avec Wazuh}
 
-\section{Conclusion}
+Pour eviter de surcharger le SIEM, nous avons créé un deuxième fichier de log sous le format EVE (Extensible Event Format), intitulé eve-wazuh.json, dans lequel seuleeent les alertes Suricata sont loggées, contrairement au fichier de log eve.json pour Evebox où toutes les alertes ainsi que tous les évenement sont loggés.\\
+Ainsi nous avons un agent wazuh sur la machine hôte Rocky linux de suricata et evebox. Cet agent est configuré pour utiliser le fichier eve-wazuh.json comme source.\\
+Cet agent wazuh a aussi une deuxième fonction ; en effet il vérifie régulièrement l'état des conteneurs dockers, et remonte des alertes dans wazuh dès qu'un changement d'état ou une commande docker <args> est lancée sur la machine.\\
+Il suffit par la suite de créer des règles dans Wazuh pour attraper les alerts suricata petrinentes.\\
+\\
+En ce qui concerne les règles de Suricata en mode IDS, nous avons premièrement ajouté les règles de l'Open Emerging Threats publiées par Proofpoint. Avec des règles additionnnelles, ajoutées à la suite de l'analyse de l'activité réseau avec Evebox.\\
+Par exemple, en constatant un traffic significatif de packets mDNS sur le réseau, des règles contre le mDNS poisoning on été ajoutées dans un fichier de règle supplémentaire.\\
+Afin de se prémunir contre les IPs malicieuses, nous avons ajouté des règles automatiquent suivant une liste d'ip malicuese.\\
+Pour ce faire, nous avons écrit un programme bash qui récupère des listes d'ip maliceuses depuis de listes de emerging threats, abuse.ch ou encore alien vault (Voir annexe). Nous concatenons ensuite ces liste dans un seul fichier, puis ajountons pour chaque ip 2 règles dans un fichier de règle suricata "ip-reputation!.rules"\\
+une règle pour les connexions sortante et la deuxième pour les connexions entrantes depuis/vers cette ip. Ensuite le programme execute "docker kill --signal=USR2 suricata" qui envoie un signal non pas d'arrêt mais de reload des règles à chaud sans redémarrer le service.\\
+Ce reload est d'ailleurs détecté par l'agent wazuh présent sur la machine hôte, qui remonte un évenement de reload dans wazuh.\\
+\\
+Pour executer ce programme de manière automatique, nous avons créé un service linux "suricata-ip-update.service" qui est lancé tous les jours à minuit par "suricata-ip-update.timer".\\
+Grâce à l'option "RandomizedDelaySec=1800", ce timer a une fenêtre de 30 min (entre 00:00 et 00:30) pour lancer le service, ce qui permet d'éviter de surcharger la machine si des processus louds sont déjà en train de s'executer (backup automatiques entre autre)\\
 
-\section{Réferences}
+%\subsection{Mise en place d'un SIEM - Wazuh}
+%\subsubsection{Choix techniques}
+%\subsubsection{Détail des tâches}
+%\subsubsection{Pistes d'améliorations}
 
-\section{Glossaire}
+%\section{Impact environnemental et sociétal}
 
-\section{Annexe}
+%\section{Conclusion}
+
+%\section{Réferences}
+
+%\section{Glossaire}
+
+%\section{Annexe}
 \begin{figure}[h]
   \lstinputlisting[language=SQL]{Annexe/Setup_query.sql}
   \label{fig:setup-access}
@@ -679,27 +701,6 @@ Maintenant que nous avons extrait toutes les données nécessaires, nous pouvons
   \label{fig:graph-lundi2026-b1}
 \end{figure}
 \par\bigskip
-\subsection{environnement technique}
-
-[Ici, présentation de l'architecture + logiciels utilisés]
-
-\subsection{Organisation des missions}
-
-Le diagramme ci dessous présente la chronolgie des différentes missions effectuées durant cette année d'alternance,
-bien que certaines missions comme \textit{l'homologation du SI classé "DR"} ou bien la \textit{migration de l'AD} étaient prévus pour une date donnée ou une date butoire,
-  les autres ne bénéficiaient d'aucun ordre établi à l'avance :
-
-
-
-
-
-
-\newpage
-\section{Missions effectuées}
-
-Après avoir posé le cadre institutionnel et professionnel de l'alternance, il est désormais pertinent de présenter en détail le sujet traité, les objectifs poursuivis
- ainsi que le déroulement chronologique des missions réalisées. Ces éléments permettent de saisir la portée technique de l'alternance et la logique
-d’ensemble des projets menés.
 
 \subsection{Installation et Intégration de Wazuh}
 
