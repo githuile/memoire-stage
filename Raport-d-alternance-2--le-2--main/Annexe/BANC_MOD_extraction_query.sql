@@ -1,11 +1,11 @@
---BC-MOD-00-BowenProd
+--BC-MOD-00-TEST_DATAProd
 
 SELECT
     *
 INTO
-    BOWEN_PROD_B1
+    TEST_DATA_PROD_B1
 FROM
-    BOWEN_REDUIT
+    TEST_DATA_REDUIT
 WHERE
     Prod = "PROD"
     AND StationID = "VM_T-D14"
@@ -25,7 +25,7 @@ SELECT
 INTO
     B1_table_essais_statut
 FROM
-    BOWEN_PROD_B1
+    TEST_DATA_PROD_B1
 ORDER BY
     StartTime;
 
@@ -152,7 +152,7 @@ SELECT
 INTO
     B1_temp_Nb_HorsProd
 FROM
-    BOWEN_REDUIT
+    TEST_DATA_REDUIT
 WHERE
     StationID = "VM_T-D14"
     AND Prod = "HORS_PROD"
@@ -334,7 +334,7 @@ SELECT
 INTO
     B1_temp_timestamp_essais
 FROM
-    BOWEN_PROD_B1
+    TEST_DATA_PROD_B1
 GROUP BY
     Year(StartTime),
     Weekday (StartTime),

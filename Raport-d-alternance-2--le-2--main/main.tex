@@ -14,7 +14,7 @@
 \usepackage{float}
 \usepackage{tabularx}
 \usepackage{pgfplots}
-\usepackage[colorlinks=true, urlcolor=blue, linkcolor=black]{hyperref}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=cyan, citecolor=green]{hyperref}
 
 
 \usepackage{titlesec}
@@ -493,81 +493,119 @@ J'ai aussi pu retravailler l'organisation de l'Active Directory de l'entreprise,
 \\
 Ces missions étant toutes étroitement liées entre elles, excepté l'analyse de données pour un client, elles se sont déroulées en parallèles sur la durée de mon stage.
 par\bigskip
-\begin{figure}[H]
-\centering
-\resizebox{\textwidth}{!}{%
-  \begin{ganttchart}[
-      hgrid style/.style={draw=gray!20, line width=0.4pt},
-      vgrid={*{7s}{draw=none}, dotted},
-      time slot format=isodate,
-      time slot unit=day,
-      canvas/.style={draw=gray!30, line width=0.5pt},
-      title/.style={draw=none, fill=gray!12},
-      title label font=\small\bfseries\color{black!70},
-      title height=1,
-      bar label font=\small,
-      bar label node/.append style={align=right, text width=6cm},
-      bar height=0.55,
-      bar top shift=0.225,
-      y unit title=0.7cm,
-      y unit chart=1.1cm,
-      x unit=0.15cm
-  ]{2026-04-13}{2026-07-17}
-      \gantttitlecalendar{year, month=name, week=1} \\[grid]
-      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
-          {Analyse de données client dans Microsoft Access}{2026-04-13}{2026-05-01} \\
-      \ganttbar[bar/.append style={fill=blue!30, draw=blue!50, rounded corners=2pt}]
-          {Installation de Suricata et Evebox}{2026-05-01}{2026-05-31} \\
-      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
-          {Installation et Configuration de Wazuh}{2026-05-01}{2026-06-30}\\
-      \ganttbar[bar/.append style={fill=blue!30, draw=blue!50, rounded corners=2pt}]
-          {Durcissement système (GPO) et refonte de l'organisation Active Directory}{2026-05-30}{2026-07-17}\\
-      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
-          {Réalisation d'une campagne de phishing}{2026-06-01}{2026-06-30}
-
-  \end{ganttchart}
-}%
-\caption{Chronologie des missions réalisées pendant mon stage}
-\label{fig:gantt-missions}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%\resizebox{\textwidth}{!}{%
+%  \begin{ganttchart}[
+%      hgrid style/.style={draw=gray!20, line width=0.4pt},
+%      vgrid={*{7s}{draw=none}, dotted},
+%      time slot format=isodate,
+%      time slot unit=day,
+%      canvas/.style={draw=gray!30, line width=0.5pt},
+%      title/.style={draw=none, fill=gray!12},
+%      title label font=\small\bfseries\color{black!70},
+%      title height=1,
+%      bar label font=\small,
+%      bar label node/.append style={align=right, text width=6cm},
+%      bar height=0.55,
+%      bar top shift=0.225,
+%      y unit title=0.7cm,
+%      y unit chart=1.1cm,
+%      x unit=0.15cm
+%    ]{2026-04-13}{2026-07-17}
+%      \gantttitlecalendar{year, month=name, week=1} \\[grid]
+%      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
+%          {Analyse de données client dans Microsoft Access}{2026-04-13}{2026-05-01} \\
+%      \ganttbar[bar/.append style={fill=blue!30, draw=blue!50, rounded corners=2pt}]
+%          {Installation de Suricata et Evebox}{2026-05-01}{2026-05-31} \\
+%      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
+%          {Installation et Configuration de Wazuh}{2026-05-01}{2026-06-30} \\
+%      \ganttbar[bar/.append style={fill=blue!30, draw=blue!50, rounded corners=2pt}]
+%          {Durcissement système (GPO) et refonte de l'organisation Active Directory}{2026-05-30}{2026-07-17} \\
+%      \ganttbar[bar/.append style={fill=teal!30, draw=teal!50, rounded corners=2pt}]
+%          {Réalisation d'une campagne de phishing}{2026-06-01}{2026-06-30} \\
+%
+%  \end{ganttchart}
+%}%
+%\caption{Chronologie des missions réalisées pendant mon stage}
+%\label{fig:gantt-missions}
+%\end{figure}
 \section{Réalisation}
 
 \subsection{Base de données Access}
 
   Au début de mon stage, j'ai travaillé sur une analyse de base de donnée Microsoft Access pour un client de Mesulog. Cette base de donnée, générée automatiquement depuis les rapports de test de banc de test Mesulog présent chez des clients, ce présente au départ comme 1 seule table à 23 colonnes.\\
-  Il était donc courant d'avoir des enregisrtements partiels, erronés ou avec un mauvais format. L'objectif final était de produire différents graphiques pour analyser l'évolution de la production de modules, appelés "V1" ou "V2".\\
+  \\
+  Il était donc courant d'avoir des enregistrements partiels, erronés ou avec un mauvais format. L'objectif final était de produire différents graphiques et tableaux pour analyser l'évolution de la production de modules, appelés "V1" ou "V2".\\
+  \\
+  Les modules sont testés sur un banc, ils sont soit de type 1 ou 2. Un module passe un ou plusieurs tests ou essais avant d'être validé. Pour qu'un module soit validé il suffit d'un essai passé. Un essai à 4 issues : "Passed" (valide), "Failed" (non-valide), "Terminated" (le test s'est treminé prématurément) et "Error" (le banc de test a fait crasher le test).\\
+  \\
+  Nous devons donc produire un tableau récapitulatif général par année et par banc avec entre autre les nombres de modules validés, le nombre d'essais moyen et médian avant pour un moduel avant d'être validé, le temps moyen en heure pour valider un module, le ratio des états des essais.\\
+  \\
+  Le client a aussi 2 demandes plus particulières : \\
+   - nous devons analyser plus précisément les états des essais les lundi matins car un nombre anormal d'erreurs sur le banc est suspecté.\\
+   - nous devons aussi analyser la distribution des états des essais selon le pas de test. En effet une séquence d'essais complète comporte 39 étapes.\\
+\par\bigskip
 
-  Voici donc la liste des indicateurs (KPI) à extraire de ces données :
+\subsubsection{Nettoyage des données}
 
+  Pour pouvoir correctement exploiter les données, il est important d'avoir des données complètes et sous le même format.\\
+  Les colonnes comportant des erreurs ou des oublis sont principalement :\\
   \begin{enumerate}
-    \item[$\bullet$] Depuis 2020, par banc et par type de module : 
-      \begin{enumerate}
-        \item[$\bullet$] Le nombre de modules testés au total
-        \item[] Le nombre de modules testés en Production
-        \item[] Le nombre de modules testés en production validés
-        \item[] Le nombre de modules testés en production non-validés
-        \item[] Le ratio de modules V2 sur l'ensemble
-        \item[] L'Effort Pass* moyen
-        \item[] L'Effort Pass* médian
-        \item[] Le Time to First Pass(TtFP)* en heure
-        \item[] Le nombre total d'essais en Production
-        \item[] Le ratio d'essais validés
-        \item[] Le ratio d'essais non-validés
-        \item[] Le ratio d'essais coupés avant la fin
-        \item[] Le ratio d'essais en erreur
-        \item[] Le nombre d'essais en erreur les Lundis matin
-        \item[] Le ratio
-        \item[] Le nombre d'essai en erreur les autres jours le matin
-        \item[] le
-      \end{enumerate}
-    \item[$\bullet$]  
+    \item[$\bullet$] Le numéro de série du module, qui comporte parfois des espaces, lettres minuscule ou un mauvais nombre de caractères.
+    \item[$\bullet$] Le type du module (V1 ou V2), qui est noté UHF100 pour V1, UHF100 V2 ou UHF1002Ghz. Cette valeur est souvent manquante, il faut donc l'inférer.
+    \item[$\bullet$] Les essais qui font partis de la chaine production et les essais de R\&D ou de SAV qui ne sont pas signalés de manière consistante. Il faut écarter ces enregistrements de l'analyse.
   \end{enumerate}
+  \par\bigskip
+  Pour ce faire nous avons créé une suite de requètes SQL pour automatiquement effecture ce nettoyage. Etant donné que l'objectif final est d'automatiser l'execution de toutes ces requètes dans Microsoft Access avec un scipt VBS (Visual Basic Scripting), la synthaxe SQL utilisée est celle de Microsoft Access, qui nous impose des choix parfois sous-optimaux.\\
+  Pour ne pas surcharger ce rapport nous verrons ici seulement un exemple de formattage, le reste est disponible en Annexe \hyperref[fig:setup-access]{ici} :
+  \par\bigskip
+  \begin{figure}[h]
+    \lstinputlisting[language=SQL, firstline=122, lastline=141]{Annexe/Setup_query.sql}
+    \label{fig:setup-access-08}
+    \caption{Requête de normalisation des fins de numéro de série}
+  \end{figure}
+  \par\bigskip
 
-  12 setup puis 18 extraction
-\subsubsection{Choix techniques}
-\subsubsection{Détail des tâches}
-\subsubsection{Pistes d'améliorations}
+Nous pouvons voir ci-dessus un requête destinée à formatter tous les numéros de série sous la forme "*.XXX", "XXX" étant 3 chiffres.\\
+Exemple : "17A240923.2" est transformé en "17A240923.002"\\
+\\
+Une fois que toutes les données sont complétées et formattées, nous passons à l'exploitation de celles-ci.
+\par\bigskip
+\subsubsection{Extraction des données pertinentes}
 
+L'objectif de cette partie est de remplir un tableau type comme présenté ci-dessous :\\
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/tableau-access.png}
+  \label{fig:tableau}
+  \caption{Tableu récapitulatif général - (pour le banc VM-TD14-BHT)}
+\end{figure}
+
+Ce tableau récapitulatif permet de voir facilement l'évolution de l'utilisatiion du banc, des résultats d'essais et du nombre de modules sortis en production.\\
+Pour plus de précision, le "Effort to Pass" est le nombre d'essais avant une réussite, tandis que le "Time to First Pass" est  le temps cumulé de tous les essais jusqu'à un essais validant.\\
+Nous pouvons aussi voir des lignes mettant en évidence les différences d'essais en erreur entre les lundis matins et les autres jours de la semaine.\\
+\\
+Dans ce jeu de données, nous avons 2 bancs est 2 types de modules. Il était demandé d'analyser l'évolution de la production par banc tous types de modules confondus et par banc seulement pour les modules types V2. Cela nous fait donc 6 tableaux à remplir de données.\\
+Pour extraire ces données, nous partons de la table nettoyée, et nous avons fait une suite de 18 requêtes SQL pour extraire les données ou créer des tables temporaires pour d'autres requêtes. Si dans ces requêtes nous définissons le banc et le type de module en dur, il est prévu d'utiliser un script VBS (Visual Basic Scripting) pour remplacer automatiquement ces variables dans les reqêtes.\\
+Comme précedement, nous ne montrons pas l'intégralité des requêtes dans le corps du rapport, mais elles sont disponibles en \hyperref[fig:extraction-access]{Annexe}.
+\newpage
+\begin{figure}[h]
+  \lstinputlisting[language=SQL, firstline=411, lastline=448]{Annexe/BANC_MOD_extraction_query.sql}
+  \label{fig:extraction-access-15}
+  \caption{Requête d'une table tamporaire pour le calcul du TtFP (Time to First Pass)}
+\end{figure}
+\par\bigskip
+Cette requête créer une table temporaire qui regroupe l'empreinte temporelle du premier essai d'un module, du premier essai validant, de la différence entre ces deux essais, du temp d'essai du second essai et finalement du "Time to First Pass" arrondi à l'heure.\\
+\\
+Maintenant que nous avons extrait toutes les données nécessaires, nous pouvons les mettre en forme, voici donc quelques exemples de graphiques produits (L'ensemble est trouvable en \hyperref[fig:graphiques]{Annexe}):
+\par\bigskip
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/nb_test_mod12_stepcount.png}
+  \label{fig:graph-step12-corps}
+  \caption{Distribution des statuts de fin des essais par étape de l'essai, tous bancs confondus}
+\end{figure}
 \subsection{Mise en place de Suricata}
 \subsubsection{Choix techniques}
 \subsubsection{Détail des tâches}
@@ -578,7 +616,7 @@ par\bigskip
 \subsubsection{Détail des tâches}
 \subsubsection{Pistes d'améliorations}
 
-\section{Imapct environnemental et sociétal}
+\section{Impact environnemental et sociétal}
 
 \section{Conclusion}
 
@@ -587,7 +625,60 @@ par\bigskip
 \section{Glossaire}
 
 \section{Annexe}
-
+\begin{figure}[h]
+  \lstinputlisting[language=SQL]{Annexe/Setup_query.sql}
+  \label{fig:setup-access}
+  \caption{Requêtes de nettoyage des données}
+\end{figure}
+\par\bigskip
+\begin{figure}[h]
+  \lstinputlisting[language=SQL]{Annexe/BANC_MOD_extraction_query.sql}
+  \label{fig:extraction-access}
+  \caption{Requêtes d'extraction de données}
+\end{figure}
+\newpage
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/nb_test_mod2_stepcount.png}
+  \label{fig:graphiques}
+  \caption{Distribution des statuts de fin des essais par étape de l'essai, modules V2}
+\end{figure}
+\par\bigskip
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/nb_test_status_lundi-2024-V2-BHT.png}
+  \label{fig:graph-lundi2024-bht}
+\end{figure}
+\par\bigskip
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/nb-test-status-lundi-2025-V2-BHT.png}
+  \label{fig:graph-lundi2025-bht}
+\end{figure}
+\par\bigskip
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/nb-test-status-lundi-2026-V2-BHT.png}
+  \label{fig:graph-lundi2026-bht}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/nb-test-status-lundi-2024-V2-B1.png}
+  \label{fig:graph-lundi2024-b1}
+\end{figure}
+\par\bigskip
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/nb-test-status-lundi-2025-V2-B1.png}
+  \label{fig:graph-lundi2025-b1}
+\end{figure}
+\par\bigskip
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/nb-test-status-lundi-2026-V2-B1.png}
+  \label{fig:graph-lundi2026-b1}
+\end{figure}
+\par\bigskip
 \subsection{environnement technique}
 
 [Ici, présentation de l'architecture + logiciels utilisés]

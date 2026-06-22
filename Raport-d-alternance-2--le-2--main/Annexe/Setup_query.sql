@@ -1,10 +1,10 @@
 --SETUP-01-ModelUpdateEmpty
 
-UPDATE BOWEN
+UPDATE RAW_DATA
 SET
     Model = DLookUp (
         "[Model]",
-        "BOWEN",
+        "RAW_DATA",
         "UHF100name='" & [UHF100name] & "' AND [Model] Is Not Null AND Trim([Model] & '')<>''"
     )
 WHERE
@@ -13,7 +13,7 @@ WHERE
 
 --SETUP-02-ModelUpdateUHF100-V2
 
-UPDATE BOWEN
+UPDATE RAW_DATA
 SET
     Model = "UHF100 V2"
 WHERE
@@ -21,7 +21,7 @@ WHERE
 
 --SETUP-03-ModelNormalise-1
 
-UPDATE bowen
+UPDATE RAW_DATA
 SET
     ModelNormalise = IIf(
         Model = "UHF100",
@@ -36,7 +36,7 @@ SELECT DISTINCT
 INTO
     temp_model1_serials
 FROM
-    bowen
+    RAW_DATA
 WHERE
     ModelNormalise = 1;
 
@@ -47,13 +47,13 @@ SELECT DISTINCT
 INTO
     temp_model2_serials
 FROM
-    bowen
+    RAW_DATA
 WHERE
     ModelNormalise = 2;
 
 --SETUP-06-ModelNormalise-4
 
-UPDATE bowen
+UPDATE RAW_DATA
 SET
     ModelNormalise = IIf(
         Year(StartTime) >= 2025,
@@ -86,7 +86,7 @@ WHERE
 
 --SETUP-07-SerialNumberNorlalise-1
 
-UPDATE bowen
+UPDATE RAW_DATA
 SET
     SerialNumber = IIf(
         Left(SerialNumber, 1) = " ",
@@ -105,7 +105,7 @@ SET
 
 --SETUP-08-SerialNumberNormalise-2
 
-UPDATE bowen
+UPDATE RAW_DATA
 SET
     SerialNumberNormalise = UCase (
         IIf(
@@ -121,7 +121,7 @@ SET
 
 --SETUP-09-SerialNumberNormalise-3
 
-UPDATE bowen
+UPDATE RAW_DATA
 SET
     SerialNumberNormalise = IIf(
         InStr (SerialNumberNormalise, ".") > 0,
@@ -142,7 +142,7 @@ WHERE
 
 --SETUP-10-Prod_HorsProd-1
 
-UPDATE bowen
+UPDATE RAW_DATA
 SET
     Prod = "HORS_PROD"
 WHERE
@@ -155,13 +155,13 @@ WHERE
 
 --SETUP-11-Prod_HorsProd-2
 
-UPDATE bowen
+UPDATE RAW_DATA
 SET
     Prod = "PROD"
 WHERE
     NOT Prod = "HORS_PROD";
 
---SETUP-12-BowenReduit
+--SETUP-12-RAW_DATAReduit
 
 SELECT
     StartTime,
@@ -173,9 +173,9 @@ SELECT
     SerialNumberNormalise,
     Prod
 INTO
-    BOWEN_REDUIT
+    RAW_DATA_REDUIT
 FROM
-    BOWEN
+    RAW_DATA
 WHERE
     Year(StartTime) >= 2020
     AND StepCount <= 39
