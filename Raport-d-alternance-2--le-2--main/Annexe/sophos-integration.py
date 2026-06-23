@@ -78,7 +78,7 @@ def analyze_exfiltration(events):
 
     return ip_totals
 
-# créer une alerte
+#crer une alerte
 def generate_alert(src_ip, data, threshold_octets, period_name):
     total_mb = data['total_octets'] / 1_000_000
     threshold_mb = threshold_octets / 1_000_000

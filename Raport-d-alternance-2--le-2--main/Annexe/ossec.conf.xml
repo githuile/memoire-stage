@@ -57,7 +57,7 @@
   <remote>
     <connection>syslog</connection>
     <port>5514</port>
-    <protocol>udp</protocol>
+    <protocol>tcp</protocol>
     <allowed-ips>192.168.105.2/32</allowed-ips>
   </remote>
 

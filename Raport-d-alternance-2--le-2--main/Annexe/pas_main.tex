@@ -1,0 +1,2548 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{csquotes}
+\usepackage{pgfgantt}
+
+\usepackage[french]{babel}
+\usepackage[toc]{glossaries}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[table]{xcolor}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{pgfplots}
+\usepackage[colorlinks=true, urlcolor=blue, linkcolor=black]{hyperref}
+
+
+\usepackage{titlesec}
+\setcounter{secnumdepth}{4} % numéroter jusqu'à \paragraph (niveau 4)
+\setcounter{tocdepth}{4}    % inclure jusqu'à \paragraph dans la table des matières
+
+% Rendre \paragraph visible comme un titre de niveau 4 (bloc, non run-in)
+\titleformat{\paragraph}[block]{\normalfont\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}{0pt}{3.5ex plus 1ex minus .2ex}{1ex}
+
+
+\pgfplotsset{compat=1.17}
+
+
+\definecolor{darkblue}{RGB}{31, 73, 125}
+\definecolor{medblue}{RGB}{68, 114, 196}
+\definecolor{lightblue}{RGB}{189, 215, 238}
+\definecolor{lightgreen}{RGB}{169, 208, 142}
+
+
+\definecolor{backgray}{rgb}{0.15,0.15,0.15} % Fond gris très foncé
+\definecolor{codegray}{rgb}{0.6,0.6,0.6}    % Commentaires gris clair
+\definecolor{keywordblue}{rgb}{0.4,0.8,1.0} % Mots-clés bleu clair
+\definecolor{stringgreen}{rgb}{0.5,1.0,0.5} % Chaînes vert pâle
+\definecolor{textwhite}{rgb}{0.95,0.95,0.95} % Texte principal presque blanc
+\definecolor{codebg}{RGB}{248,248,248}
+\definecolor{linenumber}{RGB}{150,150,150}
+\definecolor{keywordpurple}{RGB}{180,0,255}
+\definecolor{stringgreen}{RGB}{0,128,0}
+\definecolor{bordergray}{RGB}{220,220,220}
+
+
+\definecolor{bluelight}{RGB}{210, 228, 245}
+\definecolor{blueborder}{RGB}{70, 130, 180}
+\definecolor{greybox}{RGB}{230, 228, 220}
+\definecolor{greyborder}{RGB}{160, 155, 140}
+\definecolor{bluetext}{RGB}{70, 130, 180}
+\definecolor{dashedborder}{RGB}{140, 140, 140}
+
+\definecolor{gh-keyword}{HTML}{CF222E}   % rouge pour les clés YAML
+
+
+
+ 
+% ── Palette ──────────────────────────────────────────────────────────────────
+\definecolor{netblue}{RGB}{30,  80, 160}
+\definecolor{firered}{RGB}{180,  30,  30}
+\definecolor{swgreen}{RGB}{ 34, 120,  60}
+\definecolor{devpurp}{RGB}{ 90,  50, 150}
+\definecolor{srvoran}{RGB}{190, 100,  10}
+\definecolor{voiptel}{RGB}{ 10, 130, 150}
+\definecolor{wificolor}{RGB}{ 70, 140, 200}
+\definecolor{boxbg}  {RGB}{240, 245, 255}
+\definecolor{zonebg} {RGB}{230, 238, 252}
+\definecolor{servbg} {RGB}{255, 245, 230}
+\definecolor{devbg}  {RGB}{240, 232, 255}
+\definecolor{voipbg} {RGB}{225, 248, 250}
+\definecolor{wifibg} {RGB}{232, 242, 255}
+\definecolor{extbg}  {RGB}{235, 235, 235}
+ 
+
+
+
+% ── Styles ───────────────────────────────────────────────────────────────────
+\tikzset{
+  dev/.style={
+    rectangle, rounded corners=5pt,
+    draw=#1!70!black, fill=#1!10,
+    font=\sffamily\scriptsize, text width=3.0cm, align=left,
+    inner sep=5pt, minimum height=1.2cm,
+    drop shadow={shadow xshift=.6pt, shadow yshift=-.6pt, opacity=.2}
+  },
+  internet/.style={
+    ellipse, draw=netblue, fill=netblue!10,
+    font=\sffamily\small\bfseries,
+    minimum width=2.4cm, minimum height=1.0cm,
+    drop shadow={shadow xshift=.6pt, shadow yshift=-.6pt, opacity=.2}
+  },
+  zonetitle/.style={font=\sffamily\tiny\bfseries, text=#1},
+  netlink/.style ={draw=#1, line width=1.3pt, -{Stealth[length=4pt]}, rounded corners=3pt},
+  netbidi/.style ={draw=#1, line width=1.3pt,
+    {Stealth[length=4pt]}-{Stealth[length=4pt]}, rounded corners=3pt},
+}
+
+
+
+\tikzset{
+  boxdark/.style={
+    rectangle, rounded corners=4pt,
+    fill=darkblue, draw=darkblue,
+    text=white, font=\small\bfseries,
+    text width=3.2cm, align=center,
+    minimum height=1.1cm, inner sep=6pt
+  },
+  boxmed/.style={
+    rectangle, rounded corners=4pt,
+    fill=medblue, draw=medblue,
+    text=white, font=\small\bfseries,
+    text width=3.2cm, align=center,
+    minimum height=1.1cm, inner sep=6pt
+  },
+  boxlight/.style={
+    rectangle, rounded corners=4pt,
+    fill=lightblue, draw=lightblue,
+    text=black, font=\small,
+    text width=3.2cm, align=center,
+    minimum height=1.1cm, inner sep=6pt
+  },
+  boxgreen/.style={
+    rectangle, rounded corners=4pt,
+    fill=lightgreen, draw=lightgreen,
+    text=black, font=\small,
+    text width=3.2cm, align=center,
+    minimum height=1.1cm, inner sep=6pt
+  },
+  line/.style={draw=gray!70, thick}
+}
+
+
+
+\lstdefinelanguage{WazuhXML}{
+    language=XML,
+    morekeywords={
+        decoder,
+        prematch,
+        regex,
+        order,
+        parent,
+        plugin_decoder,
+        group,
+        rule,
+        if_sid,
+        list,
+        description,
+        known-devices,
+    },
+    keywordstyle=\color{keywordpurple}\bfseries,
+    morestring=[b]",
+    stringstyle=\color{stringgreen}
+}
+
+\lstdefinelanguage{ScaYAML}{
+    keywords={
+        id, title, description, rationale, remediation,
+        compliance, condition, rules, profile, check,
+        cis, cis_csc, hipaa, gdpr_IV, tsc, all, any, none
+    },
+    keywordstyle=\color{keywordpurple}\bfseries,
+    morestring=[b]",
+    morestring=[b]',
+    stringstyle=\color{stringgreen},
+    morecomment=[l]{\#},
+    commentstyle=\color{codegray}\itshape,
+    sensitive=true,
+}
+
+
+\lstset{
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small\color{black},
+    keywordstyle=\color{keywordpurple},
+    stringstyle=\color{stringgreen},
+    commentstyle=\color{gray}\itshape,
+    numbers=left,
+    numberstyle=\tiny\color{linenumber},
+    numbersep=10pt,
+    frame=single,
+    rulecolor=\color{bordergray},
+    breaklines=true,
+    showstringspaces=false,
+    tabsize=2,
+    xleftmargin=5pt,
+    framexleftmargin=5pt
+}
+
+
+
+
+%Pour la création d'un glossaire, il faut mettre toutes les entrées dans le préambule
+\newglossaryentry{ANSSI}{
+   name={ANSSI},
+   description={Agence nationale de la sécurité des systèmes d'information}}
+\newglossaryentry{RSSI}{
+   name={RSSI},
+   description={Responsable de la sécurité des systèmes d'information, chargé de la mise en œuvre de la politique de sécurité au sein d'une organisation}}
+\newglossaryentry{Deep Learning}{
+   name={Deep Learning},
+   description={Sous-domaine de l'apprentissage automatique qui utilise des réseaux de neurones profonds pour modéliser des données complexes et extraire des caractéristiques hiérarchiques}}
+\newglossaryentry{CVE}{
+   name={CVE},
+    description={Common Vulnerabilities and Exposures, un système de référence pour les vulnérabilités de sécurité connues dans les logiciels et les systèmes informatiques}}
+\newglossaryentry{CVSS}{
+   name={CVSS},
+    description={Common Vulnerability Scoring System, un cadre standardisé pour évaluer la gravité des vulnérabilités de sécurité dans les systèmes informatiques}}
+\newglossaryentry{CIS Benchmarks}{
+   name={CIS Benchmarks},
+   description={Center for Internet Security Benchmarks, ensemble de bonnes pratiques de sécurité pour la configuration des systèmes d'exploitation et des applications}}
+\newglossaryentry{GPO}{
+   name={GPO},
+   description={Group Policy Object, mécanisme de stratégies de groupe permettant de configurer et de sécuriser les postes et utilisateurs d’un domaine Active Directory}
+}
+\newglossaryentry{SIEM}{
+   name={SIEM},
+   description={Security Information and Event Management, solution centralisant et corrélant les événements de sécurité afin de détecter les incidents et améliorer la visibilité du SI}
+}
+\newglossaryentry{DNS}{
+   name={DNS},
+   description={Domain Name System, service permettant la résolution des noms de domaine en adresses IP, indispensable au fonctionnement d’Active Directory}
+}
+
+\newglossaryentry{DHCP}{
+   name={DHCP},
+   description={Dynamic Host Configuration Protocol, service permettant l’attribution automatique des paramètres réseau aux postes clients}
+}
+\newglossaryentry{Hyperviseur de type 1}{
+   name={Hyperviseur de type 1},
+   description={Hyperviseur fonctionnant directement sur le matériel, sans système d’exploitation hôte, offrant de meilleures performances et une sécurité accrue}
+}
+\newglossaryentry{VLAN}{
+   name={VLAN},
+   description={Virtual Local Area Network, technique de segmentation réseau permettant d’isoler logiquement des flux et d’améliorer la sécurité}
+}
+\newglossaryentry{PSSI}{
+   name={PSSI},
+   description={Politique de Sécurité des Systèmes d’Information, document définissant les règles, bonnes pratiques et responsabilités en matière de cybersécurité}
+}
+\newglossaryentry{CIS-CAT}{
+   name={CIS-CAT},
+   description={CIS Configuration Assessment Tool, un outil développé par le Center for Internet Security pour évaluer la conformité des systèmes informatiques aux benchmarks CIS}
+}
+\newglossaryentry{bancs d’essais}{
+    name={Bancs d’essais},
+    description={Ensemble d'équipements et de dispositifs utilisés pour tester, mesurer et valider les performances, la fiabilité et la conformité de composants ou systèmes industriels}
+}
+\newglossaryentry{Système d’Information}{
+  name={Système d’Information},
+  description={Ensemble cohérent de ressources matérielles, logicielles, humaines et organisationnelles permettant de stocker, traiter et transmettre des données}
+}
+\newglossaryentry{OASIS}{
+    name={OASIS},
+    description={Outil d’Aide et de Suivi de l’Implémentation de la Sécurité, un cadre méthodologique proposé par l'ANSSI pour évaluer et structurer la mise en œuvre des mesures de sécurité dans les systèmes d’information sensibles}
+}
+\newglossaryentry{Rackage}{
+    name={Rackage},
+    description={Installation et organisation physique des équipements informatiques dans des armoires ou baies dédiées, permettant une gestion optimisée de l'espace, du câblage et de la ventilation}
+}
+\newglossaryentry{SVN}{
+    name={SVN},
+    description={Subversion, un système de gestion de versions centralisé utilisé pour le suivi des modifications dans les projets de développement logiciel}
+}
+
+
+\usepackage[T1]{fontenc}
+\usepackage{color}
+\usepackage{adjustbox}
+\usepackage{latexsym}
+\usepackage{xspace}
+\usepackage{amsmath}
+\usepackage{marvosym}
+\usepackage{ulem}
+\usepackage{cancel}
+\usepackage{xspace}
+\usepackage{amssymb}
+\usepackage{times} 
+\usepackage{epsfig,t1enc}
+\usepackage{setspace} % Ajoute la prise en charge de l'environnement spacing
+
+\usepackage{comment}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+%\usepackage{dsfont}
+\usepackage{comment}
+\usepackage{etex}
+\usepackage{bookmark,multido}
+\usepackage{xlop}
+\usepackage{biblatex}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, fit, backgrounds, shadows}
+\usepackage{float}
+
+\author{}
+\date{}
+
+%\graphicspath{ {./images/} }
+
+
+
+
+
+\setlength{\textwidth}{15cm}
+\setlength{\textheight}{24cm}
+
+%\raggedbottom
+
+
+\title{\vspace*{-5cm}{\small DEPARTEMENT INFORMATIQUE - IUT 2 GRENOBLE}\\
+
+\vspace*{1cm}
+
+\includegraphics[scale=0.7]{images/Logo IUT2.jpg}
+
+
+
+\flushleft{{\small Année universitaire 2025-2026}}
+\vspace*{-0.5cm}
+\flushleft{{\small RAPPORT D'ALTERNANCE}}\\
+
+\vspace*{0.5cm}
+------------------------------------------------------------
+
+\vspace*{0.5cm}
+
+\begin{center} Sécurisation et supervision du système d'information dans le secteur industriel du test et de la mesure\\
+\vspace*{0.5cm}
+Mesulog - Moirans\\
+\vspace*{1.5cm}
+\includegraphics[scale=0.16]{images/Logo_mesulog.jpg}
+\end{center}
+
+\begin{center}{\small Présenté par}\\
+
+Kenzo Sechi\\
+
+{\small Jury} \\
+IUT 	: M. Bonnaud\\
+IUT 	: Mme Laget-Kamel\\
+Société  : Mesulog - Nerys Group\\
+\end{center}
+ 
+}
+\author{}
+\date{}
+
+
+
+
+
+\addtocounter{page}{-1}
+\vspace{-1cm}
+
+\begin{document}
+\thispagestyle{empty} 
+\maketitle
+
+\newpage 
+\thispagestyle{empty} 
+\begin{center}
+\textbf{Déclaration de respect des droits d'auteurs}
+\end{center}
+
+
+\vspace*{1cm}
+
+
+Par la présente, je déclare être le seul auteur de ce rapport et assure qu'aucune autre ressource que celles indiquées n'ont été utilisées pour la réalisation de ce travail. Tout emprunt (citation ou référence) littéral ou non à des documents publiés ou inédits est référencé comme tel et tout usage à un outil doté d'IA a été mentionné et sera de ma responsabilité. \\
+
+Je suis informé qu'en cas de flagrant délit de fraude, les sanctions prévues dans le règlement des études en cas de fraude aux examens par application du décret 92-657 du 13 juillet 1992 peuvent s'appliquer. Elles seront décidées par la commission disciplinaire de l'UGA. \\
+
+\vspace*{1cm}
+
+\begin{tabular}{p{0.33\textwidth} p{0.33\textwidth} p{0.33\textwidth}}
+\textbf{À Moirans} &
+\textbf{Le 02/06/2026} &
+\textbf{Signature} \\[-1cm]
+&
+&
+\includegraphics[scale=0.14]{images/signature.png}
+\end{tabular}
+
+
+
+\newpage
+\thispagestyle{empty} 
+\section*{Remerciements}
+
+Premièrement, je tiens à préciser que cette année d'alternance au sein de Mesulog fût une grande opportunité m’offrant une seconde expérience au sein du monde professionnel. Je considère avoir beaucoup appris sur les environnements professionnel, la sécurité, le réseau ainsi que l’administration système grâce aux
+différents collaborateurs qui ont su m’accompagner en m’aiguillant lorsque j’avais un problème, en me conseillant des solutions cohérentes ou bien en m’expliquant certains concepts clés.
+
+\par\vspace{\baselineskip} % Ajoute une ligne vide entre les éléments
+
+Je souhaite particulièrement remercier : 
+
+\vspace{\baselineskip} % Ajoute une ligne vide entre les éléments
+
+\begin{itemize}
+\item[$\bullet$] \textbf{Luc Desruelle (RSSI - Mesulog)} mon tuteur d'alternance qui m'a aidé à contextualiser les projets sur lesquels je travaillais
+\item[] 
+
+\item[$\bullet$] \textbf{Benjamin Lerch} mon deuxième tuteur, référent de la partie technique, il m'a notamment aidé à mieux connaître l'architecture du système d'information (SI) de l'entreprise.
+\item[] 
+
+\item[$\bullet$] \textbf{Florent Fonteix (RSSI - Nerys)} avec qui j'ai pu travailler sur la mise en place d'un accès réseau client fortemment isolé pour Nerys.
+\item[] 
+
+
+\item[$\bullet$] \textbf{Sara Laget-Kamel} qui m’a aidé à rendre un rapport de stage plus clair et compréhensible et qui s’est montré disponible en cas de besoin.
+\item[] 
+
+\item[$\bullet$] \textbf{Laurent Bonnaud} qui a pris le temps de lire ce rapport afin de m’évaluer
+\item[] 
+
+
+\item[$\bullet$] \textbf{L’équipe technique de Mesulog \& Nerys} pour leur disponibilité, leur pédagogie, leur aide et leurs conseils précieux.
+\item[] 
+\item[$\bullet$] \textbf{L’équipe Mesulog dans son ensemble} pour l’accueil chaleureux, les échanges constructifs et l’esprit collaboratif qui m’ont permis de progresser tout au long de l’alternance.
+\item[] 
+\item[$\bullet$] \textbf{L’équipe enseignante de l'IUT2} pour les connaissances et bonnes pratiques transmises, qui m’ont été très utiles dans le cadre de cette alternance.
+\end{itemize}
+
+\vspace{\baselineskip} % Ajoute une ligne vide entre les éléments
+
+Je souhaite que mon travail contribue à améliorer la sécurisation et la supervision du système d'information de Mesulog. Cette expérience a été très enrichissante et m’a permis de développer mes compétences en administration système, cybersécurité et développement, tout en découvrant le fonctionnement concret d’une entreprise orientée vers l'industrie, un secteur d'activité qui m'était jusqu'ici inconnu.
+ \newpage
+
+
+
+
+	
+
+\thispagestyle{empty}
+
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+
+
+
+% -----------------------
+% INTRODUCTION
+% -----------------------
+\section*{Introduction}
+Dans le cadre de ma troisième année de Bachelor Universitaire Technologique en informatique à l'IUT2 de Grenoble, j'ai eu l'opportunité d'effectuer une année d'alternance au sein
+ de Mesulog, une société spécialisée dans le développement de logiciels de test et de mesures pour les environnements industriels. Cette expérience professionnelle
+  m'a permis d'appliquer les connaissances acquises durant ma formation tout en développant de nouvelles compétences techniques et organisationnelles.
+
+ \par\bigskip
+Cette alternance s'inscrit dans le cadre de la sécurisation du système d'information de l'entreprise, un enjeu majeur afin de garantir la 
+confidentialité, l'intégrité et la disponibilité des données et des services, conformément au triptyque 
+CIA (Confidentialité, Intégrité, Disponibilité)~\cite{cia-triad}, modèle fondamental qui constitue la base de toute démarche de gestion
+ de la sécurité de l'information, notamment formalisé dans la norme ISO/IEC 27001.
+\par\bigskip
+
+Ce rapport s'organise en quatre parties. La première présente le cadre institutionnel et organisationnel de l'entreprise d'accueil 
+ainsi que le contexte de l'alternance. La seconde détaille les missions techniques réalisées au cours de l'année, en particulier la
+ mise en place d'une supervision de sécurité avec Wazuh et le durcissement du système d'information selon les standards CIS. 
+ La troisième partie aborde l'impact environnemental et sociétal des missions menées. Enfin, un bilan personnel revient sur les 
+ compétences développées et leur articulation avec le référentiel de formation.
+
+
+\section{Présentation de l'entreprise}
+
+\subsection{Présentation générale}
+
+Mesulog et Nerys constituaient initialement deux entreprises distinctes, ayant respectivement pour domaine d'activités le développement de logiciels de
+ test et de mesures pour l'une et pour l'autre, la conception de
+  \href{https://fr.wikipedia.org/wiki/Banc_de_test#:~:text=Un%20banc%20de%20test%20est,de%20développement%20d%27un%20produit.}{bancs de test},
+   \href{https://nerysgroup.com/fr/metiers/baies-et-coffrets}{baies et coffrets électriques} pour les environnements industriels.
+    Leur rapprochement a conduit à la structuration de \textbf{Nerys Group}, société mère intégrant Nerys et Mesulog.
+ \par\bigskip
+ Cette fusion permet ainsi le regroupement des expertises techniques dans les domaines du test, de la mesure et de 
+ l’ingénierie logicielle associée aux bancs d’essais. Ce processus de fusion intégre également la société Territoire de Changements devenue ensuite Nerys Group 
+ Service permettant ainsi au groupe la proposition de formations techniques (principalement LabVIEW \& TestStand).
+
+\par\bigskip
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/sociétés.jpg}
+    \caption{Présentation des sociétés filles de Nerys Group et de leurs directions}
+    \label{fig:filiales-nerys}
+\end{figure}
+\par\bigskip
+
+
+Nerys Group évolue également dans le milieu de la recherche et du Développement, notamment depuis sa reconnaissance en tant qu'organisme de
+ recherche privé par le Ministère de l’Enseignement Supérieur et de la Recherche.\\
+
+
+
+
+\subsection{Valeurs et orientations stratégiques}
+
+La culture d’entreprise de Nerys Group repose sur des valeurs partagées par l’ensemble des collaborateurs. Le \textbf{respect de l’humain}, \textbf{l’expertise technique} et \textbf{le sens du service} constituent les fondements de son fonctionnement. Ces valeurs se traduisent notamment par un fort esprit d’équipe, une logique de confiance et de transparence, ainsi qu’une volonté de partage des compétences.
+
+%moins commercial juste en dessous svp
+L’entreprise met en œuvre une organisation agile et accorde une attention particulière à la fidélisation de ses clients. Elle s’appuie également sur une politique structurée en matière de qualité et de cybersécurité, appliquée aussi bien en interne que dans les projets réalisés pour ses clients. Par ailleurs, la participation de certains salariés au capital de l’entreprise contribue à renforcer leur implication dans la performance et la pérennité du groupe
+
+
+\subsection{Hiérarchie de l'équipe Mesulog}
+
+\begin{figure}[h]
+
+  \centering
+
+\begin{tikzpicture}[node distance=1.4cm and 1.6cm]
+
+ 
+
+\node[boxlight] (asaro) {Anthony Asaro\\Développeur technicien};
+
+\node[boxlight, left=1.8cm of asaro] (lerch) {Benjamin Lerch\\Développeur ingénieur};
+
+\node[boxlight, right=1.8cm of asaro] (bertin) {Thomas Bertin\\Développeur ingénieur};
+
+ 
+
+\node[boxgreen, below=1.2cm of lerch] (sechi) {Kenzo Sechi\\Alternant};
+
+\node[boxlight, below=1.2cm of asaro] (kilian) {Verger Kilian\\Stagiaire};
+
+\node[boxlight, below=1.2cm of bertin] (miquel) {Vianney Miquel\\Stagiaire};
+
+ 
+
+\node[boxmed, above=1.2cm of asaro, xshift=-3cm] (lamy) {Damien Lamy\\Chef de projet};
+
+\node[boxmed, above=1.2cm of asaro, xshift=3cm] (andrieu) {Adrien Andrieu\\Chef de projet};
+
+ 
+
+\node[boxdark, above=3.6cm of asaro] (president) {Luc Desruelle\\Directeur};
+
+ 
+
+\node[boxdark, right=2cm of president] (admin) {Emilie Evrard\\Responsable administrative};
+
+ 
+
+% --- Groupes par ligne (rectangle englobant) ---
+
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(president), label=north:{Direction}] (grp1) {};
+
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lamy) (andrieu), label={[xshift=-17mm,yshift=-1mm] above left:{Chefs de projet}}] (grp2) {};
+
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(lerch) (asaro) (bertin), label={[xshift=-41mm,yshift=-1mm] above left:{Développeurs}}] (grp3) {};
+
+% Position label exactly at the side: use left with a small xshift to align beside the rectangle
+\node[draw=black, rounded corners=6pt, inner sep=8pt, fit=(sechi) (kilian) (miquel), label={[xshift=-32mm,yshift=-1mm] above left:{Stagiaires / Alternant}}] (grp4) {};
+
+ 
+
+% --- Connexions entre rectangles seulement ---
+
+\draw[line] (grp1.south) -- ++(0,-0.6) -- (grp2.north);
+
+\draw[line] (grp2.south) -- ++(0,-0.6) -- (grp3.north);
+
+\draw[line] (grp3.south) -- ++(0,-0.6) -- (grp4.north);
+
+\draw[dashed] (admin.west) -- (grp1.east);
+
+ 
+
+\end{tikzpicture}
+
+  \caption{Présentation de la hiérarchie de l'équipe Mesulog}
+
+  \label{fig:hierachie-mesulog}
+
+\end{figure}
+\par\bigskip
+\noindent\textit{Légende : } \tikz{\node[boxdark, scale=0.4]{};} Direction \quad \tikz{\node[boxmed, scale=0.4]{};} Chefs de projet \quad \tikz{\node[boxlight, scale=0.4]{};} Développeurs/Stagiaires \quad \tikz{\node[boxgreen, scale=0.4]{};} Alternant (moi-même)
+\bigskip
+
+L'organigramme présenté ci-dessus permet de visualiser la structuration actuelle de Mesulog et de comprendre la répartition des rôles au sein
+ de l'équipe, ainsi que les liens hiérarchiques entre la direction, les chefs de projet et les équipes de développement. Cette organisation
+  résulte d'une évolution progressive détaillée ci-après, au fil de la croissance de l'activité.
+L'entreprise est fondée en mars 2000 par Jean-Louis Schricke, qui en assure initialement la direction ainsi que les activités de développement.
+\par\bigskip
+
+En mai 2002, 
+Luc Desruelle rejoint la société en tant qu'ingénieur développement logiciel ; en 2026, il occupe désormais le poste de directeur de Mesulog et de président de 
+Nerys Group Service, tout en gardant une place importante dans l'encadrement technique des projets.
+
+\par\bigskip
+La montée en charge de l'activité s'accompagne ensuite d'un renforcement progressif de l'équipe, avec l'arrivée de Damien Lamy en 2012, puis d'Anthony Asaro et de
+ Benjamin Lerch en 2019.
+ 
+\par\bigskip
+ En juillet 2020, l'entreprise évolue en \href{https://fr.wikipedia.org/wiki/Société_par_actions_simplifiée}{Société par actions simplifiée} (SAS) et intègre Nerys Group. Cette étape marque un ajustement de la gouvernance, avec une direction 
+ rattachée au groupe, tout en conservant un pilotage opérationnel de proximité sur les activités techniques.
+Plus récemment, Adrien Andrieu (2023) rejoint l'équipe en tant qu'ingénieur développement. Ainsi, la hiérarchie de Mesulog s'articule autour d'une direction
+ clairement identifiée, d'un encadrement technique historique et d'une équipe projet resserrée, orientée développement, maintien des solutions existantes et
+  accompagnement des besoins clients.
+
+
+\section{Présentation du service d'accueil}
+
+J’ai intégré l’équipe technique de Mesulog, composée d’administrateurs systèmes, de développeurs et de deux responsables de la sécurité des systèmes d'information 
+(\textbf{\gls{RSSI}}). Ce service est en charge du maintien en condition opérationnelle du système d’information, de la cybersécurité, du support utilisateur ainsi 
+que du développement et de la maintenance d’outils internes. L’alternance s’inscrit dans un contexte de renforcement global de la sécurité du système d’information et 
+de modernisation de l’infrastructure. L’évolution des exigences clients, la manipulation de données sensibles et l’obsolescence progressive de certaines composantes 
+techniques ont conduit l’entreprise à structurer et renforcer ses pratiques en matière de cybersécurité et de gouvernance du SI.
+\par\bigskip
+Dans ce cadre, les missions qui m’ont été confiées répondent à plusieurs enjeux transverses : assurer la conformité aux exigences réglementaires et normatives, améliorer la résilience du système 
+ d’information, renforcer la confiance des clients et accompagner la modernisation de l’infrastructure technique. Mon positionnement en tant qu’alternant m’a 
+ permis d’intervenir à la fois sur des aspects opérationnels et structurants, en lien étroit avec les équipes techniques et les responsables de la sécurité du système
+  d’information. Les missions présentées dans la suite du rapport illustrent cette double dimension, mêlant actions concrètes de sécurisation et participation à des 
+  démarches d’amélioration continue.
+
+\subsection{Environnement technique}
+\begin{figure}[H]
+\centering
+\begin{adjustbox}{max width=0.98\textwidth,max totalheight=0.92\textheight}
+\begin{tikzpicture}[
+  node distance=1.0cm and 1.2cm,
+  >=Stealth,
+  font=\sffamily\tiny
+]
+
+%% ── ROW 0 : Internet ────────────────────────────────────────────────────────
+\node[internet] (internet)
+  {\textcolor{netblue}{\textbf{Internet}}};
+
+%% ── ROW 1 : Routeurs (même hauteur, espacés) ────────────────────────────────
+\node[dev=netblue, below left=1.6cm and 3.2cm of internet, text width=3.2cm] (adsl)
+  {\textcolor{netblue}{\textbf{ADSL OVH Tel}}\\
+   WAN: 109.190.53.59\\LAN: 192.168.10.1/24\\Ligne: 04 76 35 65 98};
+
+\node[dev=netblue, below right=1.6cm and 3.2cm of internet, text width=3.2cm] (fibre)
+  {\textcolor{netblue}{\textbf{Fibre Free Pro}}\\
+   WAN: 45.80.27.81\\LAN: 192.168.10.0/24\\Ligne: 04 58 28 12 69};
+
+%% ── ROW 2 : Firewall ────────────────────────────────────────────────────────
+\node[dev=firered, below=3.2cm of internet, text width=3.8cm] (fw)
+  {\textcolor{firered}{\textbf{Firewall Sophos XGS107}}\\
+   WAN: 192.168.10.1/24\\LAN: 192.168.100.1/22\\
+   P1:LAN · P2:WAN · P3:WiFi · P4:Codex};
+
+%% ── ROW 3 : Switch Core ────────────────────────────────────────────────────
+
+\node[dev=swgreen, below=2.0cm of fw, text width=3.2cm] (sw1)
+  {\textcolor{swgreen}{\textbf{Switch Manageable}}\\
+   Switch 1: 192.168.100.3\\
+   VLAN Tel Ports 1–8};
+
+
+\node[dev=swgreen, below=2.0cm of sw1, text width=3.2cm] (sw2)
+  {\textcolor{swgreen}{\textbf{Switch Manageable}}\\
+   Switch 2: 192.168.100.5\\
+  };
+
+
+%% ── VoIP ───────────────────────────────────────────────────────────────────
+
+\node[dev=voiptel, left=4.8cm of sw1, text width=3.0cm] (voip)
+  {\textcolor{voiptel}{\textbf{Téléphones VoIP}}\\
+   Borne: 192.168.10.71\\
+   04 58 00 16 71/72};
+
+\node[dev=voiptel, below=0.2cm of voip, text width=3.0cm] (voip2)
+  {\textcolor{voiptel}{\textbf{Téléphones VoIP}}\\
+   Borne: 192.168.10.73\\
+   04 58 00 16 71/74};
+
+
+   \node[dev=voiptel, below=0.2cm of voip2, text width=3.0cm] (voip3)
+  {\textcolor{voiptel}{\textbf{Téléphones VoIP}}\\
+   Borne: 192.168.10.75\\
+   04 58 00 16 71/76};
+
+
+   \node[dev=voiptel, below=0.2cm of voip3, text width=3.0cm] (voip4)
+  {\textcolor{voiptel}{\textbf{Téléphones VoIP}}\\
+   Borne: 192.168.10.77\\
+   04 58 00 16 71/78};
+
+   \node[dev=voiptel, below=0.2cm of voip4, text width=3.0cm] (voip5)
+  {\textcolor{voiptel}{\textbf{Téléphones VoIP}}\\
+  Borne: 192.168.10.79\\
+   04 58 00 16 71/78};
+
+
+
+%% ── Switch Dev ─────────────────────────────────────────────────────────────
+
+\node[dev=swgreen,
+      right=3.5cm of sw2,
+  text width=3.2cm,
+  yshift=-50pt] (sw3) {
+\textcolor{swgreen}{\textbf{Switch Manageable}}\\
+Switch 3: 192.168.100.4
+  };
+
+%% ── Equipements Dev ────────────────────────────────────────────────────────
+
+
+
+\node[dev=zonebg,
+      above=5cm and of sw3,
+      yshift=-50pt,
+      text width=3.2cm] (unf)
+{
+\textcolor{wificolor}{\textbf{UNF Gateway}}\\
+192.168.105.1
+};
+
+
+\node[dev=zonebg,
+     right=0.5cm of unf,
+      text width=3.2cm] (wifi)
+{
+\textcolor{wificolor}{\textbf{WiFi Ubiquiti}}\\
+SSID: Mesulog\_Guest\\
+192.168.106.1/24
+};
+
+\node[dev=devpurp,
+      below right=1.0cm and 2cm of sw3,
+      text width=3.2cm] (printer)
+{
+\textcolor{devpurp}{\textbf{HP LaserJet M254dw}}\\
+192.168.101.110/22
+};
+
+
+
+%% ── ROW 6 (Devs) : PC Devs ─────────────────────────────────────────────────
+\node[dev=devpurp, below=1cm of sw3, text width=3.5cm] (pcs)
+  {\textcolor{devpurp}{\textbf{PC Developpeurs}}\\IP: 192.168.103.XXX/22};
+
+%% ── ROW 4–6 (Serveurs) : sous le switch core ───────────────────────────────
+%% Rangée A
+\node[dev=srvoran, below left=4.2cm and 6.5cm of sw2, text width=3.4cm] (srv_vault)
+  {\textcolor{srvoran}{\textbf{Serveur V4ULT}}\\
+   Win Srv 2025\\IP: 192.168.100.111\\iLO: 192.168.100.112};
+
+\node[dev=srvoran, right=0.4cm of srv_vault, text width=3.4cm] (srv_ad)
+  {\textcolor{srvoran}{\textbf{Serveur AD}}\\
+   Win Srv 2025\\IP: 192.168.100.113\\DNS + DHCP};
+
+\node[dev=srvoran, right=0.4cm of srv_ad, text width=3.4cm] (srv_file)
+  {\textcolor{srvoran}{\textbf{V4ULT-Files}}\\
+   Win Srv 2025\\IP: 192.168.100.114\\S: / R: / T:};
+
+%% Rangée B
+\node[dev=srvoran, below=0.9cm of srv_vault, text width=3.4cm] (srv_bkp)
+  {\textcolor{srvoran}{\textbf{Serveur Backup}}\\
+   Win Srv 2025\\IP: 192.168.100.115\\Veeam Backup};
+
+\node[dev=srvoran, right=0.4cm of srv_bkp, text width=3.4cm] (srv_waz)
+  {\textcolor{srvoran}{\textbf{Serveur Wazuh}}\\
+   Rocky Linux 10\\IP: 192.168.100.116\\Monitoring};
+
+\node[dev=srvoran, right=0.4cm of srv_waz, text width=3.4cm] (nas)
+  {\textcolor{srvoran}{\textbf{NAS2}}\\
+   IP: 192.168.100.109/22\\Download NI};
+
+%% Rangée C : Codex (pleine largeur, DMZ)
+% Placé centré sous le serveur Wazuh
+\node[dev=firered, below=0.8cm of srv_waz, text width=7.5cm] (srv_cdx)
+  {\textcolor{firered}{\textbf{Serveur Codex}}\\
+   Rocky Linux 9\\
+   LAN: 192.168.100.106~~WAN: 192.168.20.106\\
+   Forge Tuleap};
+
+%% ════════════════════════════════════════════════════════════════════════════
+%% ZONES DE FOND
+%% ════════════════════════════════════════════════════════════════════════════
+\begin{scope}[on background layer]
+  \node[fit=(adsl)(fibre)(internet),
+        rounded corners=8pt, fill=extbg, draw=netblue!30,
+        dashed, line width=1pt, inner sep=10pt,
+        label={[zonetitle=netblue]north west:Réseau Externe (WAN)}] {};
+
+  \node[fit=(srv_vault)(srv_ad)(srv_file)(srv_bkp)(srv_waz)(nas)(srv_cdx),
+        rounded corners=8pt, fill=servbg, draw=srvoran!40,
+        dashed, line width=1pt, inner sep=10pt,
+        label={[zonetitle=srvoran]above:Infrastructure Serveurs — VLAN 192.168.100.0/22}] {};
+
+  \node[fit=(pcs)(sw3)(printer),
+        rounded corners=8pt, fill=devbg, draw=devpurp!30,
+        dashed, line width=1pt, inner sep=10pt,
+        label={[zonetitle=devpurp]above:Zone Développeurs — VLAN 192.168.103.0/22}] {};
+
+  \node[fit=(voip)(voip2)(voip3)(voip4)(voip5),
+        rounded corners=8pt, fill=voipbg, draw=voiptel!40,
+        dashed, line width=1pt, inner sep=8pt,
+        label={[zonetitle=voiptel]above:VLAN -Téléphonie}] {};
+
+  \node[fit=(unf)(wifi),
+  rounded corners=8pt, fill=zonebg, draw=wificolor!40,
+        dashed, line width=1pt, inner sep=10pt,
+        label={[zonetitle=wificolor]above:Wifi invité — VLAN 192.168.105.0/24}] {};
+\end{scope}
+
+%% ════════════════════════════════════════════════════════════════════════════
+%% CONNEXIONS
+%% ════════════════════════════════════════════════════════════════════════════
+
+%% Internet ↔ Routeurs
+\draw[netbidi=netblue] (internet) -- (adsl);
+\draw[netbidi=netblue] (internet) -- (fibre);
+
+%% Routeurs → Firewall (arrivent sur les côtés du fw)
+\draw[netlink=firered] (adsl.east)  -- ++(0.4,0) |- (fw.west);
+\draw[netlink=firered] (fibre.west) -- ++(-0.4,0) |- (fw.east);
+
+%% Firewall ↔ Switch Core
+\draw[netbidi=swgreen, line width=1.6pt]
+  (fw.south) -- node[right, font=\sffamily\tiny, text=swgreen]{192.168.100.1/22}
+  (sw1.north);
+
+
+%%sw1 -> sw2
+\draw[netbidi=swgreen, line width=1.6pt]
+  (sw1.south) -- node[right, font=\sffamily\tiny, text=swgreen]{
+    192.168.100.1/22
+  }
+  (sw2.north);
+
+
+%% Switch Core ↔ Switch 3
+\draw[netbidi=devpurp] (sw2.east)  -- ++(0.4,0) |- (sw3.west);
+
+%% Switch Core ↔ VoIP
+\draw[netbidi=voiptel] (sw1.west) -- (voip.east);
+
+\draw[netbidi=devpurp, line width=1.2pt] (sw3) -- (pcs);
+
+
+%% Switch Core ↔ Serveurs (lien central vers srv_ad)
+\draw[netbidi=srvoran, line width=1.6pt]
+  (sw2.south) -- ++(0,-0.55) -| (srv_ad.north);
+
+\draw[netbidi=netblue] (unf) -- (wifi);
+% Lien Firewall ↔ UNF avec double coude bleu
+\draw[netbidi=netblue, line width=1.2pt] (fw.east)  -- ++(0.4,0) |- (unf.west);
+
+\draw[netbidi=devpurp]  (sw3.east)  -- ++(3.4,0) -|(printer.north);
+
+
+%% Firewall → Codex (Port 4 WAN, tirets)
+\draw[netlink=firered, dashed, line width=1.2pt]
+  (fw.south) -- ++(0,-0.3) -- ++(-12.8,0) |- (srv_cdx.west);
+
+%% ════════════════════════════════════════════════════════════════════════════
+%% LÉGENDE + TITRE
+%% ════════════════════════════════════════════════════════════════════════════
+\node[anchor=south east, font=\sffamily\tiny, align=right, text width=8cm]
+  at (current bounding box.south east) {
+  \textcolor{swgreen}{—\,LAN interne}~~
+  \textcolor{devpurp}{—\,VLAN Devs}~~
+  \textcolor{srvoran}{—\,VLAN Serveurs}~~
+  \textcolor{firered}{--\,WAN/DMZ (trait plein : liaison directe ~/~ pointillé : liaison via reverse proxy exposée sur Internet)}~~
+  \textcolor{voiptel}{—\,VoIP}
+};
+
+\end{tikzpicture}
+\end{adjustbox}
+\caption{Plan réseau de Mesulog en 2026}
+\label{fig:plan-reseau}
+\end{figure}
+
+\par\bigskip
+Comme on peut le voir sur la figure~\ref{fig:plan-reseau}, l'architecture réseau de Mesulog est composé d'une partie serveurs (Windows Server 2025 ou \href{https://rockylinux.org/}{Rocky Linux 10})
+ hebergeants les services principaux de l'entreprise.
+ \par\bigskip
+ Les serveurs de l'infrastructure sont regroupés sous le nom de domaine interne \textbf{V4ULT},
+  convention de nommage propre à Mesulog désignant l'ensemble du socle serveur de l'entreprise. On y retrouve notamment :
+\par\bigskip
+
+ \begin{itemize}
+  \item[$\bullet$] \textbf{V4ULT-AD} : l'Active Directory (Serveur \href{https://fr.wikipedia.org/wiki/LDAP}{LDAP}) faisant aussi office de Serveur DHCP et DNS.
+  \item[$\bullet$] \textbf{V4ULT-FILES} : Le seveur de de fichiers de l'entreprise découpés en 3 entités (Echanges, Mesulog, Downloads)
+  \item[$\bullet$] \textbf{Server Backup} : Le serveur de sauvegarde de l'entreprise utilisant Veeam Backup \& Replication.
+  \item[$\bullet$] \textbf{Server Codex} : Instance de Tuleap, similaire à GitLab, gestionnaire de version de code source basé SVN. Le serveur est exposé sur internet derrière un reverse proxy et un firewall.
+ \end{itemize}
+\par\bigskip
+Quant à l'environnement logiciel, les utilisateurs, principalement des développeurs LabVIEW \& TestStand, utilisent Windows 11 avec la suite de logiciels suivante :
+\par\bigskip
+
+\begin{itemize}
+  \item[$\bullet$] \textbf{\href{https://www.virtualbox.org/}{Oracle VirtualBox}} : virtualisation pour exécuter des machines virtuelles locales.
+  \item[$\bullet$] \textbf{\href{https://www.microsoft.com/fr-fr/microsoft-365/}{Suite Microsoft 365}} : bureautique et collaboration (Outlook, Word, Excel, Teams...).
+  \item[$\bullet$] \textbf{\href{https://www.mozilla.org/fr/firefox/}{Firefox}} : navigateur web principal pour la navigation et les outils web internes.
+  \item[$\bullet$] \textbf{\href{https://www.teamviewer.com/}{TeamViewer}} : assistance à distance et support technique.
+\end{itemize}
+\par\bigskip
+
+Les logiciels utilisés dans les machines virtuelles peuvent être les suivants :
+\par\bigskip
+
+\begin{itemize}
+  \item[$\bullet$] \textbf{LabVIEW} : environnement de développement pour les applications de test et mesure.
+  \item[$\bullet$] \textbf{TestStand} : Séquenceur de tests automatisés.
+  \item[$\bullet$] \textbf{Logiciels propriétaires clients} : applications spécifiques fournies par des clients (e.g. ?)
+\end{itemize}
+
+
+
+\subsection{Organisation des missions}
+
+Le diagramme ci dessous présente la chronolgie des différentes missions effectuées durant cette année d'alternance,
+bien que certaines missions comme \textit{l'homologation du Système d'Informations (SI) classé "DR"} ou bien la \textit{migration de l'Active Directory (AD)} étaient prévus pour une date donnée ou une date butoire,
+  les autres ne bénéficiaient d'aucun ordre établi à l'avance :
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{ganttchart}[
+    hgrid style/.style={draw=gray!20, line width=0.4pt},
+    vgrid={*1{draw=gray!20, line width=0.4pt}},
+    time slot format=isodate-yearmonth,
+    time slot unit=month,
+    canvas/.style={draw=gray!30, line width=0.5pt},
+    title/.style={draw=none, fill=gray!12},
+    title label font=\small\bfseries\color{black!70},
+    title height=1,
+    bar label font=\small,
+    bar label node/.append style={align=right, text width=6cm},
+    bar height=0.55,
+    bar top shift=0.225,
+    y unit title=0.7cm,
+    y unit chart=1.1cm,
+    x unit=1.5cm
+]{2024-09}{2025-07}
+    \gantttitlecalendar{month=shortname} \\[grid]
+    \ganttbar[bar/.append style={fill=green!45, draw=green!60, rounded corners=2pt}]
+        {Homologation d'un SI classé \og DR \fg{}}{2024-09}{2024-12} \\
+    \ganttbar[bar/.append style={fill=teal!35, draw=teal!50, rounded corners=2pt}]
+        {Migration AD 2012\textrightarrow{}2025}{2024-12}{2024-12} \\
+    \ganttbar[bar/.append style={fill=blue!30, draw=blue!45, rounded corners=2pt}]
+        {Projet client synchro Gitlab\textrightarrow{}Jira}{2025-01}{2025-02} \\
+    \ganttbar[bar/.append style={fill=teal!35, draw=teal!50, rounded corners=2pt}]
+      {Mise en place d’un accès client isolé}{2025-03}{2025-03} \\
+    \ganttbar[bar/.append style={fill=green!45, draw=green!60, rounded corners=2pt}]
+        {Portage d'une application Python 3.5\textrightarrow{}3.12}{2025-04}{2025-04} \\
+    \ganttbar[bar/.append style={fill=teal!35, draw=teal!50, rounded corners=2pt}]
+        {Installation de Suricata et Evebox}{2025-05}{2025-05} \\
+    \ganttbar[bar/.append style={fill=blue!30, draw=blue!45, rounded corners=2pt}]
+        {Installation et Configuration de Wazuh}{2025-04}{2025-06}\\
+    %\ganttbar[bar/.append style={fill=green!45, draw=green!60, rounded corners=2pt}]
+     %   {Réalisation d'une campagne de phishing}{2025-06}{2025-07}\\
+        \ganttbar[bar/.append style={fill=teal!35, draw=teal!50, rounded corners=2pt}]
+        {Durcissement du système d'information à l'aide des standards Center for Internet Security}{2025-04}{2025-07}
+
+\end{ganttchart}
+}%
+\caption{Chronologie des missions réalisées pendant l'alternance}
+\label{fig:gantt-missions}
+\end{figure}
+
+
+
+
+\newpage
+\section{Missions effectuées}
+
+Après avoir posé le cadre institutionnel et professionnel de l'alternance, il est désormais pertinent de présenter en détail le sujet traité, les objectifs poursuivis
+ ainsi que le déroulement chronologique des missions réalisées. Ces éléments permettent de saisir la portée technique de l'alternance et la logique
+d’ensemble des projets menés.
+
+\subsection{Mission 1 : Installation et Configuration de Wazuh}
+
+Dans un système d'information (SI), il est primordial de surveiller les comportements utilisateurs et systèmes afin de prévenir certaines
+ pannes, accidents, comportements inappropriés et attaques. La surveillance via divers outils comme les EDR, IDS/IPS et les Security 
+ Information and Event Management (SIEM)
+  s'inscrit ainsi dans une démarche de sécurité et de sûreté vis-à-vis du SI, de ses utilisateurs ainsi que des différents actifs de 
+  l'entreprise qu'il est
+  important de protéger. De plus, un SIEM peut également servir en tant que plateforme de journalisation, notamment dans un but de 
+  conformité aux standards ISO27001 (ex: A.8.15).
+\par\bigskip
+Cette supervision continue se justifie par le fait qu'un contrôle ponctuel ou a posteriori arrive souvent trop tard pour limiter 
+l'impact d'un incident : l'analyse en quasi temps réel de journaux systèmes, applicatifs ou réseau (par exemple sous forme de captures
+ PCAP pour le trafic réseau) permet à l'inverse de détecter rapidement des comportements anormaux ou malveillants. Elle complète également
+  la réalisation d'audits réguliers, qui permettent de vérifier que les mesures de sécurité mises en place restent conformes aux exigences 
+  réglementaires et aux bonnes pratiques, et de détecter les écarts de configuration avant qu'ils ne soient exploités par un attaquant.
+\par\bigskip
+Cette surveillance se base ici sur Wazuh, un SIEM servant de point de centralisation des journaux des machines du parc. Ce choix, 
+parmi les solutions disponibles sur le marché (Splunk, Elastic Security, IBM QRadar, etc.), s'explique principalement par son caractère 
+open source, l'absence de coût de licence adapté au contexte budgétaire de l'entreprise, ainsi que la richesse de son de son moteur de règles natif et de
+ son module de conformité (SCA) directement compatible avec les benchmarks CIS, déjà retenus par l'entreprise pour le durcissement du parc
+  (cf. section~\ref{sec:mission2}).
+
+\subsubsection{Qu'est-ce que Wazuh}
+Wazuh est un SIEM, une plateforme permettant de centraliser,
+ analyser enrichir et corréler les événements de sécurité afin de détecter des menaces. Il permet de surveiller
+  une gamme d’équipements via le protocole Syslog ainsi que l'aide de ses agents.
+   Les agents sont des logiciels installés sur les appareils administrés qui ont 
+   pour principal fonction de remonter les journaux systèmes ou applications des machines, ils peuvent également
+    éxécuter des commandes avec un privilège administrateur sur les machines ce qui peut s'avérer
+     utile pour un outil de scan de permission par exmple mais dangereux dans le cas où une personne mal 
+     intentionnés arrive à prendre la main sur le serveur qui les déploie.
+
+
+
+\subsubsection{Les protocoles de Transmission de journaux}
+
+Le protocole Syslog est un protocole permettant l'échange de journaux système entre un serveur et un client dans un format centralisé défini selon les standards de la RFC 5424. Chaque champ est défini par cette norme et les valeurs stockées dedans également, à l'exception de certains champs laissés libre afin de permettre aux développeurs d'enrichir les logs de leur programme.
+\par\bigskip
+Le protocole est disponible en deux versions, TCP qui assure la transmission fiable des informations (port 5514) et UDP (port 514) permettant un trafic plus important mais moins fiable.
+\vspace{\baselineskip}
+
+\textbf{Exemple de structure d'un message au format Syslog, conforme à la RFC 5424 :}
+
+
+\begin{table}[H]
+\centering
+\scriptsize
+\renewcommand{\arraystretch}{1.3}
+
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\cellcolor{blue!15}\texttt{Sep 14 14:09:09} &
+\cellcolor{green!15}\texttt{machine\_de\_test} &
+\cellcolor{yellow!20}\texttt{dhcp service} &
+\cellcolor{orange!20}\texttt{warning} &
+\cellcolor{red!15}\texttt{110} &
+\cellcolor{purple!15}\texttt{corps du message} \\
+\hline
+Date et heure &
+Hostname &
+Processus &
+Priorité &
+PID &
+Message \\
+\hline
+\end{tabular}
+}
+
+\caption{Structure d'un message Syslog}
+\label{tab:syslog}
+\end{table}
+
+
+Outre Syslog, d'autres formats de journaux sont également utilisés dans les systèmes d'information. 
+Parmi eux, le format Common Event Format (CEF) \footnote{\url{https://www.microfocus.com/documentation/arcsight/}}, développé par ArcSight, permet de standardiser les événements de sécurité provenant d'équipements et de logiciels différents.
+
+
+\newpage
+\subsubsection{Architecture de Wazuh}
+Avant de détailler la mise en œuvre réalisée durant l'alternance, il convient de présenter l'architecture générale de Wazuh, qui repose sur une organisation modulaire en plusieurs composants communiquant entre eux.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  >=Stealth,
+  % Style boîte grise standard
+  greybox/.style={
+    draw=greyborder, fill=greybox,
+    rounded corners=4pt,
+    align=center,
+    font=\small,
+    minimum width=3.2cm,
+    minimum height=1.1cm,
+    inner sep=6pt
+  },
+  % Style boîte bleue (Manager / Indexer)
+  bluebox/.style={
+    draw=blueborder, fill=bluelight,
+    rounded corners=6pt,
+    align=center,
+    font=\small,
+    inner sep=8pt
+  },
+  % Style boîte interne du manager
+  innerbox/.style={
+    draw=greyborder, fill=greybox,
+    rounded corners=3pt,
+    align=center,
+    font=\small,
+    minimum width=2.8cm,
+    minimum height=1.0cm,
+    inner sep=5pt
+  },
+  % Flèches
+  arrow/.style={->, thick, color=gray!70},
+  % Label de flèche
+  arrowlabel/.style={font=\footnotesize, color=gray!80, midway}
+]
+
+%% ============================================================
+%% RANGÉE 1 : Endpoints surveillés (cadre pointillé)
+%% ============================================================
+
+% Agent Linux
+\node[greybox] (linux) at (-4, 0) {
+  \textbf{Agent Linux}\\[2pt]
+  \footnotesize Collecte logs,\\syscalls, fichiers
+};
+
+% Agent Windows
+\node[greybox] (windows) at (0, 0) {
+  \textbf{Agent Windows}\\[2pt]
+  \footnotesize Collecte logs,\\registre, audits
+};
+
+% Agent Cloud
+\node[greybox] (cloud) at (4, 0) {
+  \textbf{Agent Cloud}\\[2pt]
+  \footnotesize AWS, Azure,\\GCP, Docker
+};
+
+% Cadre pointillé "Endpoints surveillés"
+\begin{scope}[on background layer]
+  \node[draw=dashedborder, dashed, rounded corners=8pt,
+        fit=(linux)(windows)(cloud),
+        inner sep=14pt,
+        label={[font=\small, color=dashedborder]above left:Endpoints surveillés}
+       ] (endpoints) {};
+\end{scope}
+
+%% ============================================================
+%% LABEL TLS
+%% ============================================================
+\node[font=\footnotesize, color=gray] (tls) at (-3, -1.2) {Chiffré (TLS)};
+
+%% ============================================================
+%% RANGÉE 2 : Wazuh Manager (boîte bleue avec composants internes)
+%% ============================================================
+
+% Composants internes du Manager
+\node[innerbox] (rules) at (-2.2, -4.2) {
+  \textbf{Rules Motor}\\[1pt]
+  \footnotesize 3000+ règles intégrées
+};
+
+\node[innerbox] (decoders) at (2.2, -4.2) {
+  \textbf{Decoders}\\[1pt]
+  \footnotesize Parsing des logs
+};
+
+\node[innerbox] (fim) at (-3.2, -5.8) {
+  \textbf{FIM}\\[1pt]
+  \footnotesize Intégrité
+};
+
+\node[innerbox] (sca) at (0, -5.8) {
+  \textbf{SCA}\\[1pt]
+  \footnotesize Conformité
+};
+
+\node[innerbox] (vuln) at (3.2, -5.8) {
+  \textbf{Vuln.}\\[1pt]
+  \footnotesize CVE
+};
+
+% Titre du Manager (au-dessus des composants)
+\node[font=\normalsize\bfseries, color=black] (managertitle) at (0, -3.0) {Wazuh Manager};
+\node[font=\small, color=bluetext] (managersubtitle) at (0, -3.45)
+      {Cœur du système — analyse et corrélation};
+
+% Cadre bleu du Manager
+\begin{scope}[on background layer]
+  \node[bluebox,
+        fit=(managertitle)(managersubtitle)(rules)(decoders)(fim)(sca)(vuln),
+        inner sep=12pt
+       ] (manager) {};
+\end{scope}
+
+%% ============================================================
+%% BOÎTES LATÉRALES (Syslog et SIEM)
+%% ============================================================
+
+\node[greybox, minimum width=2.5cm] (syslog) at (-7.0, -4.55) {
+  \textbf{Syslog / API}\\[2pt]
+  \footnotesize Sources externes
+};
+
+\node[greybox, minimum width=2.5cm] (siem) at (7.0, -4.5) {
+  \textbf{SIEM / SOAR}\\[2pt]
+  \footnotesize Intégrations
+};
+
+%% ============================================================
+%% RANGÉE 3 : Wazuh Indexer
+%% ============================================================
+
+\node[font=\normalsize\bfseries] (indexertitle) at (0, -8.5) {Wazuh Indexer};
+\node[font=\small, color=bluetext] (indexersub1) at (0, -8.95) {Basé sur OpenSearch};
+\node[font=\small, color=bluetext] (indexersub2) at (0, -9.35)
+      {Stockage \& indexation des événements};
+
+\begin{scope}[on background layer]
+  \node[bluebox, minimum width=8cm,
+        fit=(indexertitle)(indexersub1)(indexersub2),
+        inner sep=12pt
+       ] (indexer) {};
+\end{scope}
+
+%% ============================================================
+%% BOÎTE LATÉRALE : Réponse active
+%% ============================================================
+
+\node[greybox, minimum width=2.8cm] (active) at (-6.5, -8.95) {
+  \textbf{Réponse active}\\[2pt]
+  \footnotesize Blocage, scripts
+};
+
+%% ============================================================
+%% RANGÉE 4 : Wazuh Dashboard
+%% ============================================================
+
+\node[font=\normalsize\bfseries] (dashtitle) at (0, -12.0) {Wazuh Dashboard};
+\node[font=\small] (dashsub1) at (0, -12.45)
+      {Interface web (OpenSearch Dashboards)};
+\node[font=\small] (dashsub2) at (0, -12.85)
+      {Visualisation, alertes, rapports};
+
+\begin{scope}[on background layer]
+  \node[draw=greyborder, fill=greybox, rounded corners=6pt,
+        fit=(dashtitle)(dashsub1)(dashsub2),
+        minimum width=8cm,
+        inner sep=12pt
+       ] (dashboard) {};
+\end{scope}
+
+%% ============================================================
+%% FLÈCHES
+%% ============================================================
+
+% Agents -> Manager
+\draw[arrow] (linux.south)   -- ++(0,-0.5) -| (manager.north);
+\draw[arrow] (windows.south) -- (manager.north);
+\draw[arrow] (cloud.south)   -- ++(0,-0.5) -| (manager.north);
+
+% Syslog -> Manager
+\draw[arrow] (syslog.east) -- (manager.west);
+
+% Manager -> SIEM
+\draw[arrow] (manager.east) -- (siem.west);
+
+% Manager -> Indexer
+\draw[arrow] (manager.south) -- node[arrowlabel, right]{Alertes \& logs} (indexer.north);
+
+% Indexer -> Active response
+\draw[arrow] (indexer.west) -- (active.east);
+
+% Indexer -> Dashboard
+\draw[arrow] (indexer.south) -- node[arrowlabel, right]{Requêtes} (dashboard.north);
+
+\end{tikzpicture}
+\caption{Architecture fonctionnelle de Wazuh}
+\label{fig:archi-wazuh}
+\end{figure}
+
+
+Comme on peut le voir sur la figure~\ref{fig:archi-wazuh}, Wazuh se compose de quatres éléments principaux :
+\par\bigskip
+
+
+\begin{itemize}
+  \item[$\bullet$] les agents, qui collectent les données de sécurité à partir des systèmes surveillés et les transmettent au Manager via le protocole Syslog TCP ou d'autres méthodes de communication.
+  \item[$\bullet$] le Manager, qui est le cœur du système, chargé de collecter, analyser et corréler les journaux envoyés par les agents.
+  \item[$\bullet$] l'Indexer, basé sur OpenSearch, qui stocke et indexe les données pour permettre des recherches rapides et efficaces.
+  \item[$\bullet$] le Dashboard, qui offre une interface web pour visualiser les alertes, générer des rapports, interagir avec les données collectées et configurer l'outil.
+\end{itemize}
+\par\bigskip
+
+Le schéma fait également apparaître des intégrations possibles vers des solutions SIEM/SOAR tierces. Un Security Orchestration, Automation and Response (SOAR)
+ est une plateforme qui automatise les réponses à des alertes de sécurité (par exemple le blocage automatique d'une adresse IP suspecte), en s'appuyant généralement
+  sur les événements remontés par un SIEM comme Wazuh.
+\par\bigskip
+
+  Le Manager intègre également des modules complémentaires, dont le File Integrity Monitoring (FIM), qui surveille les modifications de fichiers et de clés de registre sensibles, le module de conformité SCA (Security Configuration Assessment) qui sera détaillé en section~\ref{sec:mission2}, ainsi qu'un module de détection de vulnérabilités basé sur les CVE connues.
+
+
+\newpage
+
+
+\subsubsection{Mise en place de Wazuh}
+
+\paragraph{Que faut-il mettre en place ?}
+
+La mise en place de Wazuh a été réalisée sur un serveur Rocky Linux 10 (RHEL 10) virtualisé via l'hyperviseur Hyper-V, sur un serveur
+ physique \href{https://www.hpe.com/us/en/compute/proliant-dl360.html}{HPE ProLiant DL360 Gen10 Plus}.
+ \par\bigskip
+Le choix de ce système d'exploitation s'explique par sa stabilité ainsi que l'assurance de son support à long terme (10 ans) ce qui est un critère
+ important pour une entreprise, de plus, RedHat assure une compatibilté totale materielle avec les serveurs HPE via le grade "Certified" consulltable sur le site web de l'entrepise ce qui n'est pas forcémment proposé par d'autres Systèmes d'éxploitation.\\
+ \par\bigskip
+
+\begin{figure}[H]
+\centering
+
+ \includegraphics[scale=0.7]{images/certification_rhel10_proliant.png} 
+\end{figure}
+
+Le processus d'installation de Wazuh s'est déroulé en trois étapes principales :
+
+
+\begin{itemize}
+\vspace{\baselineskip} % Ajoute une ligne vide entre les éléments
+  \item[$\bullet$] La création d'une VM HyperV ayant les paramètres adaptés (stockage, cpu, ram etc.)
+  \item[$\bullet$] L'installation des différents composants (Wazuh Manager, Wazuh Indexer et Wazuh Dashboard) sur la VM
+  \item[$\bullet$] L'ajout d'un enregistrements DNS afin de rendre la configuration plus maintenable
+\end{itemize}
+\par\bigskip
+
+Je n'ai pas eu besoin de réinstaller les agents sur les ordinateurs mais seulement de modifier l'adresse de wazuh vers son nom \textbf{ex: 192.168.1.12 → wazuh.mesulog.local} \\ 
+
+Le processus d'installation est disponible dans les figures \ref{fig:wazuh-install-step1} et \ref{fig:wazuh-install-step2} disponibles en annexe.
+
+\subsubsection{Les décodeurs règles et alertes}
+
+Une fois Wazuh installé et les agents configurés, l'enjeu principal devient l'exploitation effective des journaux collectés : 
+il faut être capable d'en extraire les informations pertinentes, de les comparer à des critères de détection, puis de générer des
+ alertes exploitables par les équipes de sécurité. C'est le rôle conjoint des décodeurs, qui interprètent la structure des logs,
+  des règles, qui définissent les critères de détection, et des alertes, qui formalisent la remontée d'information. Cette sous-section
+   détaille le fonctionnement de cette chaîne ainsi que les éléments personnalisés mis en place durant l'alternance.
+
+
+\paragraph{Fonctionnement général}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=2.2cm,
+  every node/.style={font=\small}
+]
+
+\node[draw, rounded corners, align=center, text width=2.8cm] (log) at (0,0)
+{Log entrant\\(Syslog / agent / autre source)};
+
+\node[draw, rounded corners, align=center, text width=2.8cm] (decoder) at (4,0)
+{Décodage\\(\textit{decoders})};
+
+\node[draw, rounded corners, align=center, text width=2.8cm] (rules) at (8,0)
+{Comparaison aux règles\\(\textit{rules})};
+
+\node[draw, rounded corners, align=center, text width=2.8cm] (alert) at (12,0)
+{Alerte et affichage\\Dashboard};
+
+\draw[->] (log) -- (decoder);
+\draw[->] (decoder) -- (rules);
+\draw[->] (rules) -- (alert);
+
+% Sous-légendes explicatives
+\node[font=\footnotesize, text width=2.8cm, align=center, text=gray] at (0,-1.3) {Réception brute du message};
+\node[font=\footnotesize, text width=2.8cm, align=center, text=gray] at (4,-1.3) {Extraction des champs via expressions régulières};
+\node[font=\footnotesize, text width=2.8cm, align=center, text=gray] at (8,-1.3) {Recherche de correspondance avec le ruleset};
+\node[font=\footnotesize, text width=2.8cm, align=center, text=gray] at (12,-1.3) {Remontée selon le niveau de criticité (\textit{level})};
+
+\end{tikzpicture}
+\caption{Chaîne de traitement d'un log dans Wazuh}
+\label{fig:chaine-log}
+\end{figure}
+
+Ce schéma présente le processus de gestion de l'arrivée d'un log dans Wazuh Manager jusqu'à la montée d'alerte traitée par 
+un administrateur système ou un analyste SOC. Ce traitement s'appuie sur un mécanisme de \textit{pattern matching} : à chaque étape,
+ le contenu du log est comparé à un ensemble de motifs prédéfinis (expressions régulières pour les décodeurs, critères de correspondance pour les règles) 
+ afin d'en extraire des informations exploitables puis de déclencher, le cas échéant, une alerte. Le fonctionnement détaillé des décodeurs et des règles est
+  présenté dans les paragraphes suivants.
+\par\bigskip
+
+\begin{enumerate}
+  \item[$\bullet$] D'abord le log arrive sur un des ports ouverts de Wazuh Manager (514 Syslog UDP, 1515 agent, etc.)
+  \item[$\bullet$] Le log est ensuite parsé par un décodeur, cette étape peut se réitérer plusieurs fois si le résultat obtenu en sortie correspond à un autre décodeur.
+  \item[$\bullet$] Le résultat est ensuite comparé aux différentes règles incluses dans Wazuh ainsi qu'aux règles personnalisées ; si une correspondance est avérée, une règle est levée et apparaît dans le Dashboard Wazuh (si son niveau est supérieur à 0).
+  \item[$\bullet$] Il est alors possible de créer des alertes en fonction du niveau de chaque règle levée ; ces alertes peuvent être envoyées via différents canaux (mail, Teams, Slack).
+  \end{enumerate}
+  
+\newpage
+\paragraph{Décodage de journaux, fonctionnement des "decoders"}
+Les décodeurs représentent la première couche de traitement de logs dans wazuh, il en existe 2 sortes : 
+\par\bigskip
+
+\begin{itemize}
+    \item[$\bullet$] les natifs, présents sous \textit{/var/ossec/ruleset/decoder/0XXX-Nom}
+    \item[$\bullet$] les customs, présents sous \textit{/var/ossec/etc/decoder/Nom}
+\end{itemize}
+\par\bigskip
+
+
+Les décodeurs custom ont plusieurs fonctions, ils permettent notamment d'interpréter des logs provenants de sources
+ pour lesquelles wazuh ne propose pas de décodeur intégré, ou de surcharger certains décodeurs existant afin d'enrichir
+  le log. Voici un exemple de décodeur:
+
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{1\textwidth}
+\begin{lstlisting}[language=WazuhXML]
+<decoder name="ms-dhcp-ipv4">
+  <prematch>^\d\d,\d+/\d+/\d\d\d\d,\d+:\d+:\d+,|</prematch>
+  <prematch>^\d\d,\d+/\d+/\d\d,\d+:\d+:\d+,</prematch>
+  <regex>^(\d\d),\d+/\d+/\d\d\d*,\d+:\d+:\d+,(\w+),(\S+)</regex>
+  <order>id,extra_data,srcip</order>
+</decoder>
+
+
+\end{lstlisting}
+
+  \caption{Exemple décodeur DHCP}
+  \label{fig8}
+  \end{minipage}
+\end{figure}
+
+Ce décodeur permet d'analyser les journaux générés par le service DHCP de Windows. Il repose sur un \textit{pattern matching}, c'est-à-dire une comparaison
+ entre le texte du log et un modèle attendu : si le message suit la même structure que celle décrite dans le décodeur, il est reconnu. Par exemple, une ligne
+  commençant par \texttt{24,05/08/2024,12:41:18,DNS Update Request,201.10.168.192} correspond au modèle attendu car elle respecte l'ordre des champs définis.
+\par\bigskip
+Les expressions régulières, ou \textit{regex}, sont le langage utilisé pour décrire ce modèle. Concrètement, elles servent à repérer des motifs dans une chaîne 
+de caractères : \texttt{\textbackslash d} désigne un chiffre, \texttt{\textbackslash w} un mot, et \texttt{\textbackslash S+} une suite de caractères sans espace.
+\par\bigskip
+
+ Dans l'exemple ci-dessus, la regex permet d'isoler automatiquement l'identifiant de l'événement, les données complémentaires
+   et l'adresse IP source, qui pourront ensuite être exploitées par les règles de détection de Wazuh.
+   Les champs extraits sont ensuite stockés dans des variables Wazuh (id, extra\_data, srcip).
+    Voici les champs extraits par ce décodeur :
+
+
+\begin{table}[H]
+\centering
+\scriptsize
+\renewcommand{\arraystretch}{2}
+
+\begin{tabular}{|c|c|c|}
+\hline
+\cellcolor{blue!15}\texttt{24} &
+\cellcolor{orange!20}\texttt{DNS Update Request} &
+\cellcolor{red!15}\texttt{201.10.168.192} \\
+\hline
+\texttt{id} &
+\texttt{extra\_data} &
+\texttt{srcip} \\
+\hline
+\end{tabular}
+
+\caption{Champs extraits par le décodeur DHCP}
+\label{tab:dhcp_decoder}
+\end{table}
+
+Après application du décodeur, ces variables sont utilisées pour la création de règles personnalisées ou pour l'affichage d'alertes
+      plus détaillées dans le dashboard Wazuh.
+
+\paragraph{Les règles "Rules"}
+
+Les règles sont déclenchés en fonction des logs décodés lorsqu'un log correspond à leurs critères, leurs champ \textit{level} permettent d'attribuer 
+une criticité de 0 à 15, le détail sur la criticité est expliqué dans le tableau suivant qui apparaît sur la page d'accueil Wazuh.\\
+
+\begin{figure}[H]
+  \centering
+\includegraphics[width=1 \textwidth]{images/criticité-règles.png}
+\caption{Criticité des règles Wazuh}
+\end{figure}
+
+\subsubsection{Création de règles personnalisées}
+
+Les règles personnalisées permettent de créer des alertes spécifiques en fonction des besoins de l'entreprise.
+ Elles suivent globalement le même fonctionnement que les décodeurs, elles sont composées d'une partie de pré-matching 
+ qui permet de filtrer les logs à traiter, d'une partie de matching qui permet d'extraire des champs du log et d'une partie 
+ de description qui permet de définir le message d'alerte qui sera affiché dans le dashboard Wazuh.\\
+ Il est possible pour une règle de faire référence à une autre règle via la balise \texttt{if\_sid}, ce qui permet de faire du chainage de règles (chaining), c'est à dire que si une règle est levé, elle peut faire référence à une autre règle qui elle même peut faire référence à une autre règle etc.\\
+
+\paragraph{Travail réalisé}
+
+Plusieurs règles personnalisées ont été créées, l'objectif principale était de détecter la présence de nouveaux appareils sur le réseau LAN ou sur le réseau wifi (invité)
+de l'entreprise.
+\par\bigskip
+Pour ce faire, j'ai créé deux règles permettant de vérifier les baux DHCP renouvelés sur le réseau wifi invité de l'entreprise ainsi que 2 règles 
+ permettant de vérifier les baux DHCP renouvelés sur le réseau LAN de l'entreprise.
+ L'objectif était de détecter les appareils connus et inconnus se connectant au réseau, en utilisant une liste blanche d'adresses MAC autorisées définie sur 
+ le serveur Wazuh. 
+Voici les exemple de règles personnalisées créées pour cette surveillance :
+
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{1\textwidth}
+\begin{lstlisting}[language=WazuhXML]
+<group name="dhcp">
+  <rule id="120052" level="3">
+    <if_sid>6305</if_sid>
+    <list field="mac" lookup="match_key">etc/lists/known-devices</list>
+    <description>DHCP lease renewed for $(mac) = $(srcip)</description>
+  </rule>
+  <rule id="120053" level="12">
+    <if_sid>6305</if_sid>
+    <list field="mac" lookup="not_match_key">etc/lists/known-devices</list>
+    <description>ALERT! Unknown device connected: for $(mac) = $(srcip)</description>
+  </rule>
+
+</group>
+
+
+\end{lstlisting}
+
+  \caption{Exemple de règles personnalisées pour vérifier la whitelist DHCP}
+  \label{fig9}
+  \end{minipage}
+\end{figure}
+
+
+Ci-dessus, deux règles personnalisées ont été créées pour vérifier les baux DHCP renouvelés sur le wifi invité de la société. La première règle (ID 120052) 
+est déclenchée lorsque le champ "mac" du log correspond à une adresse MAC présente dans la liste "known-devices", indiquant 
+qu'un appareil connu a renouvelé son bail DHCP. La seconde règle (ID 120053) est déclenchée lorsque le champ "mac" ne correspond
+ pas à une adresse MAC de la liste, signalant la connexion d'un appareil inconnu et générant une alerte critique.
+ \par\bigskip
+
+La mise en place de ces règles a également mis en évidence une difficulté importante: contrairement à des langages de requête 
+comme le KQL (plus lisible et orienté analyse), la logique de corrélation dans Wazuh repose sur une structure XML plus verbeuse et moins intuitive. En pratique,
+ cela rend l'écriture, la relecture et la maintenance des règles plus longues, en particulier pour des tâches d'administration système où l'on doit itérer rapidement,
+  tester souvent et limiter les erreurs de syntaxe.
+
+ \newpage
+\paragraph{Alertes}
+Les alertes constituent une fonction centrale du SIEM, permettre d'alerter les équipes de sécurité en cas d'événements suspects
+ ou critiques détectés. Elles peuvent être configurées pour être envoyées via différents canaux de communication,
+  tels que les emails, les notifications sur des plateformes de collaboration (\href{https://www.microsoft.com/fr-fr/microsoft-teams/group-chat-software}{Teams}, \href{https://slack.com}{Slack})
+   ou même des intégrations avec des systèmes de ticketing comme \href{https://www.glpi-project.org/}{GLPI} ou \href{https://www.atlassian.com/software/jira}{Jira}, permettant ainsi de créer un ticket d'incident automatiquement afin qu'un technicien de
+    support puisse intervenir au plus vite, cela peut-être intéressant dans une grande structure avec un SI complexe.
+
+\subparagraph{Contexte et travail réalisé}
+
+Dans un premier temps, la DSI souhaite assurer un contrôle efficace des accès et des activités sur le réseau, en particulier
+ pour détecter les tentatives de connexion échouées et la présence d'appareils inconnus sur le réseau LAN et wifi.
+ \par\bigskip
+Une attention particulière fut également portée à la surveillance des activités sur le serveur SharePoint, afin de détecter toute suppression massive de fichiers
+ ou dossiers, ce qui pourrait indiquer une activité malveillante ou non autorisée (e.g. tentative de supression de masse). 
+
+Voici les alertes qui ont été mises en place afin de répondre à ces besoins :
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1 \textwidth]{images/monitors.png}
+  \caption{Alertes configurées dans Wazuh}
+    \label{fig:alert_config}
+\end{figure}
+
+ \par\bigskip
+
+\begin{itemize}
+  \item [$\bullet$] \textbf{Windows Multiple Logon Failure} : Cette alerte est déclenchée lorsqu'il y a plusieurs tentatives de connexion échouées sur une session utilisateur d'un système Windows (événement \href{https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4625}{4625}), cela peut indiquer une attaque bruteforce ou une tentative d'accès non autorisée.
+  \item [$\bullet$] \textbf{Sharepoint Remove detection} : Cette alerte est générée lorsqu'une suppression d'au moins 5 fichiers ou dossiers est détectée sur notre serveur SharePoint dans une intervalle de 1 minutes, ce qui peut signaler une activité suspecte ou malveillante.
+  \item [$\bullet$] \textbf{Appareil non-connu détécté sur le réseau LAN} : Cette alerte est déclenchée lorsqu'un appareil inconnu se connecte au réseau LAN de l'entreprise, en utilisant une adresse MAC qui n'est pas présente dans la liste blanche des appareils autorisés. Elle est coréllé à la règle \textit{120053} créé en amont. Cela permet de détecter rapidement les connexions non autorisées et de prendre des mesures appropriées pour sécuriser le réseau interne.
+  \item [$\bullet$] \textbf{Appareil non-connu détécté sur le réseau wifi} : Cette alerte est déclenchée lorsqu'un appareil inconnu se connecte au réseau wifi invité de l'entreprise, en utilisant une adresse MAC qui n'est pas présente dans la liste blanche des appareils autorisés. Elle est coréllé à la règle \textit{120051} créé aussi en amont. Cela permet de détecter rapidement les connexions non autorisées et de prendre des mesures appropriées pour sécuriser le réseau invité.
+\end{itemize}
+\par\bigskip
+Observons maintenant comment est définie une de ces alertes, en détail, voici l'exemple de l'alerte \textit{Appareil non-connu détécté sur le réseau LAN}. Cette alerte a été configurée dans OpenSearch Dashboards pour utiliser un moniteur de type \textit{Per bucket monitor} basé sur une requête d'agrégation utilisant l'index Wazuh contenant les logs DHCP.
+
+\paragraph{Architecture de l'alerte}
+
+L'alerte fonctionne selon une architecture en 3 niveaux : la \textbf{détection} au niveau de la règle Wazuh (rule 120053), l'\textbf{agrégation des données} via une requête Elasticsearch, et finalement la \textbf{notification} déclenchée par le moniteur OpenSearch.
+\par\bigskip
+
+
+\begin{enumerate}
+  \item \textbf{Détection au niveau Wazuh} : La détection commence au niveau de la règle Wazuh ID 120053 (cf. figure \ref{fig:alert_config}), qui s'active lorsqu'un appareil avec une adresse MAC non présente dans la liste blanche \textit{known-devices} se connecte au réseau DHCP. Cette règle déclenche automatiquement un log d'alerte avec un niveau de criticité 12 (critique).
+  \item \textbf{Requête d'agrégation et d'indexation} : Le moniteur OpenSearch utilise une requête Elasticsearch sophistiquée pour interroger ces logs et agréger les données par adresse MAC. Voici la composition de cette requête :
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.9\textwidth}
+\begin{lstlisting}[language=wazuhXML]
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "range": {
+            "@timestamp": {
+              "from": "{{period_end}}||-1h",
+              "to": "{{period_end}}",
+              "include_lower": true,
+              "include_upper": true,
+              "format": "epoch_millis"
+            }
+          }
+        },
+        {
+          "term": {
+            "rule.id": {
+              "value": "120053"
+            }
+          }
+        }
+      ],
+      "adjust_pure_negative": true,
+      "boost": 1
+    }
+  },
+  "aggregations": {
+    "by_device": {
+      "composite": {
+        "size": 100,
+        "sources": [
+          {
+            "mac_address": {
+              "terms": {
+                "field": "data.srcmac"
+}
+\end{lstlisting}
+    \caption{Requête d'agrégation Elasticsearch pour le moniteur de détection d'appareils inconnus au format JSON}
+    \label{fig:elasticsearch_query}
+  \end{minipage}
+\end{figure}
+
+Cette requête effectue les opérations suivantes :
+\begin{itemize}
+  \item[$\bullet$] \textbf{Filtrage temporel} : Récupère tous les logs générés au cours de la dernière heure (intervalle d'exécution du moniteur).
+  \item[$\bullet$] \textbf{Filtrage par règle} : Sélectionne uniquement les logs associés à la règle 120053 (appareils non-connus).
+  \item[$\bullet$] \textbf{Agrégation composite} : Regroupe les résultats par adresse MAC source (\texttt{data.srcmac}) pour obtenir une liste unique des appareils détectés.
+\end{itemize}
+
+\subparagraph{Condition de déclenchement}
+
+Le moniteur évalue ensuite une condition de déclenchement basée sur le résultat de l'agrégation :
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.9\textwidth}
+\begin{lstlisting}[language=wazuhXML]
+{
+  "buckets_path": {
+    "_count": "_count"
+  },
+  "parent_bucket_path": "by_device",
+  "script": {
+    "source": "params._count > 0",
+    "lang": "painless"
+  },
+  "gap_policy": "skip"
+}
+\end{lstlisting}
+    \caption{Condition de déclenchement du moniteur}
+    \label{fig:trigger_condition}
+  \end{minipage}
+\end{figure}
+
+Le script Painless vérifie que le nombre de documents trouvés (\texttt{params.\_count > 0}) est strictement supérieur à zéro. Si au moins un appareil inconnu est détecté dans la dernière heure, le moniteur bascule à l'état \textit{alert} et déclenche les actions configurées.
+
+\subparagraph{Configuration du moniteur}
+
+Le moniteur OpenSearch est configuré selon les paramètres suivants :
+\begin{itemize}
+  \item[$\bullet$] \textbf{Type de moniteur} : Per bucket monitor (un moniteur par agrégation).
+  \item[$\bullet$] \textbf{Fréquence d'exécution} : Toutes les 1 minute(s).
+  \item[$\bullet$] \textbf{Sévérité} : Niveau 2 (High) - reportée en tant que \textit{Critical} par Wazuh.
+  \item[$\bullet$] \textbf{Throttling} : 720 minutes (12 heures) - pour éviter une surcharge de notifications en cas de détections répétées.
+  \item[$\bullet$] \textbf{Actionnable} : Par alerte (une notification par événement détecté).
+\end{itemize}
+
+\subparagraph{5. Configuration de la notification par email}
+
+Lors du déclenchement, le moniteur envoie une notification par email via le canal administrateur. Le modèle de message inclut les variables contextuelles pour fournir des détails techniques :
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.95\textwidth}
+\begin{lstlisting}[language=wazuhXML,inputencoding=utf8]
+Un appareil inconnu a ete detecte sur votre reseau.
+
+------------------------------------------
+  DETAILS DE L'ALERTE
+------------------------------------------
+  Moniteur   : {{ctx.monitor.name}}
+  Declencheur: {{ctx.trigger.name}}
+  Severite   : {{ctx.trigger.severity}} / 5
+  Appareil   : {{ctx.alert.bucket_keys}}
+  Debut      : {{ctx.periodStart}} UTC
+  Fin        : {{ctx.periodEnd}} UTC
+------------------------------------------
+
+  Actions recommandees :
+  1. Identifier l'adresse MAC dans les logs DHCP
+  2. Localiser l'appareil sur le reseau
+  3. Bloquer l'acces si non reconnu
+
+Consultez les alertes dans OpenSearch Dashboards pour plus
+de details.
+\end{lstlisting}
+    \caption{Modèle de message d'alerte email}
+    \label{fig:email_template}
+  \end{minipage}
+\end{figure}
+
+\paragraph{Visualisation dans OpenSearch}
+
+La configuration du moniteur est visible dans l'interface OpenSearch Dashboards (cf. figure \ref{fig:monitor_config}).\\ Le moniteur affiche :
+\par\bigskip
+
+\begin{itemize}
+  \item[$\bullet$] La requête d'extraction en JSON (Extraction query editor).
+  \item[$\bullet$] L'index source : \texttt{wazuh-alerts-*} (wazuh-indexer-cluster).
+  \item[$\bullet$] La condition de déclenchement en Painless.
+  \item[$\bullet$] L'historique des performances et des triggers exécutés.
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/monitors.png}
+  \caption{Configuration du moniteur dans OpenSearch Dashboards - Vue d'ensemble}
+  \label{fig:monitor_config}
+\end{figure}
+
+%% \begin{figure}[H]
+  %%\centering
+ %% \includegraphics[width=1\textwidth]{images/alert-config.png}
+ %% \caption{Configuration du moniteur - Détails de la requête et des agrégations}
+  %%\label{fig:monitor_query}
+ %%\end{figure}
+
+\subparagraph{Flux complet d'alerte}
+\par\bigskip
+
+Le flux complet de détection fonctionne selon le schéma suivant :
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[auto]
+    \tikzstyle{box}=[rectangle, draw, fill=blue!20, text width=2.5cm, align=center, rounded corners]
+    \tikzstyle{arrow}=[->, thick]
+    
+    \node[box] (device) at (0,0) {Appareil inconnu\\DHCP Renewal};
+    \node[box] (wazuh) at (4,0) {Agent Wazuh\\Décodeur DHCP};
+    \node[box] (rule) at (8,0) {Règle 120053\\MAC non whitelist};
+    \node[box] (monitor) at (8,-2.2) {Moniteur\\Exécution toutes les 1 min};
+    \node[box] (opensearch) at (12,0) {OpenSearch\\Indexation};
+    \node[box] (alert) at (12,-2.2) {Email d'alerte\\Administrateurs};
+    \node[box] (throttle) at (12,-4.4) {Throttling\\12 heures};
+    
+    \draw[arrow] (device) -- (wazuh);
+    \draw[arrow] (wazuh) -- (rule);
+    \draw[arrow] (rule) -- (monitor);
+    \draw[arrow] (monitor) -- (opensearch);
+    \draw[arrow] (opensearch) -- (alert);
+    \draw[arrow] (alert) -- (throttle);
+  \end{tikzpicture}
+  \caption{Flux complet de détection des appareils inconnus}
+  \label{fig:alert_flow}
+\end{figure}
+
+\par\bigskip
+
+Cette architecture garantit une détection rapide (< 2 minutes) des appareils non autorisés tout en maintenant 
+une granularité d'alerte appropriée et en évitant une surcharge d'alertes.
+
+
+
+\subsubsection{Conclusion de la mission et critiques}
+
+Cette mission m'a permis de développer une première expérience avec les SIEM et de comprendre les enjeux liés à la sécurité avec un cas concret.
+Le but était de sécuriser grâce à une supervision les actifs primordiaux de la société (serveur SharePoint et réseau LAN) par la mise en place d'un SIEM mais également la création de règles 
+ainsi que la remontée d'alertes afin de détecter les comportements anormaux.
+\par\bigskip
+J'ai pu mettre en pratique mes connaissances en administration système et les développer en sécurité informatique.
+ Cependant, j'ai également rencontré certaines difficultés duent à un manque d'experience ainsi qu'à un manque de clarté dans la documentation de la plateforme,
+notemment sur la partie des décodeurs et des règles pour le fonctionnement de l'héritage, cela m'a obligé à faire beaucoup de recherches sur des forums (cas concrets) afin de comprendre
+ le fonctionnement de Wazuh.
+
+
+
+
+\newpage
+\subsection{Mission 2: Durcissement du système d'information à l'aide des standards CIS}
+ 
+L'une de mes missions principales a été de contribuer au durcissement du système d'information
+ de l'entreprise en appliquant les recommandations du Center for Internet Security (CIS).
+
+ \paragraph{Durcissement système}
+
+ Le durcissement système est un ensemble de procédés de restriction des droits visant à réduire la surface d'attaque possible sur un système
+ informatique, cette mission se concentre sur le durcissement d'ordinateurs Windows 11 via les Group Policy Objects (GPO)
+ mais le procédé de durcissement existe également sur les systèmes Linux. Il y a plusieurs façon de durcir des systèmes comme
+ l'installation d'une image préconfiguré pour être durcie ou bien l'application de GPO suivant des standards prédéfinis.
+
+\subsubsection{Les standards CIS}
+
+  Plusieurs standards sont disponibles afin de durcir les systèmes windows, notemment:
+  \begin{itemize}
+    \item[$\bullet$] Microsoft Security Baselines
+    \item[$\bullet$] CIS Benchmarks
+    \item[$\bullet$] NIST Cybersecurity Framework
+    \item[$\bullet$] STIGs (Security Technical Implementation Guides)
+  \end{itemize}
+\par\bigskip
+
+  Le CIS propose des benchmarks de sécurité pour différents systèmes d'exploitation, applications et configurations,
+   visant à réduire les vulnérabilités et à renforcer la résilience face aux attaques. Ces benchmarks sont organisés en 2 niveaux :
+   \par\bigskip
+  \begin{itemize}
+    \item[$\bullet$] le Level 1 représente les configurations de sécurité essentielles et facilement déployables
+    \item[$\bullet$] le Level 2 inclut des mesures plus restrictives adaptées aux environnements hautement sécurisés.
+  \end{itemize}
+
+  
+  \par\bigskip
+  
+  Après évaluation des différents standards disponibles, nous avons décidé d'appliquer les standards CIS Level 1 sur l'ensemble de notre parc informatique.
+  Ce choix a été motivé par le fait que les benchmarks CIS Level 1 sont déjà présents et intégrés dans le module \href{https://wazuh.com/resources/what-is/configuration-assessment/#:~:text=Configuration%20assessment%20involves%20analyzing%2C%20auditing,best%20practices%2C%20and%20regulatory%20requirements.}{Security Configuration Assessment (SCA)} de Wazuh,
+  permettant ainsi une détection et une validation automatisées des configurations de sécurité sans nécessiter des outils supplémentaires.
+
+  \par\bigskip
+  \paragraph{Alignement avec ISO 27001}
+
+L'application des recommandations CIS Level 1 s'aligne naturellement avec
+ les exigences de la norme ISO 27001. En effet, les baselines CIS contribuent au traitement des risques 
+ et à la mise en œuvre de mesures techniques et organisationnelles correspondant aux contrôles 
+ d'Annexe A par exemple la gestion des accès, exploitation sécurisée et protection des actifs ( A.9, A.12, A.8). 
+ Cette approche facilite la démonstration de conformité lors d'un audit ISO 27001 en fournissant des preuves de
+  configuration, de surveillance et d'amélioration continue des contrôles de sécurité.
+
+ \newpage 
+\subsubsection{Création d'un schéma structuré dans l'Active Directory}
+
+Avant de déployer les configurations, la première étape était de créer un schéma structuré dans l'Active Directory (AD) afin de mieux hiérarchiser les comptes 
+utilisateurs ainsi que les ordinateurs et serveurs présents sur le domaine. Cette structuration permet de faciliter la gestion 
+des permissions, d'améliorer la visibilité sur les ressources et de renforcer la sécurité en limitant les accès aux ressources sensibles
+ par le principe du moindre privilège. Ce principe consiste à accorder à chaque utilisateur ou système uniquement les permissions minimales nécessaires pour accomplir ses tâches, réduisant ainsi la surface d'attaque en cas de compromission d'un compte. 
+\par\bigskip
+
+Cette approche s'inscrit dans une stratégie plus large de \textit{security by design}, qui vise à intégrer la sécurité dès la conception des 
+systèmes et processus plutôt que de l'ajouter après coup. Le security by design repose sur des principes fondamentaux tels que la défense en 
+profondeur, la séparation des responsabilités, et la mise en place de contrôles à plusieurs niveaux pour garantir une protection robuste contre les menaces.
+\par\bigskip
+
+Voici le schéma Active Directory initialement mis en place :\\
+
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[
+    every node/.style={draw, rounded corners, align=center},
+    level 1/.style={sibling distance=8cm},
+    level 2/.style={sibling distance=3cm},
+    level distance=1.8cm
+]
+
+\node {mesulog.local}
+    child { node {Computers}
+        child { node {PC-01} }
+        child { node {PC-02} }
+        child { node {$\cdots$} }
+    }
+    child { node {Users}
+        child { node {Alice} }
+        child { node {Bob} }
+        child { node {$\cdots$} }
+    };
+
+\end{tikzpicture}
+
+\caption{Organisation initiale de l'Active Directory}
+\end{figure}
+
+Bien que ce schéma minimale soit fonctionnel, il ne permet pas de gérer efficacement les ressources et les permissions, il présente les défauts suivants :\\
+\begin{itemize}
+    \item[$\bullet$] Absence d'Unités d'Organisation (OU) pour regrouper les ressources par fonction, département ou niveau de sensibilité.
+    \item[$\bullet$] Manque de groupes de sécurité pour attribuer des permissions de manière centralisée et éviter les permissions directes sur les comptes utilisateurs ou ordinateurs.
+    \item[$\bullet$] Difficulté à appliquer des stratégies de groupe (GPO) spécifiques à certaines catégories d'utilisateurs ou d'ordinateurs en raison de l'absence de hiérarchie claire.
+\end{itemize}
+\par\bigskip
+
+
+Afin de pallier à ces problèmes, il a été proposé et mis en place une nouvelle organisation de l'Active Directory, structurée autour de plusieurs OU et groupes de sécurité. Cette nouvelle organisation permet une gestion plus efficace des ressources, une meilleure application des politiques de sécurité et une réduction des risques liés à des permissions mal configurées.
+Voici le schéma de l'Active Directory après restructuration :\\
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    every node/.style={
+        draw,
+        rounded corners,
+        align=center,
+        font=\small
+    }
+]
+% Niveau 0
+\node (root) at (4,7) {mesulog.local};
+% Niveau 1
+\node (mesulog) at (4,5.5) {Mesulog};
+% Niveau 2
+\node (ord) at (-3.5,4) {Ordinateurs};
+\node (usr) at (5,4) {Utilisateurs};
+\node (svc) at (11,4) {Comptes de service};
+% Niveau 3 - Ordinateurs
+\node (postes)   at (-3.5,2.5) {Postes};
+\node (serveurs) at (-6.5,2.5) {Serveurs};
+% Niveau 3 - Utilisateurs
+\node (admU) at (2.5,2.5)  {Administrateurs};
+\node (devU) at (5,2.5)    {Développeurs};
+\node (dirU) at (7,2.5)    {Direction};
+\node (staU) at (9,2.5)    {Stagiaires};
+% Niveau 4 - Postes
+\node (admP) at (-6.5,1)   {Administrateurs};
+\node (devP) at (-4,1)     {Développeurs};
+\node (dirP) at (-2,1)     {Direction};
+\node (staP) at (-0.2,1)   {Stagiaires};
+% Connexions principales
+\draw (root)   -- (mesulog);
+\draw (mesulog) -- (ord);
+\draw (mesulog) -- (usr);
+\draw (mesulog) -- (svc);
+\draw (ord) -- (serveurs);
+% Connexions Ordinateurs
+\draw (ord) -- (postes);
+% Connexions Utilisateurs
+\draw (usr) -- (admU);
+\draw (usr) -- (devU);
+\draw (usr) -- (dirU);
+\draw (usr) -- (staU);
+% Connexions Postes
+\draw (postes) -- (admP);
+\draw (postes) -- (devP);
+\draw (postes) -- (dirP);
+\draw (postes) -- (staP);
+\end{tikzpicture}
+}%
+\caption{Organisation de l'Active Directory après restructuration}
+\label{fig:ad-restructure}
+\end{figure}
+
+Le schéma ci-dessus représente l'organisation finale de l'Active Directory, son découpage est le suivant:
+\par\bigskip
+
+
+\begin{itemize}
+  \item[$\bullet$] \textbf{Ordinateurs} composé de l'OU \textbf{Postes} réparties entre les \textbf{Administrateurs}, \textbf{Développeurs}, \textbf{Direction} et \textbf{Stagiaires} ainsi que de l'OU \textbf{Serveurs}
+  \item[$\bullet$] \textbf{Utilisateurs} composé des différents utilisateurs du domaine également répartie entre les \textbf{Administrateurs}, \textbf{Développeurs}, \textbf{Direction} et \textbf{Stagiaires}
+  \item[$\bullet$] \textbf{Comptes de services} composé des comptes utilisés par certains serveurs pour accéder à différentes machines et serveurs présents sur le domaine, le but est d'éviter d'utiliser un seul compte qui aurait trop de droits sur l'ensemble du domaine en définissant un compte par utilisation (e.g. compte de sauvegarde)
+\end{itemize}
+\par\bigskip
+
+Ce découpage permet de mieux hiérachiser les droits selon les personnes dans l'entreprise, les développeurs bénéficient par exemple de plusieurs droits relatifs à la virtualisation afin
+de développer dans des machines virtuelles, les autres fonctions de l'entreprises comme la Direction qui ne s'occupe que de document légaux et organisationelle ne bénéficient pas de ces droits car inutiles dans leurs cas.
+
+
+\subsubsection{Stratégie de déploiement des GPO}
+Afin de déployer les GPO de durcissement, il a été décidé de suivre une approche progressive, tout d'abord, l'ensemble des GPO
+recommandées ont été réparties dans un classeur excel en fonction de :
+\par\bigskip
+
+\begin{itemize}
+  \item[$\bullet$] leur nom
+  \item[$\bullet$] leur description
+  \item[$\bullet$] le numéro de la recommandation CIS correspondante
+  \item[$\bullet$] leur impact potentiel sur les utilisateurs et les systèmes
+  \item[$\bullet$] leur criticité, niveau de sécurité (faible, moyenne, élevée)
+  \item[$\bullet$] leur pertinence par rapport aux besoins et au contexte de l'entreprise
+  \item[$\bullet$] leur catégorie (gestion des comptes, sécurité réseau, protection des données, etc.)
+  \item[$\bullet$] leur statut (À tester, Déployée, Exclue)
+\end{itemize}
+\par\bigskip
+Cette classification a permis après une revue par l'ensemble de la DSI (Administrateurs Systèmes et RSSI) de prioriser les GPO les plus importantes avant de les déployer.
+\par\bigskip
+Le déploiement a lui été réparties en plusieurs itérations successives espacées dans le temps de plusieurs jours entre chaque, le but était de comprendre au plus vite
+si une GPO ne fonctionnait pas par rapport à un cas d'utilisation non prévu lors de l'évaluation préliminaire.
+\par\bigskip
+
+Une convention de nommage fut également établie afin de faciliter la gestion et la maintenances des GPO, 
+par exemple, la stratégie \textit{IT1* - Paramétrage des stratégies d'audits} est répartie selon les champs suivants :\\
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|p{10cm}|}
+\hline
+\textbf{Champ} & \textbf{Description} \\
+\hline
+IT1 & Numéro de l'itération durant laquelle la GPO a été créée ou déployée. \\
+\hline
+* & Indique que plusieurs GPO participent à une même fonctionnalité et sont regroupées logiquement. \\
+\hline
+Paramétrage des stratégies d'audit & Description concise de l'objectif ou du contenu de la GPO. Les termes utilisés peuvent être « Paramétrage », « Activation », « Désactivation », etc. selon la nature de la configuration appliquée. \\
+\hline
+\end{tabular}
+\caption{Convention de nommage des GPO}
+\end{table}
+
+\subsubsection{Evolution de la conformité}
+
+Tous les tests de conformités ont été réalisés à l'aide du module SCA de Wazuh sur le PC HP026
+ situé dans l'OU "Postes\textbackslash Administrateurs" qui est un poste de travail utilisé par 
+ les administrateurs systèmes de l'entreprise.\\ 
+ À ce moment, les quatres premières itérations viennent d'être effectuées, le processus de choix et de revue étant particulièrement
+ long, il se peut que l'on ne puisse avoisiner les 100\% de conformité avant la fin de l'alternance, cependant, 
+ l'objectif est d'atteindre au moins 70\% de conformité sur ce poste. Ci-dessous se trouve la capture d'écran de Wazuh montrant le niveau de conformité du poste HP026 avant le début du déploiement des GPO :
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.1\textwidth]{images/wazuh-av-IT1.png}
+\caption{Conformité du poste HP026 avant la première itération de déploiement des GPO}
+\end{figure}
+
+
+Le poste présente initialement un taux de conformité de 32 \%. Ce résultat met en évidence l'écart entre la configuration par
+ défaut du système et les recommandations du benchmark CIS Level 1.\\
+
+Afin de visualiser la progression obtenue au fil des itérations, le graphique ci-dessous présente l'évolution
+du taux de conformité aux standards "CIS Level 1" pour le poste HP026, depuis l'état initial jusqu'à la quatrième
+itération de déploiement des GPO.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.9\textwidth,
+  height=0.45\textwidth,
+  ymin=30,
+  ymax=55,
+  xmin=0,
+  xmax=4,
+  xtick={0,1,2,3,4},
+  xticklabels={Commencement,Itération 1,Itération 2,Itération 3,Itération 4},
+  ytick={30,35,40,45,50,55},
+  ylabel={Conformité CIS Level 1 (\%)},
+  xlabel={Itérations de déploiement},
+  grid=both,
+  line width=0.8pt,
+  mark size=2.5pt
+]
+\addplot[
+  color=blue,
+  mark=* 
+] coordinates {
+  (0,32)
+  (1,35)
+  (2,41)
+  (3,45)
+  (4,49)
+};
+\end{axis}
+\end{tikzpicture}
+\caption{Évolution de la conformité CIS Level 1 du poste HP026 sur 4 itérations}
+\end{figure}
+
+Après l'itération 4, le taux de conformité a atteint 49\%, ce qui représente une amélioration
+ significative par rapport à l'état initial de 32\%. Il reste cependant une marge de progression afin d'atteindre
+  l'objectif de 70\% de conformité, ce qui nécessitera la poursuite du déploiement des GPO et l'ajustement des
+  configurations en fonction des résultats obtenus lors des prochaines itérations. 
+  \par\bigskip
+  Ce travail s'inscrit dans un
+  principe de maturité progressive : les GPO sont déployées par étapes, en commençant par les mesures les plus
+  simples et les moins risquées, puis en renforçant progressivement le niveau de protection à mesure que les tests
+  et les retours terrain valident leur stabilité. Cette approche permet d'augmenter le niveau de sécurité sans
+  perturber brutalement les usages.
+
+\subsubsection{Exemples concrets de GPO appliquées}
+Viser un objectif de conformité est intéressant seulement si on donne du sens à cet objectif, il est important
+ de comprendre les différentes attaques ou vulnérabilités que l'on cherche à traiter en appliquant ces GPO,
+  voici quelques exemples concrets de GPO appliquées et des attaques ou vulnérabilités qu'elles permettent de traiter (voir le tableau~\ref{tab:gpo_risques}) :\\
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|p{1.5cm}|p{3cm}|p{5.2cm}|p{5.2cm}|}
+\hline
+\textbf{N° CIS} & \textbf{Nom} & \textbf{Objectif technique} & \textbf{Risque traité / Impact} \\
+\hline
+ 26303 
+  & Désactiver l'exécution automatique des médias 
+  & Empêcher l'exécution automatique de code depuis supports amovibles (CD, USB, etc.). 
+  & Empêche l'exécution de payloads malveillants déposés sur des médias amovibles (autorun/autoplay). Faible impact pour postes standards, peut gêner certains usages nomades. Déployé en pilote. \\
+\hline
+ 26028 
+  & Désactiver le cache des ouvertures de session précédentes 
+  & Ne pas stocker localement les informations des sessions précédentes (cache d'identifiants/jetons). 
+  & Réduit l'impact en cas de vol ou compromission d'un poste (réutilisation de sessions/cookies). Moyennement contraignant pour utilisateurs nomades~; à tester avant déploiement large. \\
+\hline
+ 26193 
+  & Désactiver le protocole LLMNR 
+  & Désactiver LLMNR/mDNS sur les interfaces afin d'empêcher la résolution de noms non sécurisée. 
+  & Évite les attaques de type LLMNR/NBT-NS poisoning permettant le détournement de trafic et le vol d'identifiants. Recommandé en environnement d'entreprise~; faible impact fonctionnel si DNS interne est bien configuré. \\
+\hline
+\end{tabular}
+\caption{Exemples concrets de GPO appliquées et des risques associés}
+\label{tab:gpo_risques}
+\end{table}
+\subsubsection{Limitation du module SCA de Wazuh}
+
+Bien que pratique, le module SCA de Wazuh n'en reste pas moins limité, voici comment il fonctionne :\\
+
+\begin{enumerate}
+  \item Pour chaque ordinateur / Serveur, un fichier \textit{.xml} avec des commandes pour tester l'application des GPO est envoyé dessus
+  \item Ces commandes présentes dans le fichier sont ensuite exécutées par un script sur les machines
+  \item Le résultat de ce script est ensuite envoyé à Wazuh Manager afin d'être traité et de calculer le taux de conformité.
+\end{enumerate}
+
+
+\par\bigskip
+\paragraph{Le problème de conformité}
+
+
+Nous avons constaté après l'application de plusieurs GPO que le taux de conformité n'augmentait pas malgré le fait que les GPO soient appliquées sur les machines,
+ après investigation, il s'est avéré que le module SCA ne prenait pas en compte certaines configurations appliquées par les GPO,
+  ce qui faussait le taux de conformité affiché dans Wazuh.\\
+
+  En ouvrant le fichier \textit{xml} envoyé par Wazuh sur les machines nous avons constaté que quand le module SCA testait 
+  l'application d'une GPO, il vérifiait la configuration d'une clé de registre spécifique, cependant, certaines GPO appliquaient des configurations qui n'étaient pas liées à des clés de registre,
+ pour ces dernières, le module test directemment de la conformité d'un paramètre via une commande PowerShell, voici une exemple concret:
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{\textwidth}
+\begin{lstlisting}[language=ScaYAML]
+- id: 26145
+  title: "Ensure 'Audit Credential Validation' is set to 'Success and Failure'."
+  description: "This subcategory reports the results of validation
+      tests on credentials submitted for a user account logon request."
+  rationale: "Auditing these events may be useful when investigating
+      a security incident."
+  remediation: "To establish the recommended configuration via GP, [...] Validation"
+  compliance:
+    - cis: ["17.1.1"]
+    - cis_csc: ["8.5"]
+  condition: all
+  rules:
+    - 'c:auditpol.exe /get /subcategory:"Credential Validation"
+        -> r:Success and Failure'
+\end{lstlisting}
+  \caption{Exemple d'un test SCA pour vérifier l'application d'une GPO}
+  \label{fig12}
+  \end{minipage}
+\end{figure}
+
+
+L'extrait ci-dessus représente un des tests présent dans le fichier \textit{xml} utilisé pour les tests de conformité Windows 11, il est utilisé pour vérifier que la stratégie d'audit "Audit Credential Validation" servant à créer des journaux 
+d'audit lors de la validation des identifiants est bien configuré pour auditer à la fois les succès et les échecs.
+\par\bigskip
+Le champ \textit{rules} définit le test à effectuer selon un format spécifique : la commande à exécuter est précédée du préfixe \textit{c:}, tandis 
+que le résultat attendu est précédé du préfixe \textit{r:}. Le test est validé avec succès lorsque la sortie de la commande correspond exactement au résultat 
+escompté ; dans le cas contraire, le test échoue.
+\par\bigskip
+
+ Lors de la deuxième itération, après le déploiement des GPO, nous avons constaté que le taux de conformité n'augmentait pas malgré le fait que les GPO soient appliquées,
+ Curieux, nous avons d'abord vérifié que les ordinateurs récupéraient bien les nouvelles GPO:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/RecupGPOEtGenerationRapport.png}
+\caption{Commande gpupdate pour forcer la récupération des GPO sur le poste HP026}
+\label{fig:gpupdate}
+\end{figure}
+
+
+Une fois le rapport généré, nous avons constaté que les GPO étaient bien actives sur le poste :
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{images/gpReport.png}
+\caption{Rapport d'application des GPO sur le poste HP026}
+\end{figure}
+
+Les GPO attendus apparaissants dans le rapport, nous avons donc décidé de vérifier directemment les commandes utilisées par le module SCA pour tester la conformité des GPO:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/auditcrd.png}
+\caption{Rapport d'application des GPO sur le poste HP026}
+\end{figure}
+
+Cette image affiche la commande \texttt{auditpol} utilisée par le module SCA pour vérifier l'application de la GPO 
+"Credential Validation". La commande recherche l'activation du sous-catégorie d'audit correspondante et compare le 
+résultat retourné avec la valeur attendue.
+\par\bigskip
+
+L'éxecution de cette commande a révélé plusieurs difonctionnemments:
+\par\bigskip
+
+
+\begin{itemize}
+  \item[$\bullet$] Le nom de la GPO a vérifier n'était pas correctement écrit, il fallait soit appeler la GPO par son GUID soit par son nom exact dans la langue du système d'exploitation, dans notre cas, le nom de la GPO était "Validation des informations d'identification" au lieu de "Credential Validation"
+  \item[$\bullet$] Le retour de la commande n'était pas correctement traité, le module SCA attendait le retour "Success and Failure" alors que la commande retournait "Succès et échec" à cause de la langue du système d'exploitation.
+\end{itemize}
+
+\paragraph{Solution}
+
+Afin de remédier aux problèmes d'incohérence entre le nom de la GPO "Credential Validation" (nom anglais utilisé dans le test) et "Validation des informations d'identification" (nom français sur le système), ainsi que du retour de la commande attendu "Success and Failure" versus "Succès et échec" (en français), il a été décidé de modifier les commandes utilisées par
+ le module afin d'inclure le GUID à la place du nom anglais ainsi que les résultats attendus en utilisant le résultat en français pour ce dernier.
+ Cette modification a été réalisé sur l'ensemble du fichier lorsqu'une commande était utilisée pour vérifier l'application d'une GPO.
+\par\bigskip
+
+L'utilisation des accents dans la langue française a elle posé un autre souci, en effet l'agent
+ Wazuh exécutent les commandes via PowerShell en tant qu'agisseur système, ce qui limite le support UTF-8 natif. 
+ Pour contourner ce problème, nous avons encapsulé la commande \texttt{auditpol} dans une commande PowerShell avec l'encoding UTF-8, 
+ permettant ainsi d'utiliser directement les caractères accentués comme "Succès et échec". La commande suivante a été implémentée :
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/commande_qui_passe.png}
+\caption{Commande PowerShell modifiée pour supporter les accents}
+\end{figure}
+
+Une fois ce problème réglé, nous avons besoin de déployer le fichier SCA modifié sur l'ensemble des postes afin de recalculer le taux 
+de conformité. Plusieurs tests ont montré que remplacer le fichier sur le serveur Wazuh Manager 
+(/var/ossec/ruleset/sca ou /var/ossec/test/sca) et supprimer les fichiers locaux ne suffisait pas : 
+les agents ne récupèrent pas automatiquement la nouvelle version.
+\par\bigskip
+Nous avons donc choisi de déployer le fichier via une stratégie de groupe (GPO) en utilisant 
+la fonctionnalité "Préférences > Paramètres Windows > Fichiers" pour copier ou remplacer le fichier 
+directement dans le répertoire de l'agent sur chaque poste.
+ Les étapes principales étaient :
+\par\bigskip
+
+\begin{itemize}
+  \item Placer la source du fichier modifié dans un partage réseau accessible par les postes (nous utiliserons ici le partage SYSVOL, un partage de fichier hebergé sur les AD permettant de déployer des GPO, fichiers, scripts etc.).
+  \item Créer une GPO liée à l'unité d'organisation contenant les postes cibles.
+  \item Dans la GPO, aller à : Configuration ordinateur > Préférences > Paramètres Windows > Fichiers ; ajouter une action "Remplacer" avec le chemin source (share) et le chemin de destination local sur les postes (C://Program Files (x86)/ossec-agent/ruleset/sca).
+  \item Configurer les options (suppressions d'erreurs, attributs, etc.) puis filtrer l'application si nécessaire (par type de machine, groupe de sécurité, etc.).
+  \item Forcer la mise à jour sur quelques machines (gpupdate /force) pour valider le déploiement, puis laisser la GPO se propager.
+\end{itemize}
+\par\bigskip
+
+La figure ci‑dessous illustre la configuration de la préférence Fichiers dans la GPO (action "Remplacer", source sur SYSVOL et destination
+ locale) ; la capture du dossier SYSVOL montre l'emplacement où nous avons stocké le fichier source pour la GPO.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/GPO_sca2.png}
+\caption{Préférence Fichiers dans la GPO pointant vers le fichier SCA sur SYSVOL}
+\end{figure}
+
+\par\bigskip
+
+
+Après déploiement, nous avons vérifié sur les postes que le fichier SCA avait bien été remplacé et déclenché une exécution 
+manuelle de l'agent Wazuh pour recalculer le taux de conformité. Cette méthode garantit que tous les postes reçoivent la même 
+version du test sans intervention manuelle sur chaque machine.
+
+
+\subsubsection{Conclusion de la mission et critiques}
+
+Cette mission a combiné trois axes d'amélioration complémentaires :
+\par\bigskip
+
+\begin{enumerate}
+  \item \textbf{Restructuration de l'Active Directory} : La première étape, la refonte du schéma Active Directory, a fourni une base solide pour l'application
+   future des politiques de sécurité. Cette restructuration hiérarchisée autour des Unités d'Organisation et des groupes de sécurité permet une gestion centralisée
+    et efficace des ressources, tout en respectant le principe du moindre privilège.
+  
+  \item \textbf{Déploiement de stratégies de groupe (GPO)} : Le déploiement des GPO a constitué le cœur du travail, nécessitant à la fois une phase de conception 
+  approfondie (classification des recommandations CIS, évaluation des impacts, établissement d'une convention de nommage) et une phase d'itération progressive. 
+  Cette approche par itérations espacées s'est avérée judicieuse, permettant de détecter et de corriger rapidement les dysfonctionnements potentiels. Les problèmes 
+  rencontrés, notamment les incohérences de langage entre les tests SCA anglais et l'environnement francophone Windows 11, ont pu être résolus de manière ciblée grâce 
+  au déploiement du fichier SCA modifié via GPO.
+  
+  \item \textbf{Amélioration de la conformité de sécurité} : Via le module SCA de Wazuh, les mesures de conformité ont été progressivement améliorées et évaluées.
+\end{enumerate}
+\par\bigskip
+
+Concernant le taux de conformité, bien que l'objectif de 70\% n'ait pas été atteint à la fin des quatre premières itérations (le poste HP026 affichant 49\% de 
+conformité), la progression régulière observée --- passant de 32\% à 49\% --- démontre l'efficacité de l'approche. Cette trajectoire croissante indique que nous 
+ne sommes pas loin de l'objectif fixé, et que la poursuite des déploiements dans les itérations suivantes permettra de continuer cette amélioration. La maturité
+ progressive mise en œuvre garantit une stabilité du système tout en renforçant progressivement le niveau de protection.
+\par\bigskip
+
+Cette mission illustre l'importance d'une approche structurée, méthodique et itérative pour transformer la posture de sécurité d'une infrastructure informatique,
+ en conjonction avec une bonne compréhension des spécificités locales (langues, environnements hétérogènes) qui peuvent impacter l'application automatisée des contrôles
+  de sécurité.
+
+
+\paragraph{Axe d'amélioration possible - BloodHound}
+
+\href{https://specterops.io/bloodhound-enterprise/}{BloodHound} est un outil utilisé en Blue Team ou en Red Team, il permet d'analyser de la sécurité
+ des réseaux Active Directory en représentant sous la forme de graphes les relations entre les utilisateurs,
+  les groupes, les ordinateurs aini que les permissions au sein d'un domaine.\\
+ En utilisant BloodHound, il est possible d'identifier les chemins d'attaque potentiels,
+  les comptes à privilèges élevés et les vulnérabilités dans la configuration de l'Active Directory.
+  \par\bigskip
+
+  L'utilisation de BloodHound pourrait être un axe d'amélioration afin de renforcer davantage la sécurité de l'Active Directory
+   en identifiant les chemins d'attaque potentiels et en mettant en place des mesures pour les atténuer.
+    Par exemple, BloodHound pourrait révéler des comptes avec des permissions excessives ou des relations d'accès non sécurisées,
+     permettant ainsi de les corriger avant qu'elles ne soient exploitées par des attaquants.
+
+  BloodHound pourrait par exemple montrer qu'un utilisateur du groupe \texttt{Administration} dispose d'un droit \texttt{GenericAll}
+  sur un compte de service, et que ce compte soit membre d'un groupe administrateur du domaine.
+  Ce chemin indiquerait qu'un attaquant qui compromet un compte Helpdesk puisse, en quelques étapes,
+  obtenir des privilèges élevés. L'action corrective consisterait à retirer ce droit excessif et à revoir
+  les délégations sur les comptes de service.
+
+
+\newpage
+\section{Impact environnemental et sociétal}
+
+\subsection{Impact de mes déplacements au long de mon alternance}
+
+\subsubsection{Déplacements quotidiens}
+
+Dans le cadre de mon alternance, j'effectuais un trajet domicile-travail aller-retour chaque jour ouvré. Les émissions de CO\textsubscript{2} ont été estimées à l'aide du calculateur de l'ADEME.\\
+
+Le trajet quotidien se décompose comme suit :\\
+
+\begin{itemize}
+\item[$\bullet$] \textbf{Tramway} : 1,5 km, soit 0,03 g CO\textsubscript{2}e/km ;
+\item[$\bullet$] \textbf{TER Grenoble -- Moirans} : 19 km, soit 0,17 g CO\textsubscript{2}e/km ;
+\item[$\bullet$] \textbf{Marche à pied jusqu'au bureau} : 1,1 km, impact négligeable.
+\end{itemize}
+\par\bigskip
+
+L'ensemble du trajet représente environ 3,68 g de CO\textsubscript{2}e par déplacement, soit 7,36 g de CO\textsubscript{2}e par journée de travail.\\
+
+Sur une période estimée à 30 semaines d'alternance à raison de 5 jours par semaine, les déplacements domicile-travail représentent environ 1,1 kg de CO\textsubscript{2}e émis.
+
+\subsubsection{Déplacements ponctuels}
+
+Au cours de mon alternance, j'ai été amené à effectuer plusieurs déplacements professionnels, notamment vers le site de Nerys à Gardanne (Bouches-du-Rhône).\\
+
+Ce trajet a été réalisé en covoiturage à trois personnes à bord d'un véhicule hybride de type SUV. La distance parcourue était d'environ 294 km pour un aller simple, soit 588 km aller-retour.\\
+
+D'après les estimations réalisées à l'aide du calculateur de l'ADEME, ce déplacement représente environ 11,9 kg de CO\textsubscript{2}e pour l'aller-retour.\\
+
+Bien que cette valeur soit significativement supérieure aux émissions générées par mes trajets quotidiens, ce type de déplacement est resté exceptionnel durant la période d'alternance.
+
+
+
+\subsection{Actions écologiques et sociales des actions menées par l'entreprise}
+
+NERYS GROUP a intégré dans son Système de Management de la Qualité un volet
+management environnemental (§ 1.6 du MAQ-07-07-033). En fonction des besoins spécifiques de
+nos clients, cette partie management environnemental peut être complétée par un chapitre dédié
+dans le Plan de Management Qualité du projet concerné, telles que la gestion d’éliminations de
+déchets ou la gestion des aspects de pollutions.
+Consciente de son rôle dans la préservation de l’environnement, NERYS GROUP veille à ce
+que l’ensemble de ses activités n’impacte pas négativement ses parties intéressées ni son
+écosystème. Cette vigilance environnementale est une composante essentielle de notre
+responsabilité sociétale.
+
+
+\subsection{Impacts sociétaux des projets réalisés}
+
+[à remplir]
+
+
+
+
+% -----------------------
+% BILAN
+% -----------------------
+\section{Bilan personnel}
+
+Cette année d'alternance a été l'occasion de me confronter concrètement aux enjeux de sécurité d'une infrastructure d'entreprise, loin des environnements contrôlés
+ de la formation. La mise en place de Wazuh et le durcissement progressif du système d'information m'ont appris qu'une bonne posture de sécurité ne repose pas 
+ uniquement sur des outils, mais sur une démarche cohérente et qualitative qui intègre les contraintes techniques, organisationnelles et humaines comme en témoignent les problèmes 
+ d'encodage UTF-8 ou les limites du module SCA, qui ont nécessité des solutions bien plus pragmatiques que prévu.
+  \par\bigskip
+
+ 
+Au-delà de ces deux missions principales, d'autres projets ont complété cette expérience et élargi ma vision du métier : la migration de l'Active Directory,
+ l'homologation d'un SI classé "Diffusion Restreinte", la documentation du PSSI, la mise en place de Veeam ou encore l'installation de Suricata et Evebox.
+  Ces missions, aux dimensions à la fois techniques et réglementaires, m'ont confronté à la réalité d'un gouvernant SSI dont le rôle dépasse largement la 
+  simple administration système.
+  \par\bigskip
+Cette expérience a confirmé mon intérêt pour la cybersécurité et m'a donné envie 
+d'explorer des perspectives complémentaires, notamment du côté offensif, pour mieux comprendre les menaces que l'on cherche à contrer.
+
+
+
+% -----------------------
+% GLOSSAIRE
+% -----------------------
+\newpage
+\printglossaries
+\printnoidxglossary
+
+% -----------------------
+% BIBLIOGRAPHIE
+% -----------------------
+\paragraph*{Références bibliographiques}
+\addcontentsline{toc}{section}{Références}
+ \begin{thebibliography}{moi}
+\bibitem{[3]} Center for Internet Security (CIS),\href{https://www.cisecurity.org/cis-benchmarks/}{CIS Benchmarks}, consulté en 2025.
+\bibitem{[4]} Microsoft, \href{https://docs.microsoft.com/en-us/windows-server/identity/active-directory-domain-services}{Active Directory Documentation}, consulté en 2025.
+\bibitem{[5]} Wazuh, \href{https://documentation.wazuh.com/}{Wazuh Documentation}, consulté en 2026.
+\bibitem{[11]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-security-configuration-framework/security-baselines}{Security baselines for Windows}, consulté en 2026.
+\bibitem{[12]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows-server/security/}{Windows Server security documentation}, consulté en 2026.
+\bibitem{[13]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview}{Active Directory Domain Services overview}, consulté en 2026.
+\bibitem{[14]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/active-directory-security-best-practices}{Best practices for securing Active Directory}, consulté en 2026.
+\bibitem{[15]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/group-policy-objects}{Group Policy documentation}, consulté en 2026.
+\bibitem{[19]} Wazuh. (2024). \href{https://documentation.wazuh.com/current/user-manual/ruleset/index.html}{Ruleset documentation}, consulté en 2026.
+\bibitem{[20]} Wazuh. (2024). \href{https://documentation.wazuh.com/current/user-manual/capabilities/active-response/index.html}{Active response documentation}, consulté en 2026.
+\bibitem{[21]} Wazuh. (2024). \href{https://documentation.wazuh.com/current/user-manual/agents/index.html}{Wazuh agent documentation}, consulté en 2025.
+\bibitem{[22]} ANSSI. (2024). \textit{Guide d’hygiène informatique}, consulté en 2026.
+\bibitem{[23]} ANSSI. (2024). \textit{Administration sécurisée des systèmes d’exploitation}, consulté en 2026.
+\bibitem{[27]} ISO/IEC. (2022). \textit{ISO/IEC 27002:2022 — Information security, cybersecurity and privacy protection — Information security controls}, consulté en 2026.
+\bibitem{[28]} MITRE. (2024). \href{https://attack.mitre.org/}{ATT\&CK for enterprise}, consulté en 2026.
+\bibitem{[29]} Cybersecurity and Infrastructure Security Agency. (2024). \href{https://www.cisa.gov/known-exploited-vulnerabilities-catalog}{Known exploited vulnerabilities catalog}, consulté en 2026.
+\end{thebibliography}
+
+\begingroup
+\let\clearpage\relax
+\let\cleardoublepage\relax
+\let\cleardoublepage\relax
+%\hbox{}\newpage % Pour forcer le résumé sur une page impaire (dernière page typiquement)
+\small
+
+\newpage
+\noindent
+\subsection*{Résumé court}
+
+Ce rapport présente l'accompagnement en alternance réalisé chez Mesulog, portant sur la conception et le déploiement d'une solution de supervision de sécurité.
+ Il décrit les actions menées (installation d'outils, centralisation des logs, mise en place d'alertes) et les bénéfices obtenus pour la détection et la réponse
+  aux incidents.
+\noindent
+\hbox{}\\
+\textbf{Keywords :}sécurité, réseau, supervision\newline
+
+
+\selectlanguage{english}
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+ 
+This report presents a third-year work-study internship carried out within Mesulog in the field of information systems security. 
+The internship focused on the design and deployment of a security supervision solution for the company’s IT infrastructure, with
+ the aim of improving visibility, monitoring, and protection of systems and network activity. The report outlines the main tasks completed
+  during the internship, including the installation and configuration of supervision tools, the implementation of alerts and log collection,
+   and the analysis of security events. It also highlights the operational issues encountered and the solutions adopted to ensure reliable monitoring
+    and faster incident response. Overall, this internship provided practical experience in cybersecurity, system administration, and security operations
+     while contributing to the strengthening of the company’s security posture.
+\noindent
+\hbox{}\\
+\textbf{Keywords :} security, network, supervision\newline
+ 
+\vfill
+\selectlanguage{french}
+
+ 
+
+
+\newpage
+\section*{Annexes}
+
+
+\begin{figure}[H]
+
+\begin{lstlisting}
+# ============================================================
+# Installation Wazuh mononoeud sur RHEL 10 (step-by-step)
+# Hote: wazuh@mesulog.local
+# IP:   192.168.100.113
+# Doc de reference:
+# https://documentation.wazuh.com/current/installation-guide/index.html
+# ============================================================
+
+# 0) Preparation systeme
+sudo dnf update -y
+sudo dnf install -y curl tar coreutils sed grep
+
+
+# 1 Recuperer l'assistant d'installation Wazuh
+curl -sO https://packages.wazuh.com/4.8/wazuh-install.sh
+curl -sO https://packages.wazuh.com/4.8/config.yml
+
+# Donner les droits d'execution
+chmod +x wazuh-install.sh
+
+# 2 Adapter le fichier config.yml pour un mononoeud
+# (un seul noeud indexer, un serveur, un dashboard)
+cat > config.yml << 'EOF'
+nodes:
+  indexer:
+    - name: node-1
+      ip: 192.168.100.113
+
+  server:
+    - name: wazuh-1
+      ip: 192.168.100.113
+
+  dashboard:
+    - name: dashboard
+      ip: 192.168.100.113
+EOF
+
+
+# 3 Generer les certificats et fichiers de configuration
+sudo bash wazuh-install.sh --generate-config-files
+
+# 4 Installer Wazuh indexer
+sudo bash wazuh-install.sh --wazuh-indexer node-1
+
+\end{lstlisting}
+\centering
+\caption{Installation de Wazuh dur un serveur RHEL 10 1/2}
+  \label{fig:wazuh-install-step1}
+\end{figure}
+
+\begin{figure}[H]
+\begin{lstlisting}
+
+# 5 Initialiser/demarrer le cluster indexer
+sudo bash wazuh-install.sh --start-cluster
+
+
+# 6 Installer Wazuh server
+sudo bash wazuh-install.sh --wazuh-server wazuh-1
+
+
+# 7 Installer Wazuh dashboard
+sudo bash wazuh-install.sh --wazuh-dashboard dashboard
+
+
+# 8 Verifier l'etat des services
+sudo systemctl status wazuh-indexer --no-pager
+sudo systemctl status wazuh-manager --no-pager
+sudo systemctl status wazuh-dashboard --no-pager
+
+
+# 9 Ouvrir les ports necessaires (firewalld)
+# Dashboard HTTPS
+sudo firewall-cmd --permanent --add-port=443/tcp
+# Wazuh API
+sudo firewall-cmd --permanent --add-port=55000/tcp
+# Agents -> manager
+sudo firewall-cmd --permanent --add-port=1514/tcp
+sudo firewall-cmd --permanent --add-port=1515/tcp
+sudo firewall-cmd --reload
+
+
+# 10 Recuperer le mot de passe admin genere par l'assistant
+sudo cat wazuh-passwords.txt
+
+
+# 11 Acces interface web
+# URL: https://wazuh.mesulog.local
+# User: admin
+# Pass: valeur recuperee dans wazuh-passwords.txt
+
+
+\end{lstlisting}
+\centering
+\caption{Installation de Wazuh dur un serveur RHEL 10 2/2}
+  \label{fig:wazuh-install-step2}
+\end{figure}
+
+
+
+
+
+
+\endgroup
+
+
+
+\end{document}

@@ -45,7 +45,7 @@ echo "Converting IPs to Suricata rules..." >> $LOG_FILE
 
 while IFS= read -r ip
 do
-    # igorer les lignes vides et commentées
+    # ignorer les lignes vides ou comentees
     [[ -z "$ip" || "$ip" == \#* ]] && continue
 
     SID_COUNTER=$((SID_COUNTER + 2))

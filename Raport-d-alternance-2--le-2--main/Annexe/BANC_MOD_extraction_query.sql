@@ -1,5 +1,4 @@
 --BC-MOD-00-TEST_DATAProd
-
 SELECT
     *
 INTO
@@ -11,8 +10,7 @@ WHERE
     AND StationID = "VM_T-D14"
     AND ModelNormalise = 2;
 
---BC-MOD-01-TableEssaisStatuts
-
+--BC-MOD-01-TableEssaisStatut
 SELECT
     StartTime,
     SerialNumberNormalise,
@@ -30,7 +28,6 @@ ORDER BY
     StartTime;
 
 --BC-MOD-02-TableFirstPass
-
 SELECT
     SerialNumberNormalise,
     Min(StartTime) AS FirstPassTime
@@ -44,7 +41,6 @@ GROUP BY
     SerialNumberNormalise;
 
 --BC-MOD-03-TempLastIsError
-
 SELECT
     SerialNumberNormalise,
     Max(StartTime) AS LastTime,
@@ -66,7 +62,6 @@ GROUP BY
     SerialNumberNormalise;
 
 --BC-MOD-04-TableAttemptCount
-
 SELECT
     n.SerialNumberNormalise,
     IIf(
@@ -129,7 +124,6 @@ FROM
     ) AS n;
 
 --BC-MOD-05-TableEssaisStatutTotal
-
 SELECT
     Sum(IIf(Passed = True, 1, 0)) AS Essai_Passed,
     Sum(IIf(Failed = True, 1, 0)) AS Essai_Failed,
@@ -145,7 +139,6 @@ GROUP BY
     Year(StartTime);
 
 --BC-MOD-06-TempNbProd_HorsProd
-
 SELECT
     Year(Max(StartTime)) AS Annee,
     SerialNumberNormalise
@@ -161,7 +154,6 @@ GROUP BY
     SerialNumberNormalise;
 
 --BC-MOD-07-TableNbModules
-
 SELECT
     Year(t1.EndDate) AS Annee,
     (
@@ -192,7 +184,6 @@ GROUP BY
     Year(t1.EndDate);
 
 --BC-MOD-08-TableEffortPassMoyenne
-
 SELECT
     Avg(AttemptCount) AS Moyenne,
     Year(EndDate) AS Annee
@@ -206,7 +197,6 @@ GROUP BY
     Year(EndDate);
 
 --BC-MOD-09-TempSortedAttemptCount
-
 SELECT DISTINCT
     SerialNumberNormalise,
     AttemptCount,
@@ -222,7 +212,6 @@ ORDER BY
     AttemptCount;
 
 --BC-MOD-10-TableEffortPassMediane
-
 SELECT
     TOP 1 (
         SELECT
@@ -321,7 +310,6 @@ FROM
     B1_temp_sorted_AttempCount AS t8;
 
 --BC-MOD-11-TempTimestampEssais
-
 SELECT
     Hour (StartTime) AS HeureDeDebut,
     Weekday (StartTime) AS Jour,
@@ -341,7 +329,6 @@ GROUP BY
     Hour (StartTime);
 
 --BC-MOD-12-TableErrorLundi
-
 SELECT
     Sum(t1.Essai_Error) AS Nb_error,
     (
@@ -366,7 +353,6 @@ GROUP BY
     Annee;
 
 --BC-MOD-13-TableErrorMMJV
-
 SELECT
     (Sum(t1.Essai_Error) / 4) AS Nb_error,
     (
@@ -391,7 +377,6 @@ GROUP BY
     Annee;
 
 --BC-MOD-14-TableRatioV1V2
-
 SELECT
     Sum(IIf(ModelNormalise = 1, 1, 0)) AS V1,
     Sum(IIf(ModelNormalise = 2, 1, 0)) AS V2,
@@ -409,7 +394,6 @@ GROUP BY
     Year(EndDate);
 
 --BC-MOD-15-TempTimediff
-
 SELECT
     SerialNumberNormalise,
     Min(StartTime) AS FirstStart,
@@ -448,7 +432,6 @@ GROUP BY
     SerialNumberNormalise;
 
 --BC-MOD-16-TempSortedTimediff
-
 SELECT DISTINCT
     SerialNumberNormalise,
     TimeToFIrstPassHours,
@@ -464,7 +447,6 @@ ORDER BY
     TimeToFIrstPassHours;
 
 --BC-MOD-17-TableTtFP
-
 SELECT
     Year(FirstPass) AS Annee,
     Avg(TimeToFirstPassHours) AS TTFP_moyen,
