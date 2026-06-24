@@ -357,7 +357,7 @@ Société  : M. DESRUELLE\\
 
 
 
-\addtocounter{page}{-6}
+\addtocounter{page}{-7}
 \thispagestyle{empty} 
 \vspace{-1cm}
 
@@ -407,7 +407,7 @@ Ce stage a été une expérience très positive, où j'ai pu me tester et acqué
 \item[$\bullet$] \textbf{Benjamin Lerch} Développeur dans l'équipe Mesulog mais aussi responsable du service informatique, il a été d'une grande aide pour aprehender le système d'information de l'entreprise et m'a porté conseil en cas de problème.
 \item[] 
 
-\item[$\bullet$] \textbf{Kenzo Sechi} Qui était aussi en alternace chez Mesulog, qui m'a aidé à m'integrer dans l'équipe et a été d'une grande aide pour toute question.
+\item[$\bullet$] \textbf{Kenzo Sechi} Qui était aussi en alternance chez Mesulog, qui m'a aidé à m'integrer dans l'équipe et a été d'une grande aide pour toute question.
 \item[] 
 
 \item[$\bullet$] \textbf{Toute l'équipe Mesulog} Pour l’accueil à bras ouvert, qui m'a aidé à m'integrer dans l'équipe. Pour leur aide et leurs conseils au long de mon stage.
@@ -427,9 +427,26 @@ Ce stage a été une expérience très positive, où j'ai pu me tester et acqué
 \newpage
 \thispagestyle{empty} 
 \listoffigures
+\thispagestyle{empty} 
 \newpage
 
+%resume court
+\section*{Résumé court}
+Ce rapport présente la réalisation de plusieurs missions au sein de l'entreprise Mesulog durant un stage. Ces missions sont en lien avec le domaine de l'administration système et réseau. Les missions sont détaillées sous forme d'explication des étapes par ordre chronologique.\\
+\textbf{Keywords :} \textit{administration, système, réseau, stage}.
+\thispagestyle{empty} 
+\par\bigskip
 
+%abstract
+\section*{Abstract}
+This report present differents missions of an 3 and a half internship.
+This end-of-degree internship was located at the company Mesulog, in Moirans.
+The main subject of this internship is system and network administration, with an emphasis on the cybersecurity stakes of theses missions.
+The main assignements where data processing and analysing to find key performance indicators, the installation and configuration of an IDS solution, feeding a SIEM installation, which centralize logs and the monitoring of network's events; and global system hardening using GPO and Windows Server administration.
+This report outlines the various stages of the process, the challenges encountered, and the solution that were found by chronological order.
+This internship provided real-world first-hand experience, and a broad range of subjects to learn from.\\
+\textbf{Keywords :} internship, security, network, monitoring
+\newpage
 
 % -----------------------
 % INTRODUCTION
@@ -515,7 +532,7 @@ Je suis donc entouré d'une équipe expérimentée qui peut m'apporter de l'aide
 \subsubsection{Présentation de l'environnement technique}
 \begin{figure}[H]
 \centering
-\begin{adjustbox}{max width=0.98\textwidth,max totalheight=0.92\textheight}
+\begin{adjustbox}{max width=1.15\textwidth,max totalheight=1.10\textheight}
 \begin{tikzpicture}[
   node distance=1.0cm and 1.2cm,
   >=Stealth,
@@ -681,27 +698,27 @@ SSID: Mesulog\_Guest\\
   \node[fit=(adsl)(fibre)(internet),
         rounded corners=8pt, fill=extbg, draw=netblue!30,
         dashed, line width=1pt, inner sep=10pt,
-        label={[zonetitle=netblue]north west:Réseau Externe (WAN)}] {};
+        label={[zonetitle=netblue, font=\sffamily\small]north west:Réseau Externe (WAN)}] {};
 
   \node[fit=(srv_vault)(srv_ad)(srv_file)(srv_bkp)(srv_waz)(nas)(srv_cdx),
         rounded corners=8pt, fill=servbg, draw=srvoran!40,
         dashed, line width=1pt, inner sep=10pt,
-        label={[zonetitle=srvoran]above:Infrastructure Serveurs — 192.168.100.0/22}] {};
+        label={[zonetitle=srvoran, font=\sffamily\small]above:Infrastructure Serveurs — 192.168.100.0/22}] {};
 
   \node[fit=(pcs)(sw3)(printer),
         rounded corners=8pt, fill=devbg, draw=devpurp!30,
         dashed, line width=1pt, inner sep=10pt,
-        label={[zonetitle=devpurp]above:Zone Développeurs — 192.168.103.0/22}] {};
+        label={[zonetitle=devpurp, font=\sffamily\small]above:Zone Développeurs — 192.168.103.0/22}] {};
 
   \node[fit=(voip)(voip2)(voip3)(voip4)(voip5),
         rounded corners=8pt, fill=voipbg, draw=voiptel!40,
         dashed, line width=1pt, inner sep=8pt,
-        label={[zonetitle=voiptel]above:VLAN -Téléphonie}] {};
+        label={[zonetitle=voiptel, font=\sffamily\small]above:VLAN -Téléphonie}] {};
 
   \node[fit=(unf)(wifi),
   rounded corners=8pt, fill=zonebg, draw=wificolor!40,
         dashed, line width=1pt, inner sep=10pt,
-        label={[zonetitle=wificolor]above:Wifi invité — VLAN 192.168.105.0/24}] {};
+        label={[zonetitle=wificolor, font=\sffamily\small]above:Wifi invité — VLAN 192.168.105.0/24}] {};
 \end{scope}
 
 %% ════════════════════════════════════════════════════════════════════════════
@@ -718,13 +735,13 @@ SSID: Mesulog\_Guest\\
 
 %% Firewall ↔ Switch Core
 \draw[netbidi=swgreen, line width=1.6pt]
-  (fw.south) -- node[right, font=\sffamily\tiny, text=swgreen]{192.168.100.1/22}
+  (fw.south) -- node[right, font=\sffamily\footnotesize, text=swgreen]{192.168.100.1/22}
   (sw1.north);
 
 
 %%sw1 -> sw2
 \draw[netbidi=swgreen, line width=1.6pt]
-  (sw1.south) -- node[right, font=\sffamily\tiny, text=swgreen]{
+  (sw1.south) -- node[right, font=\sffamily\footnotesize, text=swgreen]{
     192.168.100.1/22
   }
   (sw2.north);
@@ -757,10 +774,10 @@ SSID: Mesulog\_Guest\\
 %% ════════════════════════════════════════════════════════════════════════════
 %% LÉGENDE + TITRE
 %% ════════════════════════════════════════════════════════════════════════════
-\node[anchor=south east, font=\sffamily\tiny, align=right, text width=8cm]
+\node[anchor=south east, font=\sffamily\small, align=right, text width=14cm]
   at (current bounding box.south east) {
   \textcolor{swgreen}{—\,LAN interne}~~
-  \textcolor{devpurp}{—\,ZoneDevs}~~
+  \textcolor{devpurp}{—\,Zone Devs}~~
   \textcolor{srvoran}{—\,Zone Serveurs}~~
   \textcolor{firered}{--\,WAN/DMZ (trait plein : liaison directe ~/~ pointillé : liaison via reverse proxy exposée sur Internet)}~~
   \textcolor{voiptel}{—\,VoIP}
@@ -1369,531 +1386,339 @@ Pour que cette alerte se déclenche dans Wazuh, il faut l'ajouter dans un fichie
 \par\bigskip
 Il est important de laisser le niveau de sévérité de cette règle à 0, car cette règle se déclenche si une alerte du même ID est active. L'alerte générée par le programme Python a déjà une sévérité qui primera sur une sévérité 0, mais la règle Wazuh pourrait se déclencher elle même en boucle si elle émettais une alerte. Une règle au niveau 0 ne déclenche pas d'alerte, empêchant cette réaction en chaine.
 \newpage
-\subsection{Durcissement du système d'information à l'aide des standards CIS}
+\subsection{Durcissement système et administration Windows Server}
 
-L'une de mes missions principales a été de contribuer au durcissement du système d'information
- de l'entreprise en appliquant les recommandations du Center for Internet Security (CIS).
+L'installation de Wazuh et plus particulièrement des agents Wazuh sur les ordianteurs du parc informatique de Mesulog permet plus que de simplement remonter les journaux de logs. En effet, un agent Wazuh peut aussi vérifier en temps réel la configuration des équipements et donc la conformité à un benchmark de sécurité.
 
- \paragraph{Durcissement système}
+\subsubsection{CIS Benchmark}
 
- Le durcissement système est un ensemble de procédés de restriction des droits visant à réduire la surface d'attaque possible sur un système
- informatique, cette mission se concentre sur le durcissement d'ordinateurs Windows 11 via les les Group Policy Objects (GPO)
- mais le procédé de durcissement existe également sur les systèmes Linux. Il y a plusieurs façon de durcir des systèmes comme
- l'installation d'une image préconfiguré pour être durcie ou bien l'application de GPO suivant des standards prédéfinis.
-
-\subsubsection{Les standards CIS}
-
-  Plusieurs standards sont disponibles afin de durcir les systèmes windows, notemment:
+Le standard de durcissement système de CIS (Center for Internet Security) est un standard de sécurité pour de nombreux systèmes d'exploitation qui s'aligne avec les exigences de la norme ISO 27001 car il permet de mesurer la gestion des accès, l'exploitation sécurisé et la protection des actifs. Tout le parc informatique (hors serveurs) est en Windows 11 entreprise. Ainsi nous nous concentrons ici sur le benchmark CIS pour Windowws 11. Afin de réduire la surface d'attaques des postes, le benchmark CIS se base sur des GPOs (Group Policies Objects) à déployer sur le parc.\\
+Les benchmarks CIS sont organisés en 2 niveaux :
+  \par\bigskip
   \begin{itemize}
-    \item[$\bullet$] Microsoft Security Baselines
-    \item[$\bullet$] CIS Benchmarks
-    \item[$\bullet$] NIST Cybersecurity Framework
-    \item[$\bullet$] STIGs (Security Technical Implementation Guides)
+    \item[$\bullet$] le niveau 1 représente les configurations de sécurité essentielles et facilement déployables.
+    \item[$\bullet$] le niveau 2 inclut des mesures plus restrictives adaptées aux environnements hautement sécurisés.
   \end{itemize}
-\par\bigskip
-
-  Le CIS propose des benchmarks de sécurité pour différents systèmes d'exploitation, applications et configurations,
-   visant à réduire les vulnérabilités et à renforcer la résilience face aux attaques. Ces benchmarks sont organisés en 2 niveaux :
-   \par\bigskip
-  \begin{itemize}
-    \item[$\bullet$] le Level 1 représente les configurations de sécurité essentielles et facilement déployables
-    \item[$\bullet$] le Level 2 inclut des mesures plus restrictives adaptées aux environnements hautement sécurisés.
-  \end{itemize}
-
-  
   \par\bigskip
   
-  Après évaluation des différents standards disponibles, nous avons décidé d'appliquer les standards CIS Level 1 sur l'ensemble de notre parc informatique.
+  Le standard CIS benchmark level 1 a été retenu car il correspond le plus avec la cible (les postes employés).
   Ce choix a été motivé par le fait que les benchmarks CIS Level 1 sont déjà présents et intégrés dans le module Security Configuration Assessment (SCA) de Wazuh,
-  permettant ainsi une détection et une validation automatisées des configurations de sécurité sans nécessiter des outils supplémentaires.
+  ce qui permet la détection et la validation automatisée des configurations de sécurité sans outils supplémentaire que Wazuh.
 
-  \par\bigskip
-  \paragraph{Alignement avec ISO 27001}
+\par\bigskip
+\subsubsection{Structure de l'Active Directory}
 
-L'application des recommandations CIS Level 1 s'aligne naturellement avec
- les exigences de la norme ISO 27001. En effet, les baselines CIS contribuent au traitement des risques 
- et à la mise en œuvre de mesures techniques et organisationnelles correspondant aux contrôles 
- d'Annexe A par exemple la gestion des accès, exploitation sécurisée et protection des actifs ( A.9, A.12, A.8). 
- Cette approche facilite la démonstration de conformité lors d'un audit ISO 27001 en fournissant des preuves de
-  configuration, de surveillance et d'amélioration continue des contrôles de sécurité.
+Toutes les règles et recommandations du benchmark CIS ne peuvent pas être appliquées à tous les postes sans distinction. En effet certaines activités métier de l'entreprise, comme le développement ; nécessite des permissions plus élevées que pour de la simple bureautique. On pourrait citer par exemple l'exécution de programmes non-signés.\\
+Hors l'organisation de l'Active Directory initialiement présente ne permettait pas cette granularité.
 
- \newpage 
-\subsubsection{Création d'un schéma structuré dans l'Active Directory}
+\begin{figure}[H]
+  \centering
 
-Avant de déployer les configurations, la première étape était de créer un schéma structuré dans l'Active Directory (AD) afin de mieux hiérarchiser les comptes 
+  \begin{tikzpicture}[
+      every node/.style={draw, rounded corners, align=center},
+      level 1/.style={sibling distance=8cm},
+      level 2/.style={sibling distance=3cm},
+      level distance=1.8cm
+  ]
+
+  \node {mesulog.local}
+      child { node {Computers}
+          child { node {PC-01} }
+          child { node {PC-02} }
+          child { node {$\cdots$} }
+      }
+      child { node {Users}
+          child { node {Alice} }
+          child { node {Bob} }
+          child { node {$\cdots$} }
+      };
+
+  \end{tikzpicture}
+  \label{fig:AD-before}
+  \caption{Organisation initiale de l'Active Directory}
+\end{figure}
+\newpage
+Avant de déployer les configurations, la première étape était donc de créer un schéma structuré dans l'Active Directory (AD) afin de mieux hiérarchiser les comptes 
 utilisateurs ainsi que les ordinateurs et serveurs présents sur le domaine. Cette structuration permet de faciliter la gestion 
-des permissions, d'améliorer la visibilité sur les ressources et de renforcer la sécurité en limitant les accès aux ressources sensibles
- par le principe du moindre privilège.
+des permissions, d'améliorer la visibilité sur les ressources et de renforcer la sécurité en limitant les accès aux ressources sensibles.
 \par\bigskip
-
-Voici le schéma Active Directory initialement mis en place :\\
-
-
+Nous avons donc remanié la structure de l'Active Directory pour y inclure des OU (Unité d'Organisation) afin de définir des règles par fonction dans l'entreprise ou par niveau de permissions accordées. Nous avons aussi regroupé des permissions d'utilisateurs dans des groupes de sécurité pour en facilité l'administration.\\
+Voici donc la structure de l'Active Directory après la refonte :\\
 \begin{figure}[H]
-\centering
-
-\begin{tikzpicture}[
-    every node/.style={draw, rounded corners, align=center},
-    level 1/.style={sibling distance=8cm},
-    level 2/.style={sibling distance=3cm},
-    level distance=1.8cm
-]
-
-\node {mesulog.local}
-    child { node {Computers}
-        child { node {PC-01} }
-        child { node {PC-02} }
-        child { node {$\cdots$} }
-    }
-    child { node {Users}
-        child { node {Alice} }
-        child { node {Bob} }
-        child { node {$\cdots$} }
-    };
-
-\end{tikzpicture}
-
-\caption{Organisation initiale de l'Active Directory}
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tikzpicture}[
+      every node/.style={
+          draw,
+          rounded corners,
+          align=center,
+          font=\small
+      }
+  ]
+  % Niveau 0
+  \node (root) at (4,7) {mesulog.local};
+  % Niveau 1
+  \node (mesulog) at (4,5.5) {Mesulog};
+  % Niveau 2
+  \node (ord) at (-3.5,4) {Ordinateurs};
+  \node (usr) at (5,4) {Utilisateurs};
+  \node (svc) at (11,4) {Comptes de service};
+  % Niveau 3 - Ordinateurs
+  \node (postes)   at (-3.5,2.5) {Postes};
+  \node (serveurs) at (-6.5,2.5) {Serveurs};
+  % Niveau 3 - Utilisateurs
+  \node (admU) at (2.5,2.5)  {Administrateurs};
+  \node (devU) at (5,2.5)    {Développeurs};
+  \node (dirU) at (7,2.5)    {Direction};
+  \node (staU) at (9,2.5)    {Stagiaires};
+  % Niveau 4 - Postes
+  \node (admP) at (-6.5,1)   {Administrateurs};
+  \node (devP) at (-4,1)     {Développeurs};
+  \node (dirP) at (-2,1)     {Direction};
+  \node (staP) at (-0.2,1)   {Stagiaires};
+  % Connexions principales
+  \draw (root)   -- (mesulog);
+  \draw (mesulog) -- (ord);
+  \draw (mesulog) -- (usr);
+  \draw (mesulog) -- (svc);
+  \draw (ord) -- (serveurs);
+  % Connexions Ordinateurs
+  \draw (ord) -- (postes);
+  % Connexions Utilisateurs
+  \draw (usr) -- (admU);
+  \draw (usr) -- (devU);
+  \draw (usr) -- (dirU);
+  \draw (usr) -- (staU);
+  % Connexions Postes
+  \draw (postes) -- (admP);
+  \draw (postes) -- (devP);
+  \draw (postes) -- (dirP);
+  \draw (postes) -- (staP);
+  \end{tikzpicture}
+  }%
+  \caption{Organisation de l'Active Directory après restructuration}
+  \label{fig:ad-restructure}
 \end{figure}
-
-Bien que ce schéma minimale soit fonctionnel, il ne permet pas de gérer efficacement les ressources et les permissions, il présente les défauts suivants :\\
-\begin{itemize}
-    \item[$\bullet$] Absence d'Unités d'Organisation (OU) pour regrouper les ressources par fonction, département ou niveau de sensibilité.
-    \item[$\bullet$] Manque de groupes de sécurité pour attribuer des permissions de manière centralisée et éviter les permissions directes sur les comptes utilisateurs ou ordinateurs.
-    \item[$\bullet$] Difficulté à appliquer des stratégies de groupe (GPO) spécifiques à certaines catégories d'utilisateurs ou d'ordinateurs en raison de l'absence de hiérarchie claire.
-\end{itemize}
 \par\bigskip
-
-
-Afin de pallier à ces problèmes, il a été proposé et mis en place une nouvelle organisation de l'Active Directory, structurée autour de plusieurs OU et groupes de sécurité. Cette nouvelle organisation permet une gestion plus efficace des ressources, une meilleure application des politiques de sécurité et une réduction des risques liés à des permissions mal configurées.
-Voici le schéma de l'Active Directory après restructuration :\\
-
-\begin{figure}[H]
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tikzpicture}[
-    every node/.style={
-        draw,
-        rounded corners,
-        align=center,
-        font=\small
-    }
-]
-% Niveau 0
-\node (root) at (4,7) {mesulog.local};
-% Niveau 1
-\node (mesulog) at (4,5.5) {Mesulog};
-% Niveau 2
-\node (ord) at (-3.5,4) {Ordinateurs};
-\node (usr) at (5,4) {Utilisateurs};
-\node (svc) at (11,4) {Comptes de service};
-% Niveau 3 - Ordinateurs
-\node (postes)   at (-3.5,2.5) {Postes};
-\node (serveurs) at (-6.5,2.5) {Serveurs};
-% Niveau 3 - Utilisateurs
-\node (admU) at (2.5,2.5)  {Administrateurs};
-\node (devU) at (5,2.5)    {Développeurs};
-\node (dirU) at (7,2.5)    {Direction};
-\node (staU) at (9,2.5)    {Stagiaires};
-% Niveau 4 - Postes
-\node (admP) at (-6.5,1)   {Administrateurs};
-\node (devP) at (-4,1)     {Développeurs};
-\node (dirP) at (-2,1)     {Direction};
-\node (staP) at (-0.2,1)   {Stagiaires};
-% Connexions principales
-\draw (root)   -- (mesulog);
-\draw (mesulog) -- (ord);
-\draw (mesulog) -- (usr);
-\draw (mesulog) -- (svc);
-\draw (ord) -- (serveurs);
-% Connexions Ordinateurs
-\draw (ord) -- (postes);
-% Connexions Utilisateurs
-\draw (usr) -- (admU);
-\draw (usr) -- (devU);
-\draw (usr) -- (dirU);
-\draw (usr) -- (staU);
-% Connexions Postes
-\draw (postes) -- (admP);
-\draw (postes) -- (devP);
-\draw (postes) -- (dirP);
-\draw (postes) -- (staP);
-\end{tikzpicture}
-}%
-\caption{Organisation de l'Active Directory après restructuration}
-\label{fig:ad-restructure}
-\end{figure}
-
-Le schéma ci-dessus représente l'organisation finale de l'Active Directory, son découpage est le suivant:
-\par\bigskip
-
-
+Dans cette nouvelle organisation de l'annuaire Active Directory, nous pouvons notamment retrouver :\\
 \begin{itemize}
   \item[$\bullet$] \textbf{Ordinateurs} composé de l'OU \textbf{Postes} réparties entre les \textbf{Administrateurs}, \textbf{Développeurs}, \textbf{Direction} et \textbf{Stagiaires} ainsi que de l'OU \textbf{Serveurs}
   \item[$\bullet$] \textbf{Utilisateurs} composé des différents utilisateurs du domaine également répartie entre les \textbf{Administrateurs}, \textbf{Développeurs}, \textbf{Direction} et \textbf{Stagiaires}
-  \item[$\bullet$] \textbf{Comptes de services} composé des comptes utilisés par certains serveurs pour accéder à différentes machines et serveurs présents sur le domaine, le but est d'éviter d'utiliser un seul compte qui aurait trop de droits sur l'ensemble du domaine en définissant un compte par utilisation (e.g. compte de sauvegarde)
+  \item[$\bullet$] \textbf{Comptes de services} composé des comptes utilisés par certains serveurs et processus pour accéder à différentes ressources ou exécuter certaines fonctionnalités sur le domaine.
 \end{itemize}
 \par\bigskip
 
 Ce découpage permet de mieux hiérachiser les droits selon les personnes dans l'entreprise, les développeurs bénéficient par exemple de plusieurs droits relatifs à la virtualisation afin
 de développer dans des machines virtuelles, les autres fonctions de l'entreprises comme la Direction qui ne s'occupe que de document légaux et organisationelle ne bénéficient pas de ces droits car inutiles dans leurs cas.
+\newpage
 
-
-\subsubsection{Stratégie de déploiement des GPO}
-Afin de déployer les GPO de durcissement, il a été décidé de suivre une approche progressive, tout d'abord, l'ensemble des GPO
-recommandées ont été réparties dans un classeur excel en fonction de :
+\subsubsection{Déploiement des GPOs}
+Maintenant que l'Active Directory est prêt à déployer les GPOs efficacement, il faut définir le protocole de mise à niveau de conformité CIS benchmark.\\
+Les GPOs de durcissement sont donc déployées sous forme itérative et incrémentales. L'ensemble des GPOs
+du benchmark CIS ont été réparties dans un classeur excel afin de déterminer :
 \par\bigskip
 
 \begin{itemize}
-  \item[$\bullet$] leur nom
-  \item[$\bullet$] leur description
-  \item[$\bullet$] le numéro de la recommandation CIS correspondante
-  \item[$\bullet$] leur impact potentiel sur les utilisateurs et les systèmes
+  \item[$\bullet$] leur pertinence dans le cadre professionnel de Mesulog
   \item[$\bullet$] leur criticité, niveau de sécurité (faible, moyenne, élevée)
-  \item[$\bullet$] leur pertinence par rapport aux besoins et au contexte de l'entreprise
-  \item[$\bullet$] leur catégorie (gestion des comptes, sécurité réseau, protection des données, etc.)
-  \item[$\bullet$] leur statut (À tester, Déployée, Exclue)
+  \item[$\bullet$] leur impact potentiel sur les utilisateurs et les systèmes
 \end{itemize}
+Et donc de définir leur appllcation ou non, leur champ d'application (Unités d'Organisations affectées) et leur priorité (dans quelle itération cette GPO est à déployer).
 \par\bigskip
-Cette classification a permis après une revue par l'ensemble de la DSI (Administrateurs Systèmes et RSSI) de prioriser les GPO les plus importantes avant de les déployer.
-\par\bigskip
-Le déploiement a lui été réparties en plusieurs itérations successives espacées dans le temps de plusieurs jours entre chaque, le but était de comprendre au plus vite
-si une GPO ne fonctionnait pas par rapport à un cas d'utilisation non prévu lors de l'évaluation préliminaire.
+Le déploiement a donc réparti en plusieurs itérations successives d'une trentaines de règles. Ces itérations sont espacées dans le temps de plusieurs jours entre chaque, afin de détecter tout problème ou disfonctionnement par rapport à un cas d'utilisation non prévu lors de l'évaluation préliminaire.
 \par\bigskip
 
-Une convention de nommage fut également établie afin de faciliter la gestion et la maintenances des GPO, 
+Une convention de nommage a été établie pour faciliter la gestion et la maintenances des GPOs, 
 par exemple, la stratégie \textit{IT1* - Paramétrage des stratégies d'audits} est répartie selon les champs suivants :\\
-
 \begin{table}[H]
-\centering
-\begin{tabular}{|c|p{10cm}|}
-\hline
-\textbf{Champ} & \textbf{Description} \\
-\hline
-IT1 & Numéro de l'itération durant laquelle la GPO a été créée ou déployée. \\
-\hline
-* & Indique que plusieurs GPO participent à une même fonctionnalité et sont regroupées logiquement. \\
-\hline
-Paramétrage des stratégies d'audit & Description concise de l'objectif ou du contenu de la GPO. Les termes utilisés peuvent être « Paramétrage », « Activation », « Désactivation », etc. selon la nature de la configuration appliquée. \\
-\hline
-\end{tabular}
-\caption{Convention de nommage des GPO}
+  \centering
+  \begin{tabular}{|c|p{10cm}|}
+  \hline
+  \textbf{Champ} & \textbf{Description} \\
+  \hline
+  IT1 & Numéro de l'itération durant laquelle la stratégie a été créée ou déployée. \\
+  \hline
+  * & Indique que plusieurs GPO participent à une même fonctionnalité et sont regroupées logiquement. \\
+  \hline
+  Paramétrage des stratégies d'audit & Description concise de l'objectif ou du contenu de la stratégie. Les termes utilisés peuvent être « Paramétrage », « Activation », « Désactivation », etc. selon la nature de la configuration appliquée. \\
+  \hline
+  \end{tabular}
+  \label{fig:exemple-GPO-nom}
+  \caption{Convention de nommage des stratégies de groupe}
 \end{table}
+\newpage
 
-\subsubsection{Evolution de la conformité}
-
-Tous les tests de conformités ont été réalisés à l'aide du module SCA de Wazuh sur le PC HP026
- situé dans l'OU "Postes\textbackslash Administrateurs" qui est un poste de travail utilisé par 
- les administrateurs systèmes de l'entreprise.\\ 
- À ce moment, les 4 premières itérations viennent d'être effectuées, le processus de choix et de revue étant particulièrement
- long, il se peut que l'on ne puisse avoisiner les 100\% de conformité avant la fin de l'alternance, cependant, 
- l'objectif est d'atteindre au moins 70\% de conformité sur ce poste. Ci-dessous se trouve la capture d'écran de Wazuh montrant le niveau de conformité du poste HP026 avant le début du déploiement des GPO :
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{images/wazuh-av-IT1.png}
-\caption{Conformité du poste HP026 avant la première itération de déploiement des GPO}
-\end{figure}
-
-
-On observe que la conformité est faible, seulement 32\%, ce qui montre l'importance de cette mission de durcissement
- du système d'information.\\
-
-Afin de visualiser la progression obtenue au fil des itérations, le graphique ci-dessous présente l'évolution
-du taux de conformité aux standards CIS Level 1 pour le poste HP026, depuis l'état initial jusqu'à la quatrième
-itération de déploiement des GPO.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-  width=0.9\textwidth,
-  height=0.45\textwidth,
-  ymin=30,
-  ymax=55,
-  xmin=0,
-  xmax=4,
-  xtick={0,1,2,3,4},
-  xticklabels={Commencement,Itération 1,Itération 2,Itération 3,Itération 4},
-  ytick={30,35,40,45,50,55},
-  ylabel={Conformité CIS Level 1 (\%)},
-  xlabel={Itérations de déploiement},
-  grid=both,
-  line width=0.8pt,
-  mark size=2.5pt
-]
-\addplot[
-  color=blue,
-  mark=* 
-] coordinates {
-  (0,32)
-  (1,35)
-  (2,41)
-  (3,45)
-  (4,49)
-};
-\end{axis}
-\end{tikzpicture}
-\caption{Évolution de la conformité CIS Level 1 du poste HP026 sur 4 itérations}
-\end{figure}
-
-Après l'itération 4, le taux de conformité a atteint 49\%, ce qui représente une amélioration
- significative par rapport à l'état initial de 32\%. Il reste cependant une marge de progression afin d'atteindre
-  l'objectif de 70\% de conformité, ce qui nécessitera la poursuite du déploiement des GPO et l'ajustement des
-   configurations en fonction des résultats obtenus lors des prochaines itérations.
+%%
 
 \subsubsection{Exemples concrets de GPO appliquées}
-Viser un objectif de conformité est intéressant seulement si on donne du sens à cet objectif, il est important
- de comprendre les différentes attaques ou vulnérabilités que l'on cherche à traiter en appliquant ces GPO,
-  voici quelques exemples concrets de GPO appliquées et des attaques ou vulnérabilités qu'elles permettent de traiter :\\
-
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.4}
-\begin{tabular}{|p{1.5cm}|p{3cm}|p{5.2cm}|p{5.2cm}|}
-\hline
-\textbf{N° CIS} & \textbf{Nom} & \textbf{Objectif technique} & \textbf{Risque traité / Impact} \\
-\hline
- 26303 
-  & Désactiver l'exécution automatique des médias 
-  & Empêcher l'exécution automatique de code depuis supports amovibles (CD, USB, etc.). 
-  & Empêche l'exécution de payloads malveillants déposés sur des médias amovibles (autorun/autoplay). Faible impact pour postes standards, peut gêner certains usages nomades. Déployé en pilote. \\
-\hline
- 26028 
-  & Désactiver le cache des ouvertures de session précédentes 
-  & Ne pas stocker localement les informations des sessions précédentes (cache d'identifiants/jetons). 
-  & Réduit l'impact en cas de vol ou compromission d'un poste (réutilisation de sessions/cookies). Moyennement contraignant pour utilisateurs nomades~; à tester avant déploiement large. \\
-\hline
- 26193 
-  & Désactiver le protocole LLMNR 
-  & Désactiver LLMNR/mDNS sur les interfaces afin d'empêcher la résolution de noms non sécurisée. 
-  & Évite les attaques de type LLMNR/NBT-NS poisoning permettant le détournement de trafic et le vol d'identifiants. Recommandé en environnement d'entreprise~; faible impact fonctionnel si DNS interne est bien configuré. \\
-\hline
-\end{tabular}
-\caption{Exemples concrets de GPO appliquées et des risques associés}
-\end{table}
-\subsubsection{Limitation du module SCA de Wazuh}
-
-Bien que pratique, le module SCA de Wazuh n'en reste pas moins limité, voici comment il fonctionne :\\
-
-\begin{enumerate}
-  \item Pour chaque ordinateur / Serveur, un fichier \textit{.xml} avec des commandes pour tester l'application des GPO est envoyé dessus
-  \item Ces commandes présentes dans le fichier sont ensuite exécutées par un script sur les machines
-  \item Le résultat de ce script est ensuite envoyé à Wazuh Manager afin d'être traité et de calculer le taux de conformité.
-\end{enumerate}
-
-
-\par\bigskip
-\paragraph{Le problème de conformité}
-
-
-Nous avons constaté après l'application de plusieurs GPO que le taux de conformité n'augmentait pas malgré le fait que les GPO soient appliquées sur les machines,
- après investigation, il s'est avéré que le module SCA ne prenait pas en compte certaines configurations appliquées par les GPO,
-  ce qui faussait le taux de conformité affiché dans Wazuh.\\
-
-  En ouvrant le fichier \textit{xml} envoyé par Wazuh sur les machines nous avons constaté que quand le module SCA testait 
-  l'application d'une GPO, il vérifiait la configuration d'une clé de registre spécifique, cependant, certaines GPO appliquaient des configurations qui n'étaient pas liées à des clés de registre,
- pour ces dernières, le module test directemment de la conformité d'un paramètre via une commande PowerShell, voici une exemple concret:
+Voici des exemples de GPOs déployées sur le parc informatique :\\
 
 \begin{figure}[H]
   \centering
-  \begin{minipage}{\textwidth}
-\begin{lstlisting}[language=ScaYAML]
-- id: 26145
-  title: "Ensure 'Audit Credential Validation' is set to 'Success and Failure'."
-  description: "This subcategory reports the results of validation
-      tests on credentials submitted for a user account logon request."
-  rationale: "Auditing these events may be useful when investigating
-      a security incident."
-  remediation: "To establish the recommended configuration via GP, [...] Validation"
-  compliance:
-    - cis: ["17.1.1"]
-    - cis_csc: ["8.5"]
-  condition: all
-  rules:
-    - 'c:auditpol.exe /get /subcategory:"Credential Validation"
-        -> r:Success and Failure'
-\end{lstlisting}
-  \caption{Exemple d'un test SCA pour vérifier l'application d'une GPO}
-  \label{fig12}
-  \end{minipage}
+  \includegraphics[width=1\textwidth]{images/gpo-example.png}
+  \label{fig:GPO-example-it2}
+  \caption{Extrait de la 2ème itération de déploiement}
 \end{figure}
-
-
-L'extrait ci-dessus représente un des tests présent dans le fichier \textit{xml} utilisé pour les tests de conformité Windows 11, il est utilisé pour vérifier que la stratégie d'audit "Audit Credential Validation" servant à créer des journaux 
-d'audit lors de la validation des identifiants est bien configuré pour auditer à la fois les succès et les échecs.
-\par\bigskip
-Le champ rules contient la commande éxecuté après la chaine \textit{c:} et le résultat attendu après la chaine \textit{r:},
- si le résultat de la commande correspond au résultat attendu, alors le test est considéré comme réussi, sinon, il est considéré comme échoué.
 \par\bigskip
 
- Lors de la deuxième itération, après le déploiement des GPO, nous avons constaté que le taux de conformité n'augmentait pas malgré le fait que les GPO soient appliquées,
- Curieux, nous avons d'abord vérifié que les ordinateurs récupéraient bien les nouvelles GPO:
+%%
+\subsubsection{Suivi de l'évolution de la conformité}
 
+Tous les tests de conformités sont réalisés à l'aide du module SCA de Wazuh. Nous verrons ici l'évolution de la conformité au benchmack CIS du poste "HP026"
+situé dans l'OU "Postes\textbackslash Administrateurs" qui est le poste de travail utilisé par un des administrateurs systèmes de l'entreprise.\\ 
+\\
+Pour actualiser les résulats du module SCA sur ce poste, nous pouvons soit redémarrer le poste soit utiliser la commande\\
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{images/RecupGPOEtGenerationRapport.png}
-\caption{Commande gpupdate pour forcer la récupération des GPO sur le poste HP026}
+  \centering
+  \includegraphics[width=1\textwidth]{images/RecupGPOEtGenerationRapport.png}
+  \label{fig:gpoupdate}
+  \caption{Commande gpupdate pour forcer la récupération des GPO sur le poste HP026}
+\end{figure}
+\newpage
+
+Avant application des GPOs, l'indice de conformité du poste HP026  est de : \\
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/wazuh-av-IT1.png}
+  \label{fig:CIS-it-0}
+  \caption{Conformité du poste HP026 avant la première itération de déploiement des GPO}
 \end{figure}
 
-
-Une fois le rapport généré, nous avons constaté que les GPO étaient bien actives sur le poste :
+Nous observons que la conformité est faible, de seulement 32\%. La conformité moynne des postes de travail avant le déploiement des ces GPOs se situait entre 25 et 35\%.\\
+\\
+Pour visualiser la progression obtenue au fil des itérations, le graphique ci-dessous présente l'évolution
+du taux de conformité aux standards CIS Level 1 pour le poste HP026, depuis l'état initial jusqu'à la quatrième
+itération.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.7\textwidth]{images/gpReport.png}
-\caption{Rapport d'application des GPO sur le poste HP026}
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}[
+    width=0.9\textwidth,
+    height=0.45\textwidth,
+    ymin=30,
+    ymax=55,
+    xmin=0,
+    xmax=4,
+    xtick={0,1,2,3,4},
+    xticklabels={Commencement,Itération 1,Itération 2,Itération 3,Itération 4},
+    ytick={30,35,40,45,50,55},
+    ylabel={Conformité CIS Level 1 (\%)},
+    xlabel={Itérations de déploiement},
+    grid=both,
+    line width=0.8pt,
+    mark size=2.5pt
+  ]
+  \addplot[
+    color=blue,
+    mark=* 
+  ] coordinates {
+    (0,32)
+    (1,35)
+    (2,41)
+    (3,45)
+    (4,49)
+  };
+  \end{axis}
+  \end{tikzpicture}
+  \label{fig:GPO-graph}
+  \caption{Évolution de la conformité CIS Level 1 du poste HP026 sur 4 itérations}
 \end{figure}
+\par\bigskip
+A l'issue des 4 premières itérations, le taux de conformité est passé à 49\%, ce qui représente une amélioration
+significative par rapport à l'état initial de 32\%. Il reste cependant une marge de progression importante avant d'atteindre
+un objectif minimal de 70\% de conformité.
+\newpage
+\subsubsection{Limitation du module SCA de Wazuh}
 
-Les GPO attendus apparaissants dans le rapport, nous avons donc décidé de vérifier directemment les commandes utilisées par le module SCA pour tester la conformité des GPO:
-
+Au cours de notre utilisation du module SCA de wazuh, nous nous sommes appercus de certaines limitations :\\
+\\
+Pour tester la conformité du poste au benchmark CIS, l'agent Wazuh présent sur celui-ci récupère un fichier YAML depuis le template présent sur le serveur Wazuh, puis exécute les commandes présentes dans ce fichier, avant de renvoyer leurs résultat au serveur Wazuh.\\
+\\
+Cependant, nous avons constaté après l'application de plusieurs GPO que le taux de conformité n'augmentait pas malgré le fait que les GPO soient appliquées sur les machines. Nous avons donc vérifier en générant un rapport des GPOs appliquées sur le poste que les GPOs étaient bel et bien actives :
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/gpReport.png}
+  \label{fig:rapport.html}
+  \caption{Extrait d'un rapport d'application des GPO sur le poste HP026}
+\end{figure}
+\par\bigskip
+Nous avons donc vérifié directement les commandes utilisées par l'agent Wazuh pour tester la conformité : 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/auditcrd.png}
-\caption{Rapport d'application des GPO sur le poste HP026}
+\label{fig:test-sca}
+\caption{Test manuel d'une commanede utilisée par l'agent, sur le poste HP026}
 \end{figure}
-
-L'éxecution de cette commande a révélé plusieurs difonctionnemments:
-\par\bigskip
-
-
-\begin{itemize}
-  \item[$\bullet$] Le nom de la GPO a vérifier n'était pas correctement écrit, il fallait soit appeler la GPO par son GUID soit par son nom exact dans la langue du système d'exploitation, dans notre cas, le nom de la GPO était "Validation des informations d'identification" au lieu de "Credential Validation"
-  \item[$\bullet$] Le retour de la commande n'était pas correctement traité, le module SCA attendait le retour "Success and Failure" alors que la commande retournait "Succès et échec" à cause de la langue du système d'exploitation.
-\end{itemize}
-
-\paragraph{Solution}
-
-Afin de remédier à ce problème, il a été décidé de modifier les commandes utilisées par
- le module afin d'inclure le GUID à la place du nom anglais ainsi que les résultats attendus en utilisant le résultat en français pour ce dernier.
- Cette modification a été réalisé sur l'ensemble du fichier lorsqu'une commande était utilisée pour vérifier l'application d'une GPO.
-\par\bigskip
-
-L'utilisation des accents dans la langue française a elle posé un autre souci, en effet l'agent
- Wazuh exécutent les commandes via PowerShell en tant qu'agisseur système, ce qui limite le support UTF-8 natif. 
- Pour contourner ce problème, nous avons encapsulé la commande \texttt{auditpol} dans une commande PowerShell avec l'encoding UTF-8, 
- permettant ainsi d'utiliser directement les caractères accentués comme "Succès et échec". La commande suivante a été implémentée :
+\newpage
+En ouvrant le fichier \textit{YAML} envoyé par Wazuh sur les machines nous avons constaté que quand le module SCA testait 
+l'application d'une GPO, il vérifiait la configuration d'une clé de registre spécifique. Pour les GPO qui n'étaient pas liées à des clés de registre, le module test directemment de la conformité d'un paramètre via une commande PowerShell.\\
+Cependant, ces commandes sont écrites pour un système d'exploitation en anglais, et les postes de Mesulog sont tous installés en français. Dans notre cas, le nom de la GPO était "Validation des informations d'identification" au lieu de "Credential Validation".\\
+\\
+Pour pallier ce problème, nous avons modifié les commandes utilisées par le module pour utiliser le GUID à la place du nom anglais et que les résultats attendus soient en français.
+Nous avons donc été obligé de modifier tout ce fichier pour traduire chaque instance de test de GPO utilisant la commande \textbf{"auditpol"}.\\
+\\
+Ce changement dans le fichier de test a engendré un autre problème. En effet, l'agent Wazuh exécutent les commandes via PowerShell, ce qui limite le support des caractères UTF-8.
+Nous avons donc entouré la commande \textbf{"auditpol"} d'une autre commande PowerShell spécifiant l'encodage UTF-8, pour ainsi utiliser directement les caractères accentués comme "Succès et échec".\\
+Nous pouvons voir ici un example de commande de test de ces GPO mise à jour :
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{images/commande_qui_passe.png}
-\caption{Commande PowerShell modifiée pour supporter les accents}
+  \centering
+  \includegraphics[width=1\textwidth]{images/commande_qui_passe.png}
+  \label{fig:auditpol-succes}
+  \caption{Commande PowerShell modifiée pour supporter les accents}
 \end{figure}
 
-Une fois ce problème reglé, nous avons eu besoin de déployer le nouveau fichier de test sur l'ensemble des postes afin de recalculer le taux de conformité,
-initialement, nous pensions que remplacer le fichier sur le serveur Wazuh Manager sous /var/ossec/test/sca et le supprimer des postes suffirait,
- cependant, après plusieurs tests, nous avons constaté que les agents ne récupéraient pas automatiquement le nouveau fichier de test.
- \par\bigskip
-
- Nous avons donc décidé de déployer le nouveau fichier sur les machines du parc via GPO, pour cela:
- \begin{itemize}
-  \item 
- \end{itemize}
-
- [présenter la GPO de déploiement du fichier de test SCA sur les postes]
-
-
-\subsubsection{Conclusion de la mission et critiques}
-
-\paragraph{Axe d'amélioration possible - BloodHound}
-
-BloodHound est un outil utilisé en Blue Team ou en Red Team, il permet d'analyser de la sécurité
- des réseaux Active Directory en représentant sous la forme de graphes les relations entre les utilisateurs,
-  les groupes, les ordinateurs aini que les permissions au sein d'un domaine.\\
- En utilisant BloodHound, il est possible d'identifier les chemins d'attaque potentiels,
-  les comptes à privilèges élevés et les vulnérabilités dans la configuration de l'Active Directory.
-  \par\bigskip
-
-  L'utilisation de BloodHound pourrait être un axe d'amélioration afin de renforcer davantage la sécurité de l'Active Directory
-   en identifiant les chemins d'attaque potentiels et en mettant en place des mesures pour les atténuer.
-    Par exemple, BloodHound pourrait révéler des comptes avec des permissions excessives ou des relations d'accès non sécurisées,
-     permettant ainsi de les corriger avant qu'elles ne soient exploitées par des attaquants.
-
-  [inclure un exemple]
-
-
-
-\subsection{Création et implémentation d'une stratégie de sauvegarde}
-\subsection{Entretien du parc informatique et missions annexes}
-
-à ajouter en fonction de ce que je veux développer.
-
-\begin{enumerate}
-  \item debug du problème de synchronisation de l'Active Directory
-  \item debug du problème de synchronisation de mail
-  \item Diagnostique d'un problème de connexion au serveur nas
-  \item installation de suricata
-  \item configuration d'un réseau wifi invité
-\end{enumerate}
-
-
-
+Il ne suffit donc maintenant plus qu'a déployer automatiquement le nouveau fichier de test sur le parc informatique. Nous pouvons simplement utiliser une GPO pour modifier ce fichier sur les postes. Ce fichier sera donc disponible dans le volume partagé \textbf{SYSVOL}.\\
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/GPO_sca2.png}
+  \label{fig:yaml-deploy}
+  \caption{Extrait de la GPO permettant de déployer le fichier de test modifié sur les postes}
+\end{figure}
 \newpage
 \section{Impact environnemental et sociétal}
-
-\subsection{Impact de mes déplacements au long de mon alternance}
-
-\subsubsection{Déplacements quotidiens}
-
-Dans le cadre de mon alternance, j'effectuais un trajet domicile-travail aller-retour chaque jour ouvré. Les émissions de CO\textsubscript{2} ont été estimées à l'aide du calculateur de l'ADEME.\\
-
-Le trajet quotidien se décompose comme suit :\\
-
-\begin{itemize}
-\item[$\bullet$] \textbf{Tramway} : 1,5 km, soit 0,03 g CO\textsubscript{2}e/km ;
-\item[$\bullet$] \textbf{TER Grenoble -- Moirans} : 19 km, soit 0,17 g CO\textsubscript{2}e/km ;
-\item[$\bullet$] \textbf{Marche à pied jusqu'au bureau} : 1,1 km, impact négligeable.
-\end{itemize}
 \par\bigskip
-
-L'ensemble du trajet représente environ 3,68 g de CO\textsubscript{2}e par déplacement, soit 7,36 g de CO\textsubscript{2}e par journée de travail.\\
-
-Sur une période estimée à 30 semaines d'alternance à raison de 5 jours par semaine, les déplacements domicile-travail représentent environ 1,1 kg de CO\textsubscript{2}e émis.
-
-\subsubsection{Déplacements ponctuels}
-
-Au cours de mon alternance, j'ai été amené à effectuer plusieurs déplacements professionnels, notamment vers le site de Nerys à Gardanne (Bouches-du-Rhône).\\
-
-Ce trajet a été réalisé en covoiturage à trois personnes à bord d'un véhicule hybride de type SUV. La distance parcourue était d'environ 294 km pour un aller simple, soit 588 km aller-retour.\\
-
-D'après les estimations réalisées à l'aide du calculateur de l'ADEME, ce déplacement représente environ 11,9 kg de CO\textsubscript{2}e pour l'aller-retour.\\
-
-Bien que cette valeur soit significativement supérieure aux émissions générées par mes trajets quotidiens, ce type de déplacement est resté exceptionnel durant la période d'alternance.
-
-
-
-\subsection{Actions écologiques et sociales des actions menées par l'entreprise}
-
-
-\subsection{Impacts sociétaux des projets réalisés}
-
-
-
-
-
+\subsection{Déplacements}
+\par\bigskip
+Dans le cadre de mon stage, j'ai fait des aller-retour de Voiron à Moirans tous les jours. Mon mode de déplacement est conditionnelde la météo. En effet lorsqu'il n'est pas prévu de pleuvoir, je fais mes trajets de 8.4km aller et 8.4km retour en vélo mécanique, ce qui émet naturellement 0g de CO2 par jour.\\
+Au contraire, lorsqu'il menace de pleuvoir je me rends au travail en voiture essence, ce qui émet 170 gCO2e/km ou 2.856 kgCO2e par journée.\\
+L'utilisation de la voiture a donc un impact certain mais qui reste limité car peu féquent. Ces estimations ont été faite avec le simulateur en ligne de l'ADEME.
+\par\bigskip
+\subsection{Répercussions écologiques et sociales des actions menées par l'entreprise}
+\par\bigskip
+NERYS GROUP a intégré dans son Système de Management de la Qualité un volet
+management environnemental (§ 1.6 du MAQ-07-07-033). En fonction des besoins spécifiques de
+nos clients, cette partie management environnemental peut être complétée par un chapitre dédié
+dans le Plan de Management Qualité du projet concerné, telles que la gestion d’éliminations de
+déchets ou la gestion des aspects de pollutions.
+Consciente de son rôle dans la préservation de l’environnement, NERYS GROUP veille à ce
+que l’ensemble de ses activités n’impacte pas négativement ses parties intéressées ni son
+écosystème. Cette vigilance environnementale est une composante essentielle de notre
+responsabilité sociétale.
+\newpage
 % -----------------------
 % BILAN
 % -----------------------
-\section{Bilan personnel}
+\section{Conclusion}
 
+Au cours de ce stage chez Mesulog,j'ai pu rencontrer de sujets variés et formatteurs, comme le traitement et l'analyse de données, la mise en place d'un système de supervision et de sécurisation du réseau informatique d'une entreprise.\\
+\\
+L'installation et la configuration de Wazuh en tant que solution SIEM a permis d'établir un système complet de collecte et d'analyse des événements réseau, avec la création de décodeurs, de règles et d'alertes parsonnalisées ; ce qui m'a permis d'explorer en profondeur les possibilitésde wazuh. Notamment avec l'intégration d'un script externe à l'API pour l'analyse des évenements du pare-feu Sophos.\\
+\\
+La refonte de l'Active Directory et le déploiement progressif des stratégies relatives au benchmarks CIS Level 1 via des GPO ont grandement renforcé la sécurité du parc informatique. Bien que le score de conformité n'ai pas encore atteint l'objectif affiché, le passage de 32\% à 49\% de conformité pour le poste HP026 prouve son efficacité et son potentiel.\\
+\\
+Ce stage m'a aussi permis de développer des compétences professionnelles importantes comme la maîtrise des solutions SIEM , une comprehension approfondie de la gestion de Windows Server et d'Active Directory, la capacité à identifier des problème et la capacité à utiliser des moyens alternatifs (installationde suricata dans une conteneur, externalisation de la mise à jour des règles d'ip malicieuses) pour assurer le bon fonctionnement des services.\\
+\\
+Plusieurs pistes d'amélioration existent cependant. De manière évidente une poursuite des itérations de mise en conformité avec le benchmarck CIS Windows 11, mais aussi avec l'ajout de nombreuses autres règles pour Wazuh afin d'éliminer les dernières zones d'ombres du parc informatique de Mesulog.\\
+\\
+Dernierement, ce stage m'a confirmé mon orientation vers le domaine de la cybersécurité et de l'administration systèmes \& réseaux. J"ai acquis une expérience concrète qu'il me tarde de réutiliser dans mes emplois futurs.\\
+\\
+Je tiens à remercier sincèrement l'équipe de Mesulog pour l'accueil, les conseils, l'aide et les opportunités d'apprentissage qu'ils m'ont offertes au cours de ce stage.
 
-[justification de AC 33.1 et 33.03 du PN + AC 36.1 +36.03]\\
-
-Cette alternance m’a permis de consolider et d’approfondir des compétences techniques en administration système, cybersécurité opérationnelle et développement, tout en les appliquant dans un contexte industriel réel et exigeant. Les missions confiées m’ont confronté à des problématiques concrètes de sécurisation du système d’information, de conformité réglementaire et de maintien en condition opérationnelle, dépassant largement le cadre théorique des enseignements.
-\vspace{\baselineskip}
-Le travail autour de l’homologation d’un système d’information « Diffusion Restreinte » a été particulièrement formateur. Il m’a permis de mieux appréhender les enjeux liés à la protection de données sensibles, à la formalisation des procédures de sécurité et à la rigueur nécessaire dans un contexte soumis à des exigences normatives fortes. Cette mission m’a également sensibilisé à l’importance de la documentation et de la traçabilité dans les démarches de cybersécurité.\vspace{\baselineskip}
-
-
-Les projets liés au durcissement du système d’information, à la supervision de la sécurité via Wazuh et à la migration de l’Active Directory m’ont permis de développer une vision globale de l’infrastructure et de ses interdépendances. J’ai gagné en capacité d’analyse, en autonomie et en méthode, notamment dans la priorisation des actions de sécurité, l’analyse des vulnérabilités et la mise en œuvre de solutions adaptées aux contraintes de l’entreprise.
-\vspace{\baselineskip}
-
-Sur le plan humain et organisationnel, cette alternance m’a permis de m’intégrer au sein d’une équipe technique pluridisciplinaire, de participer aux échanges collectifs et de travailler en collaboration avec des profils variés. Les réunions de suivi et le travail en environnement professionnel m’ont aidé à améliorer ma communication technique et à structurer davantage ma démarche de travail.
-\vspace{\baselineskip}
-
-Cette expérience confirme mon intérêt pour les métiers de l’administration système et de la cybersécurité. Elle m’a permis de mieux définir mon projet professionnel, orienté vers la sécurisation et l’exploitation d’infrastructures informatiques, et constitue une étape déterminante dans la construction de mes compétences et de mon parcours professionnel.
-\newpage
 \section{Annexe}
 %setup sql
-\paragraph{Requêtes de nettoyages}
+\paragraph*{Requêtes de nettoyages}
 \begin{figure}[H]
   \lstinputlisting[language=SQL, firstline=1, lastline=53]{Annexe/Setup_query.sql}
   \caption{Requêtes de nettoyage des données -1ère partie}
@@ -1917,9 +1742,7 @@ Cette expérience confirme mon intérêt pour les métiers de l’administration
   \caption{Requêtes de nettoyage des données -4ème partie}
   \label{fig:setup-access-4}
 \end{figure}
-
-%extraction sql
-\paragraph{Requêtes d'extractions}
+\paragraph*{Requêtes d'extractions}
 \begin{figure}[H]
   \lstinputlisting[language=SQL, firstline=1, lastline=63]{Annexe/BANC_MOD_extraction_query.sql}
   \caption{Requêtes d'extraction de données -1ere partie}
@@ -1980,7 +1803,35 @@ Cette expérience confirme mon intérêt pour les métiers de l’administration
 \end{figure}
 \par\bigskip
 
+%sophos integration.py
+\paragraph*{fichier sophos-exfiltration.py}
+\begin{figure}[H]
+  \lstinputlisting[language=Python, firstline=1, lastline=41]{Annexe/sophos-integration.py}
+  \caption{Script sophos-exfiltration.py -1ere partie}
+  \label{fig:sophos-integration}
+\end{figure}
+\par\bigskip
+\begin{figure}[H]
+  \lstinputlisting[language=Python, firstline=42, lastline=80]{Annexe/sophos-integration.py}
+  \caption{Script sophos-exfiltration.py -2ème partie}
+  \label{fig:sophos-integration-2}
+\end{figure}
+\par\bigskip
+\begin{figure}[H]
+  \lstinputlisting[language=Python, firstline=81, lastline=123]{Annexe/sophos-integration.py}
+  \caption{Script sophos-exfiltration.py -3eme partie}
+  \label{fig:sophos-integration-3}
+\end{figure}
+\par\bigskip
+\begin{figure}[H]
+  \lstinputlisting[language=Python, firstline=124, lastline=165]{Annexe/sophos-integration.py}
+  \caption{Script sophos-exfiltration.py -4eme partie}
+  \label{fig:sophos-integration-4}
+\end{figure}
+\par\bigskip
+
 %reste
+\paragraph*{Graphiques d'analyse de production}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/nb_test_mod2_stepcount.png}
@@ -2023,31 +1874,6 @@ Cette expérience confirme mon intérêt pour les métiers de l’administration
   \label{fig:graph-lundi2026-b1}
 \end{figure}
 \par\bigskip
-%sophos integration.py
-\begin{figure}[H]
-  \lstinputlisting[language=Python, firstline=1, lastline=41]{Annexe/sophos-integration.py}
-  \caption{Script sophos-exfiltration.py -1ere partie}
-  \label{fig:sophos-integration}
-\end{figure}
-\par\bigskip
-\begin{figure}[H]
-  \lstinputlisting[language=Python, firstline=42, lastline=80]{Annexe/sophos-integration.py}
-  \caption{Script sophos-exfiltration.py -2ème partie}
-  \label{fig:sophos-integration-2}
-\end{figure}
-\par\bigskip
-\begin{figure}[H]
-  \lstinputlisting[language=Python, firstline=81, lastline=123]{Annexe/sophos-integration.py}
-  \caption{Script sophos-exfiltration.py -3eme partie}
-  \label{fig:sophos-integration-3}
-\end{figure}
-\par\bigskip
-\begin{figure}[H]
-  \lstinputlisting[language=Python, firstline=124, lastline=165]{Annexe/sophos-integration.py}
-  \caption{Script sophos-exfiltration.py -4eme partie}
-  \label{fig:sophos-integration-4}
-\end{figure}
-\par\bigskip
 % -----------------------
 % GLOSSAIRE
 % -----------------------
@@ -2058,15 +1884,31 @@ Cette expérience confirme mon intérêt pour les métiers de l’administration
 % -----------------------
 % BIBLIOGRAPHIE
 % -----------------------
-\paragraph{Références bibliographiques}
+\paragraph*{Références bibliographiques}
 \addcontentsline{toc}{section}{Références}
  \begin{thebibliography}{moi}
-\bibitem{[1]} ANSSI, \textit{OASIS — Recommandations pour les architectures des systèmes d’information sensibles ou Diffusion Restreinte}, ANSSI-PG-075 version 1.2, 24/09/2021.
-\bibitem{[2]} ANSSI, \textit{Directive II 901-1 — Sécurisation des systèmes d’information sensibles}, Agence nationale de la sécurité des systèmes d’information, version en vigueur, 28/01/2015
-\bibitem{[3]} Center for Internet Security (CIS), \textit{CIS Benchmarks}, https://www.cisecurity.org/cis-benchmarks/, consulté en 2024.
-\bibitem{[4]} Microsoft, \textit{Active Directory Documentation}, https://docs.microsoft.com/en-us/windows-server/identity/active-directory-domain-services, consulté en 2024.
-\bibitem{[5]} Wazuh, \textit{Wazuh Documentation}, https://documentation.wazuh.com/, consulté en 2024.
+\bibitem{[1]} Center for Internet Security (CIS),\href{https://www.cisecurity.org/cis-benchmarks/}{CIS Benchmarks}, consulté en 2026.
+\bibitem{[2]} Wazuh, \href{https://documentation.wazuh.com/}{Wazuh Documentation}, consulté en 2026.
+\bibitem{[3]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-security-configuration-framework/security-baselines}{Security baselines for Windows}, consulté en 2026.
+\bibitem{[4]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows-server/security/}{Windows Server security documentation}, consulté en 2026.
+\bibitem{[5]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview}{Active Directory Domain Services overview}, consulté en 2026.
+\bibitem{[6]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/active-directory-security-best-practices}{Best practices for securing Active Directory}, consulté en 2026.
+\bibitem{[7]} Microsoft. (2024). \href{https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/group-policy-objects}{Group Policy documentation}, consulté en 2026.
+\bibitem{[8]} Wazuh. (2024). \href{https://documentation.wazuh.com/current/user-manual/ruleset/index.html}{Ruleset documentation}, consulté en 2026.
+\bibitem{[9]} Wazuh. (2024). \href{https://documentation.wazuh.com/current/user-manual/capabilities/active-response/index.html}{Active response documentation}, consulté en 2026.
+\bibitem{[10]} Wazuh. (2024). \href{https://documentation.wazuh.com/current/user-manual/agents/index.html}{Wazuh agent documentation}, consulté en 2025.
+\bibitem{[11]} ANSSI. (2024). \textit{Guide d’hygiène informatique}, consulté en 2026.
+\bibitem{[12]} ANSSI. (2024). \textit{Administration sécurisée des systèmes d’exploitation}, consulté en 2026.
+\bibitem{[13]} ISO/IEC. (2022). \textit{ISO/IEC 27002:2022 — Information security, cybersecurity and privacy protection — Information security controls}, consulté en 2026.
+\bibitem{[14]} MITRE. (2024). \href{https://attack.mitre.org/}{ATT\&CK for enterprise}, consulté en 2026.
+\bibitem{[15]} Cybersecurity and Infrastructure Security Agency. (2024). \href{https://www.cisa.gov/known-exploited-vulnerabilities-catalog}{Known exploited vulnerabilities catalog}, consulté en 2026.
+\bibitem{[16]} IT-Connect. (2026). \href{https://www.it-connect.fr/}{Divers tutoriels de Florian BURNEL}, consulté en 2026.
+\\
+\bibitem{[17]} Ressources internes à Mesulog (2026). Schémas de présentation, consulté en 2026.
+\bibitem{[18]} \textbf{Utilisatiion de l'IA: L'IA n'a pas été utilisé pour produire de texte, mais a été utilisée pour corriger les fautes d'orthographe et assister à la création de certains schémas.}
+
 \end{thebibliography}
+
 % -----------------------
 % FIN DOCUMENT
 % -----------------------
